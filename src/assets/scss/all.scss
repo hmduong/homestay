@@ -1,0 +1,176 @@
+.homestay-head {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 32px;
+
+    h1 {
+        margin-bottom: 0;
+    }
+
+    .add-btn {
+        margin: 5px 0;
+    }
+}
+
+.homestay-card .each-slide {
+    width: 100%;
+    height: 300px;
+}
+
+.detail-homestay {
+    display: flex;
+}
+
+.detail-homestay .each-slide {
+    width: 100%;
+}
+
+.detail-homestay>div {
+    width: 50%;
+    padding: 8px;
+}
+
+.homestay-info {
+    width: 50%;
+}
+
+.sidebar-row.active {
+    background: #ffffff3f;
+}
+
+// discount 
+.discount-ticket {
+    width: 100%;
+    height: 200px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    .ticket-detail {
+        width: 50%;
+        height: 100%;
+    }
+
+    .ticket-percent {
+        height: 100%;
+        width: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 10px solid #172b4d;
+
+        & h1 {
+            font-size: 50px;
+            font-weight: 700;
+        }
+    }
+}
+
+
+
+.add-discount {
+    width: 100%;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+        background: rgb(224, 224, 224);
+    }
+
+    i {
+        font-size: 50px;
+    }
+}
+
+//map
+.the-map {
+    height: 300px;
+}
+
+//map
+.the-map-marker {
+    width: 40px;
+    height: 40px;
+}
+
+//.homestay-card
+.modal-body .input-label {
+    margin-bottom: 4px;
+    height: 14px;
+    line-height: 14px;
+    font-size: 14px;
+    color: #000000b9;
+}
+
+//.homestay-card
+.modal-body .input-label.err1 {
+    color: rgb(255, 17, 0);
+    animation: jazz 0.5s linear;
+}
+
+.modal-body .input-label.err2 {
+    color: rgb(255, 17, 0);
+    animation: jizz 0.5s linear;
+}
+
+@keyframes jizz {
+    0% {
+        margin-left: 0px;
+    }
+
+    10% {
+        margin-left: -5px;
+    }
+
+    30% {
+        margin-left: 5px;
+    }
+
+    50% {
+        margin-left: -5px;
+    }
+
+    70% {
+        margin-left: 5px;
+    }
+
+    90% {
+        margin-left: -5px;
+    }
+
+    100% {
+        margin-left: 0px;
+    }
+}
+
+@keyframes jazz {
+    0% {
+        margin-left: 0px;
+    }
+
+    10% {
+        margin-left: -5px;
+    }
+
+    30% {
+        margin-left: 5px;
+    }
+
+    50% {
+        margin-left: -5px;
+    }
+
+    70% {
+        margin-left: 5px;
+    }
+
+    90% {
+        margin-left: -5px;
+    }
+
+    100% {
+        margin-left: 0px;
+    }
+}

@@ -1,0 +1,31 @@
+.alerter {
+    position: fixed;
+    top: 16px;
+    left: 100%;
+    z-index: 9999;
+}
+
+.popout {
+    animation: enter-leave 3s ease-in-out;
+    right: 0;
+    width: 600px;
+    height: 60px;
+
+    @keyframes enter-leave {
+        0% {
+            right: 0;
+        }
+
+        7.5% {
+            right: calc(100% + 16px);
+        }
+
+        92.5% {
+            right: calc(100% + 16px);
+        }
+
+        100% {
+            right: 0;
+        }
+    }
+}
