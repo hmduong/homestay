@@ -1,13 +1,9 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Headroom from "headroom.js";
 import {
     Button,
     UncontrolledCollapse,
-    DropdownMenu,
-    DropdownItem,
-    DropdownToggle,
-    UncontrolledDropdown,
     NavbarBrand,
     Navbar,
     NavItem,
@@ -18,20 +14,32 @@ import {
     Col,
     UncontrolledTooltip,
     Modal,
+    UncontrolledDropdown,
+    DropdownToggle,
 } from "reactstrap";
 import { useCookies } from "react-cookie";
+import Avatar from "components/Avatar";
 
 function MainNavbar() {
     const navigate = useNavigate();
     const [collapseClasses, setCollapseClasses] = useState("");
     const [cookies, setCookie, removeCookie] = useCookies([
-        "name"
+        "name",
+        "currentuser",
+        "role",
+        "userid"
     ]);
     const [isOpenModal, setIsOpenModal] = useState(false);
+
+    const currentPage = () => {
+        const path = document.location.pathname
+        return path === '/visitor/booking' ? 'booking' : 'homestay'
+    }
 
     useEffect(() => {
         let headroom = new Headroom(document.getElementById("navbar-main"));
         headroom.init();
+
     }, []);
 
     const onExiting = () => {
@@ -47,12 +55,11 @@ function MainNavbar() {
     };
 
     const logout = () => {
-        // Remove user and handle logout logic
-        removeCookie("currentuser");
-        removeCookie("userid");
-        removeCookie("role");
-        removeCookie("name");
-        navigate("/", { replace: true });
+        removeCookie("currentuser", { path: '/' });
+        removeCookie("userid", { path: '/' });
+        removeCookie("role", { path: '/' });
+        removeCookie("name", { path: '/' });
+        navigate("/");
     };
 
     return (
@@ -95,133 +102,44 @@ function MainNavbar() {
                                     </Col>
                                 </Row>
                             </div>
-                            {/* <Nav className="navbar-nav-hover align-items-lg-center" navbar>
-                                <UncontrolledDropdown nav>
-                                    <DropdownToggle nav>
-                                        <i className="ni ni-ui-04 d-lg-none mr-1" />
-                                        <span className="nav-link-inner--text">Components</span>
-                                    </DropdownToggle>
-                                    <DropdownMenu className="dropdown-menu-xl">
-                                        <div className="dropdown-menu-inner">
-                                            <Media
-                                                className="d-flex align-items-center"
-                                                href="https://demos.creative-tim.com/argon-design-system-react/#/documentation/overview?ref=adsr-navbar"
-                                                target="_blank"
-                                            >
-                                                <div className="icon icon-shape bg-gradient-primary rounded-circle text-white">
-                                                    <i className="ni ni-spaceship" />
-                                                </div>
-                                                <Media body className="ml-3">
-                                                    <h6 className="heading text-primary mb-md-1">
-                                                        Getting started
-                                                    </h6>
-                                                    <p className="description d-none d-md-inline-block mb-0">
-                                                        Learn how to use Argon compiling Scss, change brand
-                                                        colors and more.
-                                                    </p>
-                                                </Media>
-                                            </Media>
-                                        </div>
-                                    </DropdownMenu>
-                                </UncontrolledDropdown>
-                                <UncontrolledDropdown nav>
-                                    <DropdownToggle nav>
-                                        <i className="ni ni-collection d-lg-none mr-1" />
-                                        <span className="nav-link-inner--text">Examples</span>
-                                    </DropdownToggle>
-                                    <DropdownMenu>
-                                        <DropdownItem to="/landing-page" tag={Link}>
-                                            Landing
-                                        </DropdownItem>
-                                        <DropdownItem to="/profile-page" tag={Link}>
-                                            Profile
-                                        </DropdownItem>
-                                        <DropdownItem to="/login-page" tag={Link}>
-                                            Login
-                                        </DropdownItem>
-                                        <DropdownItem to="/register-page" tag={Link}>
-                                            Register
-                                        </DropdownItem>
-                                    </DropdownMenu>
-                                </UncontrolledDropdown>
-                            </Nav> */}
+                            {cookies.role && <>
+                                <Nav className="navbar-nav-hover align-items-lg-center" navbar>
+                                    <UncontrolledDropdown nav>
+                                        <DropdownToggle nav onClick={() => navigate('/')}>
+                                            {currentPage() === 'homestay' ? <div className="active-bg"></div> : <></>}
+                                            <i className="ni ni-ui-04 d-lg-none mr-1" />
+                                            <span className="nav-link-inner--text">Homestay</span>
+                                        </DropdownToggle>
+                                    </UncontrolledDropdown>
+                                </Nav>
+                                <Nav className="navbar-nav-hover align-items-lg-center" navbar>
+                                    <UncontrolledDropdown nav>
+                                        <DropdownToggle nav onClick={() => navigate('/visitor')}>
+                                            {currentPage() === 'booking' ? <div className="active-bg"></div> : <></>}
+                                            <i className="ni ni-ui-04 d-lg-none mr-1" />
+                                            <span className="nav-link-inner--text">Booking</span>
+                                        </DropdownToggle>
+                                    </UncontrolledDropdown>
+                                </Nav>
+                                <Nav className="navbar-nav-hover align-items-lg-center" navbar>
+                                    <UncontrolledDropdown nav>
+                                        <DropdownToggle nav onClick={() => navigate('/chat')}>
+                                            <i className="ni ni-ui-04 d-lg-none mr-1" />
+                                            <span className="nav-link-inner--text">Chat <i className="fa fa-external-link" aria-hidden="true"></i></span>
+                                        </DropdownToggle>
+                                    </UncontrolledDropdown>
+                                </Nav>
+                            </>}
                             <Nav className="align-items-lg-center ml-lg-auto" navbar>
-                                <NavItem>
-                                    <NavLink
-                                        className="nav-link-icon"
-                                        href="https://www.facebook.com"
-                                        id="tooltip333589074"
-                                        target="_blank"
-                                    >
-                                        <i className="fa fa-facebook-square" />
-                                        <span className="nav-link-inner--text d-lg-none ml-2">
-                                            Facebook
-                                        </span>
-                                    </NavLink>
-                                    <UncontrolledTooltip delay={0} target="tooltip333589074">
-                                        Facebook
-                                    </UncontrolledTooltip>
-                                </NavItem>
-                                <NavItem>
-                                    <NavLink
-                                        className="nav-link-icon"
-                                        href="https://www.instagram.com"
-                                        id="tooltip356693867"
-                                        target="_blank"
-                                    >
-                                        <i className="fa fa-instagram" />
-                                        <span className="nav-link-inner--text d-lg-none ml-2">
-                                            Instagram
-                                        </span>
-                                    </NavLink>
-                                    <UncontrolledTooltip delay={0} target="tooltip356693867">
-                                        Instagram
-                                    </UncontrolledTooltip>
-                                </NavItem>
-                                <NavItem>
-                                    <NavLink
-                                        className="nav-link-icon"
-                                        href="https://twitter.com"
-                                        id="tooltip184698705"
-                                        target="_blank"
-                                    >
-                                        <i className="fa fa-twitter-square" />
-                                        <span className="nav-link-inner--text d-lg-none ml-2">
-                                            Twitter
-                                        </span>
-                                    </NavLink>
-                                    <UncontrolledTooltip delay={0} target="tooltip184698705">
-                                        Twitter
-                                    </UncontrolledTooltip>
-                                </NavItem>
-                                <NavItem>
-                                    <NavLink
-                                        className="nav-link-icon"
-                                        href="https://github.com"
-                                        id="tooltip112445449"
-                                        target="_blank"
-                                    >
-                                        <i className="fa fa-github" />
-                                        <span className="nav-link-inner--text d-lg-none ml-2">
-                                            Github
-                                        </span>
-                                    </NavLink>
-                                    <UncontrolledTooltip delay={0} target="tooltip112445449">
-                                        Github
-                                    </UncontrolledTooltip>
-                                </NavItem>
+                                {cookies.role === 'visitor' && <NavItem className="notification-nav">
+                                    <i className="fa fa-bell notification-bell" aria-hidden="true"></i>
+                                    <i className="fa fa-circle notification-dot" aria-hidden="true"></i>
+                                </NavItem>}
                                 <NavItem className="d-none d-lg-block ml-lg-4">
                                     {cookies.name ? (
                                         <>
-                                            <Button
-                                                className="btn-neutral btn-icon circle-btn"
-                                                color="default"
-                                                onClick={() => openLoginModal(true)}
-                                            >
-                                                <span className="nav-link-inner--text">
-                                                    {cookies.name[0]}
-                                                </span>
-                                            </Button><Modal
+                                            <Avatar onclick={() => openLoginModal(true)} name={cookies.name} />
+                                            <Modal
                                                 className="modal-dialog-centered"
                                                 isOpen={isOpenModal}
                                                 toggle={() => openLoginModal(false)}

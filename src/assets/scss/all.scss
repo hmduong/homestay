@@ -17,8 +17,17 @@
     height: 300px;
 }
 
+// detail-homestay
+
 .detail-homestay {
     display: flex;
+    height: 500px;
+
+    .react-slideshow-container {
+        height: 100%;
+        border: 1px solid #eee;
+        background: #172b4d;
+    }
 }
 
 .detail-homestay .each-slide {
@@ -31,20 +40,84 @@
 }
 
 .homestay-info {
+    position: relative;
     width: 50%;
+}
+
+.info-actions {
+    display: flex;
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    width: 100%;
+    justify-content: center;
+
 }
 
 .sidebar-row.active {
     background: #ffffff3f;
 }
 
+.detail-chat {
+    height: 70px;
+    position: relative;
+
+    .input-icon {
+        padding: 8px;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 0;
+        z-index: 2;
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
+    .input-text {
+        height: 70px;
+        border-top: 1px solid #cecece;
+        color: #000;
+        font-size: 16px;
+
+        &:focus {
+            z-index: 1;
+        }
+    }
+
+    .input-group-text {
+        border: 0 !important;
+        font-size: 20px;
+
+        &:hover {
+            color: #555;
+        }
+    }
+}
+
+.discount-select {
+    position: absolute;
+}
+
+.discount-select-clear {
+    position: absolute;
+    z-index: 3;
+    top: 28px;
+    right: 8px;
+    cursor: pointer;
+}
+
 // discount 
 .discount-ticket {
+    position: relative;
     width: 100%;
     height: 200px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    border-radius: 8px;
+    overflow: hidden;
 
     .ticket-detail {
         width: 50%;
@@ -62,6 +135,23 @@
         & h1 {
             font-size: 50px;
             font-weight: 700;
+        }
+    }
+
+    .discount-active {
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 4px;
+        color: #fff;
+        border-bottom-left-radius: 8px;
+
+        &.active {
+            background: #2dce89;
+        }
+
+        &.inactive {
+            background: #ffd600;
         }
     }
 }
@@ -84,6 +174,20 @@
     }
 }
 
+
+
+.homestay-select {
+    position: absolute;
+}
+
+.homestay-select-clear {
+    position: absolute;
+    z-index: 3;
+    top: 28px;
+    right: 8px;
+    cursor: pointer;
+}
+
 //map
 .the-map {
     height: 300px;
@@ -104,7 +208,31 @@
     color: #000000b9;
 }
 
-//.homestay-card
+.card-detail {
+    padding: 8px 16px;
+    position: relative;
+
+    .card-price {
+        position: absolute;
+        bottom: calc(100% + 8px);
+        left: 8px;
+        color: yellow;
+        font-size: 30px;
+    }
+
+    .card-rate {
+        position: absolute;
+        bottom: calc(100% + 8px);
+        right: 8px;
+        color: yellow;
+        font-size: 20px;
+
+        i {
+            margin-right: 3px;
+        }
+    }
+}
+
 .modal-body .input-label.err1 {
     color: rgb(255, 17, 0);
     animation: jazz 0.5s linear;
@@ -173,4 +301,333 @@
     100% {
         margin-left: 0px;
     }
+}
+
+//chat
+.chat-page {
+    display: flex;
+}
+
+.chat-side-bar {
+    width: 400px;
+    border-right: 3px solid #000;
+    height: 100vh;
+}
+
+.chat-cards {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.chat-card {
+    width: 100;
+    height: 70px;
+    display: flex;
+
+    .chat-avt {
+        width: 70px;
+    }
+}
+
+.chat-look {
+    flex: 1;
+}
+
+.chat-last-content {
+    display: flex;
+    justify-content: space-between;
+
+    .chat-time {
+        margin-right: 16px;
+        font-size: 13px;
+        display: flex;
+        align-items: flex-end;
+    }
+}
+
+.chat-header {
+    height: 70px;
+    border-bottom: 5px solid #000;
+}
+
+.chat-slug {
+    flex: 1;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.chat-current-user {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px;
+}
+
+.chat-box {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow: hidden;
+
+    .chat-list-mess {
+        flex: 1;
+        // display: flex;
+        // flex-direction: column;
+        // justify-content: flex-end;
+        overflow-y: scroll;
+
+        ul {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 0 !important;
+            margin: 0 !important;
+            bottom: 0;
+        }
+
+        &::-webkit-scrollbar {
+            width: 4px;
+            border-radius: 2px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 2px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 2px;
+        }
+
+        &::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        .chat-mess-row {
+            display: flex;
+            flex-shrink: 0;
+            height: 100px;
+        }
+
+        .curr-user-mess {
+            justify-content: flex-end;
+        }
+    }
+
+    .chat-inform {
+        height: 70px;
+        position: relative;
+
+        .input-icon {
+            padding: 8px;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            right: 0;
+            z-index: 2;
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+
+        .input-text {
+            height: 70px;
+            border-top: 1px solid #cecece;
+            color: #000;
+            font-size: 16px;
+
+            &:focus {
+                z-index: 1;
+            }
+        }
+
+        .input-group-text {
+            border: 0 !important;
+            font-size: 20px;
+
+            &:hover {
+                color: #555;
+            }
+        }
+    }
+}
+
+.main-page {
+    position: relative;
+    display: block;
+
+    p {
+        margin-bottom: 0 !important;
+    }
+}
+
+.main-filter {
+    margin-bottom: 8px;
+}
+
+// navbar
+
+.active-bg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    margin-top: 9px;
+    border-bottom: 3px solid #fff;
+    z-index: 0;
+}
+
+.notification-nav {
+    position: relative;
+
+    .notification-bell {
+        color: #fff;
+        font-size: 20px;
+    }
+
+    .notification-dot {
+        position: absolute;
+        top: 0;
+        right: 0;
+        color: #ff0000;
+        font-size: 8px;
+    }
+}
+
+// app 
+#stt-marker {
+    height: 0;
+    position: relative;
+}
+
+#stt-btn {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    font-size: 50px;
+    color: #172b4d;
+    z-index: 3;
+}
+
+#stt-btn.active {
+    display: block;
+}
+
+.content {
+    min-height: calc(100vh - 320px);
+}
+
+//booking {
+.booking-container {
+    padding: 16px 16px 0 16px;
+}
+
+.booking-card {
+    position: relative;
+    height: 160px;
+    display: flex;
+    margin-bottom: 16px;
+    padding: 8px;
+    border: 2px solid #172b4d;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.booking-info {
+    flex: 1;
+    margin-right: 16px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    .sub-info {
+        display: flex;
+        width: 100%;
+
+        &>div {
+            flex: 1;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+
+        }
+    }
+
+    p,
+    h2 {
+        margin-bottom: 0;
+    }
+
+    .booking-status {
+        position: absolute;
+        top: -8px;
+        right: -164px;
+        padding: 4px;
+        border-bottom-left-radius: 8px;
+        z-index: 4;
+        color: #fff;
+
+        &.accepted {
+            background: #2dce89;
+        }
+
+        &.requested {
+            background: #ffd600;
+        }
+
+        &.reject {
+            background: #fb6340;
+        }
+
+        &.stayed {
+            background: #11cdef;
+        }
+
+        &.reviewed {
+            background: #868686;
+        }
+    }
+}
+
+.booking-img {
+    width: 140px;
+    height: 140px;
+    border-radius: 8px;
+}
+
+.booking-actions {
+    position: absolute;
+    height: 100%;
+    top: 0;
+    right: 0;
+    transform: translateX(100%);
+    transition: transform 0.3s;
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    &.active {
+        transform: translateX(-156px);
+    }
+}
+
+.booking-img .react-slideshow-container .default-nav {
+    display: none;
+}
+
+.booking-rate,
+.booking-submit {
+    display: flex;
+    justify-content: center;
+    padding: 16px;
 }

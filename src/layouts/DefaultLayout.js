@@ -1,14 +1,19 @@
-import CardsFooter from "components/Footers/CardsFooter";
+import BubbleBackground from "components/Decorators/BubbleBackground";
+import SimpleFooter from "components/Footers/SimpleFooter";
 import MainNavbar from "components/Navbars/MainNavbar";
-import { Outlet } from "react-router-dom";
+import { Container } from "reactstrap";
 
 function DefaultLayout({ children }) {
 
     return (
         <>
             <MainNavbar />
-            {children}
-            <CardsFooter />
+            <div style={{ height: '75px' }}></div>
+            <Container className="content">
+                <BubbleBackground />
+                {children}
+            </Container>
+            <SimpleFooter />
         </>
     );
 }

@@ -1,23 +1,16 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Headroom from "headroom.js";
 import { useCookies } from "react-cookie";
 import {
     Button,
     UncontrolledCollapse,
-    DropdownMenu,
-    DropdownItem,
-    DropdownToggle,
-    UncontrolledDropdown,
-    Media,
     NavbarBrand,
     Navbar,
     NavItem,
-    NavLink,
     Nav,
-    Container,
     Modal,
 } from "reactstrap";
+import Avatar from "components/Avatar";
 
 const OwnerNavbar = ({ refe }) => {
     const [cookies, setCookie, removeCookie] = useCookies([
@@ -43,13 +36,11 @@ const OwnerNavbar = ({ refe }) => {
     };
 
     const logout = () => {
-        // Remove user and handle logout logic
-        removeCookie("currentuser");
-        removeCookie("userid");
-        removeCookie("role");
-        removeCookie("name");
-        removeCookie("_id");
-        navigate("/", { replace: true });
+        removeCookie("currentuser", { path: '/' });
+        removeCookie("userid", { path: '/' });
+        removeCookie("role", { path: '/' });
+        removeCookie("name", { path: '/' });
+        navigate("/");
     };
 
     return (
@@ -77,71 +68,9 @@ const OwnerNavbar = ({ refe }) => {
                         onExiting={onExiting}
                         onExited={onExited}
                     >
-                        {/* <Nav className="navbar-nav-hover align-items-lg-center" navbar>
-                            <UncontrolledDropdown nav>
-                                <DropdownToggle nav onClick={() => navigateTo('homestay')}>
-                                    {currentPage === 'homestay' ? <div className="active-bg"></div> : <></>}
-                                    <i className="ni ni-ui-04 d-lg-none mr-1" />
-                                    <span className="nav-link-inner--text">Homestay</span>
-                                </DropdownToggle>
-                            </UncontrolledDropdown>
-                        </Nav>
-                        <Nav className="navbar-nav-hover align-items-lg-center" navbar>
-                            <UncontrolledDropdown nav>
-                                <DropdownToggle nav onClick={() => navigateTo('booking')}>
-                                    {currentPage === 'booking' ? <div className="active-bg"></div> : <></>}
-                                    <i className="ni ni-ui-04 d-lg-none mr-1" />
-                                    <span className="nav-link-inner--text">Booking</span>
-                                </DropdownToggle>
-                            </UncontrolledDropdown>
-                        </Nav>
-                        <Nav className="navbar-nav-hover align-items-lg-center" navbar>
-                            <UncontrolledDropdown nav>
-                                <DropdownToggle nav onClick={() => navigateTo('discount')}>
-                                    {currentPage === 'discount' ? <div className="active-bg"></div> : <></>}
-                                    <i className="ni ni-ui-04 d-lg-none mr-1" />
-                                    <span className="nav-link-inner--text">Discount</span>
-                                </DropdownToggle>
-                            </UncontrolledDropdown>
-                        </Nav>
-                        <Nav className="navbar-nav-hover align-items-lg-center" navbar>
-                            <UncontrolledDropdown nav>
-                                <DropdownToggle nav onClick={() => navigateTo('service')}>
-                                    {currentPage === 'service' ? <div className="active-bg"></div> : <></>}
-                                    <i className="ni ni-ui-04 d-lg-none mr-1" />
-                                    <span className="nav-link-inner--text">Service</span>
-                                </DropdownToggle>
-                            </UncontrolledDropdown>
-                        </Nav>
-                        <Nav className="navbar-nav-hover align-items-lg-center" navbar>
-                            <UncontrolledDropdown nav>
-                                <DropdownToggle nav onClick={() => navigateTo('chat')}>
-                                    {currentPage === 'chat' ? <div className="active-bg"></div> : <></>}
-                                    <i className="ni ni-ui-04 d-lg-none mr-1" />
-                                    <span className="nav-link-inner--text">Chat</span>
-                                </DropdownToggle>
-                            </UncontrolledDropdown>
-                        </Nav>
-                        <Nav className="navbar-nav-hover align-items-lg-center" navbar>
-                            <UncontrolledDropdown nav>
-                                <DropdownToggle nav onClick={() => navigateTo('statistic')}>
-                                    {currentPage === 'statistic' ? <div className="active-bg"></div> : <></>}
-                                    <i className="ni ni-ui-04 d-lg-none mr-1" />
-                                    <span className="nav-link-inner--text">Statistic</span>
-                                </DropdownToggle>
-                            </UncontrolledDropdown>
-                        </Nav> */}
                         <Nav className="align-items-lg-center ml-lg-auto" navbar>
                             <NavItem className="d-none d-lg-block ml-lg-4 mr-4">
-                                <Button
-                                    className="btn-neutral btn-icon circle-btn"
-                                    color="default"
-                                    onClick={() => openLoginModal(true)}
-                                >
-                                    <span className="nav-link-inner--text">
-                                        {cookies.name[0]}
-                                    </span>
-                                </Button>
+                                <Avatar onclick={() => openLoginModal(true)} name={cookies.name} />
                                 <Modal
                                     className="modal-dialog-centered"
                                     isOpen={isOpenModal}

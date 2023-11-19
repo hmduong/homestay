@@ -6,7 +6,7 @@ const MapBox = ReactMapboxGl({
     accessToken: process.env.REACT_APP_MAP_TOKEN,
 });
 
-const Map = ({ coor, onChange }) => {
+const Map = ({ coor, onChange, defaultCoor = null }) => {
     const [mapMarker, setMapMarker] = useState(coor);
 
     const initialViewState = {
@@ -36,7 +36,7 @@ const Map = ({ coor, onChange }) => {
                 }
             >
                 <Marker
-                    coordinates={[mapMarker.lng, mapMarker.lat]}
+                    coordinates={defaultCoor ? [defaultCoor.lng, defaultCoor.lat] : [mapMarker.lng, mapMarker.lat]}
                     anchor="bottom"
                 >
                     <img className='the-map-marker' src={require('assets/img/theme/marker_map_icon.png')} />

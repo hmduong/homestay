@@ -17,8 +17,10 @@ import {
   Col,
 } from "reactstrap";
 import DarkBubbleBackground from "components/Decorators/DarkBubbleBackground";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate()
   useEffect(() => {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
@@ -32,8 +34,7 @@ const Login = () => {
     "currentuser",
     "userid",
     "role",
-    "name",
-    "_id"
+    "name"
   ]);
 
   const loginForm = {
@@ -44,27 +45,23 @@ const Login = () => {
   const handleLogin = async () => {
     let tmp = `{ "username": "${loginForm.username}", "password": "${loginForm.password}" }`;
     let params = JSON.parse(tmp);
-    if (loginForm.username && loginForm.password) {
+    if (loginForm.username && loginForm.password && !cookies.currentuser) {
       const response = await login(params);
       console.log({ response });
       if (response?.token) {
-        // toastSuccess("Success Notification !");
-        setCookie("currentuser", response?.token);
-        setCookie("userid", response?.user._id);
-        setCookie("role", response.user.role);
-        setCookie("name", response.user.name);
-        setCookie("_id", response.user._id);
+        setCookie("currentuser", response?.token, { path: '/' });
+        setCookie("userid", response?.user._id, { path: '/' });
+        setCookie("role", response.user.role, { path: '/' });
+        setCookie("name", response.user.name, { path: '/' });
+        let owner = '/'
         if (response.user.role === 'homestay owner')
-          window.location.pathname = '/owner';
-        else window.location.pathname = '/'
+          owner = '/owner';
+        navigate(owner)
       }
-      //   else toastError(response?.error);
-      // } else {
-      //   // toastError("Error");
     }
   };
 
-  return (
+  return (cookies.currentuser ? <Navigate to={cookies.role === "visitor" ? "/" : "/owner"} /> :
     <>
       <main>
         <section className="section section-shaped section-lg" style={{ height: "100vh" }}>
@@ -113,7 +110,7 @@ const Login = () => {
                       <small>Or sign in with credentials</small>
                     </div>
                     <Form role="form">
-                      <FormGroup className="mb-3 has-danger">
+                      <FormGroup className="mb-3">
                         <InputGroup className="input-group-alternative">
                           <InputGroupAddon addonType="prepend">
                             <InputGroupText>

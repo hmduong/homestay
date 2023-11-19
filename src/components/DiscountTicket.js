@@ -1,5 +1,6 @@
+import { format } from "date-fns";
 import { useEffect } from "react";
-import { Card, UncontrolledTooltip } from "reactstrap";
+import { Card, Button, UncontrolledTooltip } from "reactstrap";
 import {
     deactivateDiscount
 } from "services/discount";
@@ -25,14 +26,13 @@ const DiscountTicket = ({ discount, onClick }) => {
             <Card className="discount-ticket card-lift--hover shadow border-0">
                 <div className="ticket-detail">
                     <h2 style={{ width: 'fit-content', cursor: 'pointer', fontWeight: 'bolder' }}>{discount.name}</h2>
-                    <div>checkin: {discount.checkin}</div>
-                    <div>checkout: {discount.checkout}</div>
+                    <div>checkin: {format(new Date(discount.checkin), "dd/MM/yyyy")}</div>
+                    <div>checkout: {format(new Date(discount.checkout), "dd/MM/yyyy")}</div>
                     <div>quantity: {discount.quantity}</div>
                     <div>used: {discount.used}</div>
-                    <div>Homestays: {discount.homestays.toString()}</div>
-                    {discount.active ?
-                        <button onClick={() => deactivate(discount._id)}>click</button>
-                        : <div>active: {discount.active}</div>}
+                    <div>Homestays: {discount.homestays.map((homestay, key) => <span key={key}>{homestay.name}, </span>)}</div>
+                    {discount.active && <Button onClick={() => deactivate(discount._id)}>click</Button>}
+                    <h6 className={`discount-active ${discount.active ? 'active' : 'inactive'}`}>{discount.active ? 'Active' : 'Deactivated'}</h6>
                 </div>
                 <div className="ticket-percent"><h1>{discount.percentage}%</h1></div>
             </Card> :

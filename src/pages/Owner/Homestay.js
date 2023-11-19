@@ -24,7 +24,7 @@ const Homestay = () => {
     const [rerender, triggerRerender] = useState(false)
     const [data, setData] = useState({});
     const [cookies, setCookie, removeCookie] = useCookies([
-        "_id",
+        "userid",
     ]);
     const [ani, toggleAni] = useState(false)
     const [validateErr, setValidateErr] = useState({})
@@ -39,7 +39,7 @@ const Homestay = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const data = await getListHomestay(cookies._id);
+            const data = await getListHomestay(cookies.userid);
             setData(data.data);
         };
         fetchData();
@@ -62,7 +62,6 @@ const Homestay = () => {
             if (res.status < 299) {
                 await saveImage(res.data._id)
                 setShow(false)
-                setValidateErr({})
                 setForm({ ...defaultForm })
                 triggerRerender(!rerender)
             }

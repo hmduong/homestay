@@ -1,12 +1,5 @@
 {
-  "name": "argon-design-system-react",
-  "version": "1.1.2",
-  "description": "React version of Argon Design System by Creative Tim",
   "main": "index.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/creativetimofficial/argon-design-system-react.git"
-  },
   "keywords": [
     "react",
     "reactjs",
@@ -22,12 +15,6 @@
     "argon-design-system-react",
     "design-system-react"
   ],
-  "author": "Creative Tim",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/creativetimofficial/argon-design-system-react/issues"
-  },
-  "homepage": "https://demos.creative-tim.com/argon-design-system-react/",
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
@@ -60,9 +47,11 @@
     "browserslist": "^4.18.1",
     "camelcase": "^6.2.1",
     "case-sensitive-paths-webpack-plugin": "^2.4.0",
+    "chart.js": "^4.4.0",
     "classnames": "2.3.2",
     "css-loader": "^6.5.1",
     "css-minimizer-webpack-plugin": "^3.2.0",
+    "date-fns": "^2.30.0",
     "dotenv": "^10.0.0",
     "dotenv-expand": "^5.1.0",
     "eslint": "^8.3.0",
@@ -88,6 +77,7 @@
     "prompts": "^2.4.2",
     "react": ">=16.0.0",
     "react-app-polyfill": "^3.0.0",
+    "react-chartjs-2": "^5.2.0",
     "react-cookie": "^6.1.1",
     "react-datetime": "3.2.0",
     "react-dev-utils": "^12.0.1",
@@ -106,6 +96,7 @@
     "sass": "1.62.1",
     "sass-loader": "^12.3.0",
     "semver": "^7.3.5",
+    "socket.io-client": "^4.7.2",
     "source-map-loader": "^3.0.0",
     "style-loader": "^3.3.1",
     "styled-components": "^6.1.0",
