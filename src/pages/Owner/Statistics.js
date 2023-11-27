@@ -13,6 +13,9 @@ import { useEffect, useState } from "react";
 import { getStatisticsByHomestay } from "services/statistics";
 import { Link } from "react-router-dom";
 import { useCookies } from "react-cookie";
+import Loading from "components/Loading";
+import { useDispatch } from "react-redux";
+import { actions } from "store/AlertSlice"
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -120,6 +123,7 @@ const dataQuarterPie = {
 };
 
 const Statistics = () => {
+  const dispatch = useDispatch();
   const [year, setYear] = useState("2022");
   const [type, setType] = useState("Money");
   const [homestay, setHomeStay] = useState(null);
@@ -155,13 +159,9 @@ const Statistics = () => {
       }
       const response = await getStatisticsByHomestay(query);
 
-      if (response.status >= 400) {
-      }
-
-      if (response.status === 200) {
+      if (response.status < 299) {
         setHomeStay(response.data.homestay);
         setTotal(response.data.total);
-        //set column
         setList({
           labels,
           datasets: [
@@ -182,7 +182,6 @@ const Statistics = () => {
             },
           ],
         });
-        //set pie
         const datasetsPie = {
           ...dataPie.datasets[0],
           data: response.data.list,
@@ -198,15 +197,23 @@ const Statistics = () => {
           label: type,
           datasets: [datasetsQuarterPie],
         });
-        setLoading(false);
+      } else {
+        dispatch(
+          actions.createAlert({
+            message: "Error occur",
+            type: "error"
+          })
+        );
       }
+      setLoading(false);
     }
     getData();
   }, [year, type]);
 
   return (
     <>
-      <div className="container">
+      <div className="container" style={{ marginTop: 24 }}>
+        <h2>Statistic</h2>
         <Link to={"/homestays/" + homestay?._id}>
           <h1 className="text-center" style={{ margin: "20px" }}>
             {homestay?.name}
@@ -236,9 +243,7 @@ const Statistics = () => {
             <option value="Guests">Guests</option>
           </select>
         </div>
-        {loading ? (
-          <p className="text-center">Loading...</p>
-        ) : (
+        {loading ? <Loading /> : (
           <div>
             <div className="row" style={{ marginTop: "30px" }}>
               <div className="col-md-8">

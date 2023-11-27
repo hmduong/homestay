@@ -1,41 +1,60 @@
 import { format } from "date-fns";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Card, Button, UncontrolledTooltip } from "reactstrap";
-import {
-    deactivateDiscount
-} from "services/discount";
+import { deactivateDiscount } from "services/discount";
+import { useDispatch } from "react-redux";
+import { actions } from "store/AlertSlice"
+import Loading from "components/Loading";
 
 const DiscountTicket = ({ discount, onClick }) => {
+    const dispatch = useDispatch();
+    const [hover, setHover] = useState(false)
+    const [hide, setHide] = useState(false)
+    const [loading, setLoading] = useState(false);
     useEffect(() => {
-        if (discount) discount.homestays = discount.homestays.map(homestay => homestay.name)
+        if (discount) discount.homestays = discount.homestays.map(homestay => homestay?.name)
     }, [])
     const deactivate = async (id) => {
+        setLoading(true)
         const res = await deactivateDiscount(id)
-        console.log(res.status === 200);
+        if (res.status < 400) {
+            dispatch(
+                actions.createAlert({
+                    message: "Deactivated!",
+                    type: "success"
+                })
+            );
+            setHide(true)
+        } else {
+            dispatch(
+                actions.createAlert({
+                    message: "Error occur",
+                    type: "error"
+                })
+            );
+
+        }
+        setLoading(false)
     }
-
-
-    // const formatDate = (date) => {
-    //     const format = `${
-    //       date.getMonth() + 1
-    //     }-${date.getDate()}-${date.getFullYear()}`;
-    //     return new Date(format);
-    //   };
     return (
         discount ?
-            <Card className="discount-ticket card-lift--hover shadow border-0">
+            (loading ? <Loading /> : <Card className="discount-ticket card-lift--hover shadow border-0"
+                onMouseLeave={() => setHover(false)}
+                onMouseOver={() => setHover(true)}>
                 <div className="ticket-detail">
                     <h2 style={{ width: 'fit-content', cursor: 'pointer', fontWeight: 'bolder' }}>{discount.name}</h2>
                     <div>checkin: {format(new Date(discount.checkin), "dd/MM/yyyy")}</div>
                     <div>checkout: {format(new Date(discount.checkout), "dd/MM/yyyy")}</div>
                     <div>quantity: {discount.quantity}</div>
                     <div>used: {discount.used}</div>
-                    <div>Homestays: {discount.homestays.map((homestay, key) => <span key={key}>{homestay.name}, </span>)}</div>
-                    {discount.active && <Button onClick={() => deactivate(discount._id)}>click</Button>}
-                    <h6 className={`discount-active ${discount.active ? 'active' : 'inactive'}`}>{discount.active ? 'Active' : 'Deactivated'}</h6>
+                    <div>Homestays: {discount.homestays.map((homestay, key) => <span key={key}>{homestay?.name}, </span>)}</div>
+                    <h6 className={`discount-active ${discount.active && !hide ? 'active' : 'inactive'}`}>{discount.active ? 'Active' : 'Deactivated'}</h6>
                 </div>
-                <div className="ticket-percent"><h1>{discount.percentage}%</h1></div>
-            </Card> :
+                <div className="ticket-percent">
+                    <h1>{discount.percentage}%</h1>
+                </div>
+                {discount.active && !hide && <div className={`deactive-btn${hover ? ' active' : ''}`}><Button color="primary" onClick={() => deactivate(discount._id)}>Deactive</Button></div>}
+            </Card>) :
             <>
                 <UncontrolledTooltip
                     delay={0}

@@ -1,9 +1,10 @@
-import { useState } from 'react'
-import { Button, Card, CardImg, UncontrolledTooltip } from "reactstrap";
+import { Card, CardImg, UncontrolledTooltip } from "reactstrap";
 import { Slide } from "react-slideshow-image";
 import { useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
-const HomestayCard = ({ homestay, onClick }) => {
+import { useTranslation } from 'react-i18next';
+const HomestayCard = ({ homestay, onClick, newBooking }) => {
+    const { t, i18n } = useTranslation();
     const [cookies, setCookie, removeCookie] = useCookies([
         "role",
     ]);
@@ -12,9 +13,6 @@ const HomestayCard = ({ homestay, onClick }) => {
     const detail = () => {
         const url = cookies.role === 'homestay owner' ? `/owner/homestay/${homestay._id}` : `/homestay/${homestay._id}`
         navigate(url)
-    }
-    const bookings = () => {
-        console.log("haha");
     }
     return (
         homestay ?
@@ -34,12 +32,13 @@ const HomestayCard = ({ homestay, onClick }) => {
                 </Slide>
                 <div className='card-detail'>
                     <div className='card-price'>${homestay.price}</div>
-                    <div className='card-rate'>{new Array(homestay.rate).fill(0).map((q, key) => <i key={key} className="fa fa-star" aria-hidden="true"></i>)}</div>
-                    <h2 style={{ width: 'fit-content', cursor: 'pointer', fontWeight: 'bolder' }}>{homestay.name}</h2>
-                    <div>address: {homestay.address}</div>
-                    <div>people: {homestay.people}</div>
-                    <div>pool: {homestay.pool ? 'Yes' : 'No'}</div>
-                    <div>bookings: {homestay.bookingNumber}</div>
+                    <div className='card-rate'>{new Array(5).fill(0).map((q, key) => <i key={key} className={Math.round(homestay.rate) > key ? 'fa fa-star' : 'fa fa-star-o'} aria-hidden="true"></i>)}</div>
+                    <h2 style={{ width: 'fit-content', cursor: 'pointer', fontWeight: 'bolder' }}>{homestay.name}
+                        {newBooking && <i style={{ color: '#fb6340', fontSize: 16 }} className="fa fa-circle" aria-hidden="true"></i>}</h2>
+                    <div>{t('address')}: {homestay.address}</div>
+                    <div>{t('slot')}: {homestay.people}</div>
+                    <div>{t('pool')}: {homestay.pool ? 'Yes' : 'No'}</div>
+                    <div>{t('homestay.bookings')}: {homestay.bookingNumber}</div>
                 </div>
             </Card> : <>
                 <UncontrolledTooltip

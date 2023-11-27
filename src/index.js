@@ -6,8 +6,8 @@ import "assets/vendor/font-awesome/css/font-awesome.min.css";
 import "assets/scss/argon-design-system-react.scss";
 import 'react-slideshow-image/dist/styles.css'
 
-import Login from "pages/examples/Login.js";
-import Register from "pages/examples/Register.js";
+import Login from "pages/Login.js";
+import Register from "pages/Register.js";
 import OwnerLayout from "layouts/OwnerLayout";
 import DefaultLayout from "layouts/DefaultLayout";
 import { Provider } from "react-redux";
@@ -15,12 +15,12 @@ import Alert from "components/Alert";
 import store from "store";
 import Homestay from "pages/Owner/Homestay";
 import Discount from "pages/Owner/Discount";
-import DetailHomestay from "pages/DetailHomestay";
 import Chat from "pages/Chat";
 import UserLayout from "layouts/UserLayout";
-import Main from "pages/Main";
+import HomePage from "pages/HomePage";
 import Booking from "pages/User/Booking";
-import BookingList from "pages/Owner/BookingList";
+import 'utils/i18n';
+import HomestaySlug from "pages/Owner/HomestaySlug";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 document.addEventListener('scroll', () => {
@@ -41,12 +41,12 @@ function App() {
         <Alert />
         <BrowserRouter>
           <Routes>
-            <Route path="/" exact element={<DefaultLayout><Main /></DefaultLayout>} />
+            <Route path="/" exact element={<DefaultLayout><HomePage /></DefaultLayout>} />
             {/* <Route path="*" exact element={<Navigate to='/' />} /> */}
             <Route path="/login" exact element={<Login />} />
             <Route path="/register" exact element={<Register />} />
             <Route path="/chat" exact element={<Chat />} />
-            <Route path="/homestay/:id" exact element={<DefaultLayout><DetailHomestay /></DefaultLayout>} />
+            <Route path="/homestay/:id" exact element={<DefaultLayout><HomestaySlug /></DefaultLayout>} />
             <Route path="/visitor" element={<UserLayout />}>
               <Route index element={<Navigate to={'booking'} />} />
               <Route path="booking" element={<DefaultLayout><Booking /></DefaultLayout>} />
@@ -54,9 +54,8 @@ function App() {
             <Route path="/owner" element={<OwnerLayout />}>
               <Route index element={<Navigate to={'homestay'} />} />
               <Route path="homestay" exact element={<Homestay />} />
-              <Route path="homestay/:id" exact element={<DetailHomestay />} />
+              <Route path="homestay/:id" exact element={<HomestaySlug />} />
               <Route path="discount" exact element={<Discount />} />
-              <Route path="booking" exact element={<BookingList />} />
             </Route>
           </Routes>
         </BrowserRouter>

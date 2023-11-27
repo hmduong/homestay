@@ -7,22 +7,29 @@ import {
     NavbarBrand,
     Navbar,
     NavItem,
-    NavLink,
     Nav,
     Container,
-    Row,
-    Col,
-    UncontrolledTooltip,
     Modal,
     UncontrolledDropdown,
     DropdownToggle,
+    Dropdown,
+    DropdownMenu,
+    DropdownItem,
 } from "reactstrap";
 import { useCookies } from "react-cookie";
 import Avatar from "components/Avatar";
+import { getNoti } from "services/notification";
+import { format } from "date-fns";
+import { useTranslation } from "react-i18next";
 
 function MainNavbar() {
+    const { t, i18n } = useTranslation();
+    const [enLang, setEnLang] = useState(true);
+    const changeLanguage = () => {
+        setEnLang(!enLang)
+        i18n.changeLanguage(enLang ? 'vi' : 'en')
+    }
     const navigate = useNavigate();
-    const [collapseClasses, setCollapseClasses] = useState("");
     const [cookies, setCookie, removeCookie] = useCookies([
         "name",
         "currentuser",
@@ -30,6 +37,9 @@ function MainNavbar() {
         "userid"
     ]);
     const [isOpenModal, setIsOpenModal] = useState(false);
+    const [isOpenNotification, setIsOpenNotification] = useState(false);
+    const [isNewNoti, setIsNewNoti] = useState(false);
+    const [notifications, setNotifications] = useState([]);
 
     const currentPage = () => {
         const path = document.location.pathname
@@ -39,16 +49,29 @@ function MainNavbar() {
     useEffect(() => {
         let headroom = new Headroom(document.getElementById("navbar-main"));
         headroom.init();
+        const handleClickOutside = (event) => {
+            const notification = document.getElementById('notification')
+            if (isOpenNotification && notification && !notification.contains(event.target)) {
+                alert("You clicked outside of me!");
+            }
+        }
 
+        const getNotification = async () => {
+            const res = await getNoti();
+            if (res.status === 200) {
+                setNotifications(res.data.notifications);
+                let found = res.data.notifications?.find(noti => !noti.seen)
+                if (found) setIsNewNoti(true)
+            }
+        }
+
+        document.addEventListener("click", handleClickOutside);
+        if (cookies.currentuser) getNotification();
+
+        return () => {
+            document.removeEventListener("click", handleClickOutside);
+        };
     }, []);
-
-    const onExiting = () => {
-        setCollapseClasses("collapsing-out");
-    };
-
-    const onExited = () => {
-        setCollapseClasses("");
-    };
 
     const openLoginModal = (modal) => {
         setIsOpenModal(modal);
@@ -61,6 +84,10 @@ function MainNavbar() {
         removeCookie("name", { path: '/' });
         navigate("/");
     };
+
+    const openNotification = () => {
+        setIsOpenNotification(true)
+    }
 
     return (
         <>
@@ -80,28 +107,7 @@ function MainNavbar() {
                         <UncontrolledCollapse
                             toggler="#navbar_global"
                             navbar
-                            className={collapseClasses}
-                            onExiting={onExiting}
-                            onExited={onExited}
                         >
-                            <div className="navbar-collapse-header">
-                                <Row>
-                                    <Col className="collapse-brand" xs="6">
-                                        <Link to="/">
-                                            <img
-                                                alt="..."
-                                                src={require("assets/img/brand/argon-react.png")}
-                                            />
-                                        </Link>
-                                    </Col>
-                                    <Col className="collapse-close" xs="6">
-                                        <button className="navbar-toggler" id="navbar_global">
-                                            <span />
-                                            <span />
-                                        </button>
-                                    </Col>
-                                </Row>
-                            </div>
                             {cookies.role && <>
                                 <Nav className="navbar-nav-hover align-items-lg-center" navbar>
                                     <UncontrolledDropdown nav>
@@ -117,7 +123,7 @@ function MainNavbar() {
                                         <DropdownToggle nav onClick={() => navigate('/visitor')}>
                                             {currentPage() === 'booking' ? <div className="active-bg"></div> : <></>}
                                             <i className="ni ni-ui-04 d-lg-none mr-1" />
-                                            <span className="nav-link-inner--text">Booking</span>
+                                            <span className="nav-link-inner--text">{t('booking.self')}</span>
                                         </DropdownToggle>
                                     </UncontrolledDropdown>
                                 </Nav>
@@ -131,10 +137,27 @@ function MainNavbar() {
                                 </Nav>
                             </>}
                             <Nav className="align-items-lg-center ml-lg-auto" navbar>
-                                {cookies.role === 'visitor' && <NavItem className="notification-nav">
-                                    <i className="fa fa-bell notification-bell" aria-hidden="true"></i>
-                                    <i className="fa fa-circle notification-dot" aria-hidden="true"></i>
-                                </NavItem>}
+                                {cookies.role === 'visitor' &&
+                                    <>
+                                        <NavItem onClick={openNotification} className="notification-nav">
+                                            <Dropdown isOpen={isOpenNotification} toggle={() => setIsOpenNotification(!isOpenNotification)} direction="down">
+                                                <DropdownToggle style={{ background: 'none', border: 'none', marginRight: 0 }}>
+                                                    <i className="fa fa-bell notification-bell" aria-hidden="true"></i>
+                                                    {isNewNoti && <i className="fa fa-circle notification-dot" aria-hidden="true"></i>}
+                                                </DropdownToggle>
+                                                <DropdownMenu container="body" className="notification-menu">
+                                                    {notifications && notifications.map(notification => <DropdownItem className={`notification-item${notification.seen ? '' : 'new'}`} key={notification._id} onClick={() => navigate('/visitor/booking')}>
+                                                        <h5>{format(new Date(notification.updatedAt), "dd/MM/yyyy")}</h5>
+                                                        <p className="notification-message">{notification.message}</p>
+                                                    </DropdownItem>)}
+                                                </DropdownMenu>
+                                            </Dropdown>
+                                        </NavItem>
+                                    </>
+                                }
+                                <NavItem className="d-none d-lg-block ml-lg-4">
+                                    <img onClick={changeLanguage} width={30} src={enLang ? "https://flagicons.lipis.dev/flags/4x3/gb.svg" : "https://flagicons.lipis.dev/flags/4x3/vn.svg"} alt="" />
+                                </NavItem>
                                 <NavItem className="d-none d-lg-block ml-lg-4">
                                     {cookies.name ? (
                                         <>
@@ -146,7 +169,7 @@ function MainNavbar() {
                                             >
                                                 <div className="modal-header">
                                                     <h6 className="modal-title" id="modal-title-default">
-                                                        Log out
+                                                        {t('logout.title')}
                                                     </h6>
                                                     <button
                                                         aria-label="Close"
@@ -160,7 +183,7 @@ function MainNavbar() {
                                                 </div>
                                                 <div className="modal-body">
                                                     <p>
-                                                        Are you sure?
+                                                        {t('logout.content')}
                                                     </p>
                                                 </div>
                                                 <div className="modal-footer">
@@ -170,10 +193,10 @@ function MainNavbar() {
                                                         type="button"
                                                         onClick={() => openLoginModal(false)}
                                                     >
-                                                        Cancel
+                                                        {t('cancel')}
                                                     </Button>
                                                     <Button color="primary" type="button" className="ml-auto" onClick={logout}>
-                                                        OK
+                                                        {t('ok')}
                                                     </Button>
                                                 </div>
                                             </Modal>
@@ -184,7 +207,7 @@ function MainNavbar() {
                                             color="default"
                                             href="/login"
                                         >
-                                            <span className="nav-link-inner--text mr-2">Sign in</span>
+                                            <span className="nav-link-inner--text mr-2">{t('signIn')}</span>
                                             <span className="btn-inner--icon">
                                                 <i className="fa fa-sign-in ml-1" />
                                             </span>

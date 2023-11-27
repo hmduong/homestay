@@ -4,8 +4,12 @@ import { yourChats } from "services/chat";
 import ChatSlug from "./ChatSlug";
 import { useCookies } from "react-cookie";
 import { Navigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { actions } from "store/AlertSlice"
+import Loading from "components/Loading";
 
 const Chat = () => {
+  const dispatch = useDispatch();
   const [cookies, setCookie, removeCookie] = useCookies([
     "currentuser",
     "name"
@@ -13,19 +17,29 @@ const Chat = () => {
   const currUser = { id: cookies.userid, name: cookies.name }
   const [chats, setChats] = useState([]);
   const [opposit, setOpposit] = useState(null);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     async function getData() {
+      setLoading(true)
       const response = await yourChats();
       if (response.data.chats) {
         setChats(response.data.chats);
+      } else {
+        dispatch(
+          actions.createAlert({
+            message: "Error occur",
+            type: "error"
+          })
+        );
       }
+      setLoading(false)
     }
     getData();
   }, []);
 
   return (cookies.currentuser ?
-    <div className="chat-page"><ChartSidebar setOpposit={setOpposit} chats={chats} currentUser={currUser} />
-      {opposit && <ChatSlug opposit={opposit} />}</div>
+    (loading ? <Loading /> : <div className="chat-page"><ChartSidebar setOpposit={setOpposit} chats={chats} currentUser={currUser} />
+      {opposit && <ChatSlug opposit={opposit} />}</div>)
     : <Navigate to="/login" replace />
   );
 };

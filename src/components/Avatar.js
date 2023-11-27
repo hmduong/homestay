@@ -14,7 +14,7 @@ const Avatar = ({ name, onclick }) => {
                 onMouseOver={() => setHover(true)}
             >
                 <span className="nav-link-inner--text">
-                    {name[0]}
+                    {name.toUpperCase()[0]}
                 </span>
             </Button>
             {hover && <UncontrolledTooltip

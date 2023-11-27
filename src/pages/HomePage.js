@@ -16,6 +16,9 @@ import { search } from "services/booking";
 import defaultGeo from "utils/geolist";
 import ReactDatetime from "react-datetime";
 import { formatDate } from "utils/date";
+import { useDispatch } from "react-redux";
+import { actions } from "store/AlertSlice"
+import Loading from "components/Loading";
 
 const Main = () => {
     const [cookies, setCookie, removeCookie] = useCookies(["role"]);
@@ -24,6 +27,8 @@ const Main = () => {
     const [city, setCity] = useState("Ha Noi");
     const [price, setPrice] = useState(5000000);
     const [homestays, setHomestays] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const dispatch = useDispatch();
 
     const searchHandler = async () => {
         const data = {
@@ -32,13 +37,19 @@ const Main = () => {
             checkout,
             price
         };
+        setLoading(true)
         const response = await search(data);
-        if (response.status >= 400) {
-            return;
-        }
-        if (response.data.homestays) {
+        if (response.status < 299) {
             setHomestays(response.data.homestays);
+        } else {
+            dispatch(
+                actions.createAlert({
+                    message: "Error occur",
+                    type: "error"
+                })
+            );
         }
+        setLoading(false)
     };
 
     useEffect(() => {
@@ -124,7 +135,7 @@ const Main = () => {
                         </FormGroup>
                     </Col>
                 </Row>
-                <Row>
+                {loading ? <Loading /> : <Row>
                     {homestays ? (
                         homestays.map((homestay, index) => (
                             <Col key={index} className="mb-4" md="4">
@@ -134,7 +145,7 @@ const Main = () => {
                     ) : (
                         <></>
                     )}
-                </Row>
+                </Row>}
             </div>
         );
     }

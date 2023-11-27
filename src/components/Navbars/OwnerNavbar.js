@@ -11,8 +11,15 @@ import {
     Modal,
 } from "reactstrap";
 import Avatar from "components/Avatar";
+import { useTranslation } from "react-i18next";
 
 const OwnerNavbar = ({ refe }) => {
+    const { t, i18n } = useTranslation();
+    const [enLang, setEnLang] = useState(true);
+    const changeLanguage = () => {
+        setEnLang(!enLang)
+        i18n.changeLanguage(enLang ? 'vi' : 'en')
+    }
     const [cookies, setCookie, removeCookie] = useCookies([
         "currentuser",
         "userid",
@@ -51,7 +58,6 @@ const OwnerNavbar = ({ refe }) => {
                     expand="lg"
                     id="navbar-main"
                 >
-                    {/* <Container> */}
                     <NavbarBrand onClick={() => refe.setDrawer(!refe.drawer)} className="mr-lg-5 brand" tag={Link}>
                         <img
                             alt="..."
@@ -70,6 +76,9 @@ const OwnerNavbar = ({ refe }) => {
                     >
                         <Nav className="align-items-lg-center ml-lg-auto" navbar>
                             <NavItem className="d-none d-lg-block ml-lg-4 mr-4">
+                                <img onClick={changeLanguage} width={40} src={enLang ? "https://flagicons.lipis.dev/flags/4x3/gb.svg" : "https://flagicons.lipis.dev/flags/4x3/vn.svg"} alt="" />
+                            </NavItem>
+                            <NavItem className="d-none d-lg-block ml-lg-4 mr-4">
                                 <Avatar onclick={() => openLoginModal(true)} name={cookies.name} />
                                 <Modal
                                     className="modal-dialog-centered"
@@ -77,9 +86,9 @@ const OwnerNavbar = ({ refe }) => {
                                     toggle={() => openLoginModal(false)}
                                 >
                                     <div className="modal-header">
-                                        <h6 className="modal-title" id="modal-title-default">
-                                            Log out
-                                        </h6>
+                                        <h5 className="modal-title" id="modal-title-default">
+                                            {t('logout.title')}
+                                        </h5>
                                         <button
                                             aria-label="Close"
                                             className="close"
@@ -92,7 +101,7 @@ const OwnerNavbar = ({ refe }) => {
                                     </div>
                                     <div className="modal-body">
                                         <p>
-                                            Are you sure?
+                                            {t('logout.content')}
                                         </p>
                                     </div>
                                     <div className="modal-footer">
@@ -102,17 +111,16 @@ const OwnerNavbar = ({ refe }) => {
                                             type="button"
                                             onClick={() => openLoginModal(false)}
                                         >
-                                            Cancel
+                                            {t('cancel')}
                                         </Button>
                                         <Button color="primary" type="button" className="ml-auto" onClick={logout}>
-                                            OK
+                                            {t('ok')}
                                         </Button>
                                     </div>
                                 </Modal>
                             </NavItem>
                         </Nav>
                     </UncontrolledCollapse>
-                    {/* </Container> */}
                 </Navbar>
             </header>
         </>

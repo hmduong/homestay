@@ -19,7 +19,6 @@ export async function getListDiscount() {
 }
 
 export async function getDiscountsByHomestay(id, params = {}) {
-  console.log({ params });
   const url = process.env.REACT_APP_API_URL + "/discounts/homestays/" + id;
   return getAsync(url, params);
 }

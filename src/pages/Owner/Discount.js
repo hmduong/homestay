@@ -4,19 +4,40 @@ import { useCookies } from "react-cookie";
 import { Col, FormGroup, Input, InputGroup, InputGroupAddon, InputGroupText, Modal, Row, Button } from "reactstrap";
 import DiscountTicket from "components/DiscountTicket";
 import ReactDatetime from "react-datetime";
+import { getListHomestay } from "services/homestayManagementService";
+import { formatDate } from "utils/date";
+import { createDiscount } from "services/discount";
+import validator from 'utils/validator';
+import { useDispatch } from "react-redux";
+import { actions } from "store/AlertSlice"
+import Loading from "components/Loading";
+import { useTranslation } from "react-i18next";
 
 const Discount = () => {
+    const { t, i18n } = useTranslation();
+    const dispatch = useDispatch();
     const [data, setData] = useState({});
     const [loading, setLoading] = useState(true);
-    const [homestay, setHomestay] = useState('');
+    const [loading2, setLoading2] = useState(false);
+    const [form, setForm] = useState({
+        percentage: null,
+        quantity: null,
+        checkin: null,
+        checkout: null,
+    });
+    const [homestaysApply, setHomestaysApply] = useState([]);
     const [homestays, setHomestays] = useState([]);
     const [cookies, setCookie, removeCookie] = useCookies([
         "userid",
     ]);
     const [show, setShow] = useState(false)
+    const [ani, toggleAni] = useState(false)
+    const [validateErr, setValidateErr] = useState({})
+    const [rerender, triggerRerender] = useState(false)
 
     useEffect(() => {
         const fetchData = async () => {
+            setLoading(true)
             const { data } = await getListDiscount(cookies.userid);
             let discounts = []
             if (data.activeDiscounts && data.inactiveDiscounts) {
@@ -28,15 +49,58 @@ const Discount = () => {
         fetchData();
     }, []);
 
-    const addDiscount = () => {
-
+    const addDiscount = async () => {
+        const err = validator(form, { empty: (v) => !v ? 'wut???' : null }, {})
+        if (!err) {
+            form.homestays = homestaysApply.map(homestay => homestay._id)
+            setLoading2(true)
+            const res = await createDiscount(form);
+            if (res.status < 299) {
+                triggerRerender(!rerender)
+                setForm({
+                    percentage: null,
+                    quantity: null,
+                    checkin: null,
+                    checkout: null,
+                })
+                setHomestaysApply([])
+                setShow(false)
+                dispatch(
+                    actions.createAlert({
+                        message: "Added discount",
+                        type: "success"
+                    })
+                );
+            } else {
+                dispatch(
+                    actions.createAlert({
+                        message: "Error occur",
+                        type: "error"
+                    })
+                );
+            }
+            setLoading2(false)
+            setValidateErr({})
+        } else {
+            setValidateErr(err);
+            toggleAni(!ani)
+        }
+    }
+    const openModal = async () => {
+        setShow(true)
+        const response = await getListHomestay(cookies.userid);
+        setHomestays(response.data.homestays);
+    }
+    const addHomestaysApply = (id) => {
+        const found = homestaysApply.find(homestay => homestay._id === homestays[id]._id)
+        if (!found) setHomestaysApply([...homestaysApply, homestays[id]])
     }
     return (
-        loading ? <div className="loading"></div> :
+        loading ? <Loading /> :
             <>
                 <div className="homestay-head">
-                    <h1>Your Discounts</h1>
-                    <Button onClick={() => setShow(true)} color="primary" className="add-btn">Create</Button>
+                    <h1>{t('discount.header')}</h1>
+                    <Button onClick={openModal} color="primary" className="add-btn">Create</Button>
                 </div>
                 <Row>
                     {
@@ -45,7 +109,7 @@ const Discount = () => {
                         </Col>) : <></>
                     }
                     <Col className="mb-5" md="4">
-                        <DiscountTicket onClick={() => setShow(true)} />
+                        <DiscountTicket onClick={openModal} />
                     </Col>
                 </Row>
                 <Modal
@@ -53,109 +117,112 @@ const Discount = () => {
                     isOpen={show}
                     toggle={() => setShow(false)}
                 >
-                    <div className="modal-header">
-                        <h6 className="modal-title" id="modal-title-default">
-                            Create new discount
-                        </h6>
-                        <button
-                            aria-label="Close"
-                            className="close"
-                            data-dismiss="modal"
-                            type="button"
-                            onClick={() => setShow(false)}
-                        >
-                            <span>×</span>
-                        </button>
-                    </div>
-                    <div className="modal-body">
-                        <Row>
-                            <Col md="6">
-                                <FormGroup>
-                                    <p className={`input-label`}>Quantity: </p>
-                                    <Input type="number" />
-                                </FormGroup>
-                            </Col>
-                            <Col md="6">
-                                <FormGroup>
-                                    <p className={`input-label`}>Percantage: </p>
-                                    <Input type="number" />
-                                </FormGroup>
-                            </Col>
-                            <Col md="12">
-                                <FormGroup style={{ marginBottom: '16px', position: 'relative' }}>
-                                    <p className={`input-label`}>Homestays: </p>
-                                    <Input
-                                        className="homestay-select"
-                                        type="text"
-                                        value={homestay}
-                                        onChange={() => { }}
-                                    ></Input>
-                                    <Input
-                                        type="select"
-                                        value={homestay}
-                                        onChange={e => {
-                                            setHomestay(homestays[e.target.selectedIndex])
-                                        }}
-                                        style={{ opacity: 0 }}
-                                    >
-                                        {homestays.map((e, index) => <option key={index} value="e">
-                                            e
-                                        </option>)}
-                                    </Input>
-                                    {homestay && <div className="homestay-select-clear" onClick={() => setHomestay('')}><i className="fa fa-times" aria-hidden="true"></i></div>}
-                                </FormGroup>
-                            </Col>
-                            <Col md="6">
-                                <FormGroup>
-                                    <p className={`input-label`}>Start: </p>
-                                    <InputGroup className="input-group-alternative">
-                                        <InputGroupAddon addonType="prepend">
-                                            <InputGroupText>
-                                                <i className="ni ni-calendar-grid-58" />
-                                            </InputGroupText>
-                                        </InputGroupAddon>
-                                        <ReactDatetime
-                                            inputProps={{
-                                                placeholder: "dd/MM/yyyy"
-                                            }}
-                                            timeFormat={false}
-                                        />
-                                    </InputGroup>
-                                </FormGroup>
-                            </Col>
-                            <Col md="6">
-                                <FormGroup>
-                                    <p className={`input-label`}>End: </p>
-                                    <InputGroup className="input-group-alternative">
-                                        <InputGroupAddon addonType="prepend">
-                                            <InputGroupText>
-                                                <i className="ni ni-calendar-grid-58" />
-                                            </InputGroupText>
-                                        </InputGroupAddon>
-                                        <ReactDatetime
-                                            inputProps={{
-                                                placeholder: "dd/MM/yyyy"
-                                            }}
-                                            timeFormat={false}
-                                        />
-                                    </InputGroup>
-                                </FormGroup>
-                            </Col>
-                        </Row>
-                    </div>
-                    <div className="modal-footer">
-                        <Button
-                            color="link"
-                            data-dismiss="modal"
-                            type="button"
-                            onClick={() => setShow(false)}
-                        >
-                            Cancel
-                        </Button>
-                        <Button color="primary" type="button" className="ml-auto" onClick={addDiscount}>
-                            Create
-                        </Button>
-                    </div>
+                    {loading2 ? <Loading /> : <>
+                        <div className="modal-header">
+                            <h6 className="modal-title" id="modal-title-default">
+                                Create new discount
+                            </h6>
+                            <button
+                                aria-label="Close"
+                                className="close"
+                                data-dismiss="modal"
+                                type="button"
+                                onClick={() => setShow(false)}
+                            >
+                                <span>×</span>
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            <Row>
+                                <Col md="6">
+                                    <FormGroup>
+                                        <p className={`input-label ${validateErr.quantity ? (ani ? 'err1' : 'err2') : ''}`}>Quantity: </p>
+                                        <Input type="number" onChange={e => form.quantity = e.target.value} />
+                                    </FormGroup>
+                                </Col>
+                                <Col md="6">
+                                    <FormGroup>
+                                        <p className={`input-label ${validateErr.percentage ? (ani ? 'err1' : 'err2') : ''}`}>Percantage: </p>
+                                        <Input type="number" onChange={e => form.percentage = e.target.value} />
+                                    </FormGroup>
+                                </Col>
+                                <Col md="12">
+                                    <FormGroup style={{ marginBottom: '16px', position: 'relative' }}>
+                                        <p className={`input-label`}>Homestays: </p>
+                                        <div className="homestays-picker">
+                                            <div className="homestays-apply">
+                                                {homestaysApply.map((homestay, key) => <span key={key}>{homestay.name}, </span>)}
+                                            </div>
+                                            <div className="picker-btn">Choose</div>
+                                            <Input
+                                                className="homestay-select"
+                                                type="select"
+                                                value={{}}
+                                                onChange={e => addHomestaysApply(e.target.selectedIndex - 1)}
+                                                style={{ opacity: 0 }}
+                                            >
+                                                <option style={{ display: 'none' }} value={{}}></option>
+                                                {homestays.map((homestay, index) => <option key={index} value={homestay}>
+                                                    {homestay.name}
+                                                </option>)}
+                                            </Input>
+                                        </div>
+                                    </FormGroup>
+                                </Col>
+                                <Col md="6">
+                                    <FormGroup>
+                                        <p className={`input-label ${validateErr.checkin ? (ani ? 'err1' : 'err2') : ''}`}>Start: </p>
+                                        <InputGroup className="input-group-alternative">
+                                            <InputGroupAddon addonType="prepend">
+                                                <InputGroupText>
+                                                    <i className="ni ni-calendar-grid-58" />
+                                                </InputGroupText>
+                                            </InputGroupAddon>
+                                            <ReactDatetime
+                                                onChange={e => form.checkin = formatDate(e._d)}
+                                                inputProps={{
+                                                    placeholder: "dd/MM/yyyy"
+                                                }}
+                                                timeFormat={false}
+                                            />
+                                        </InputGroup>
+                                    </FormGroup>
+                                </Col>
+                                <Col md="6">
+                                    <FormGroup>
+                                        <p className={`input-label ${validateErr.checkout ? (ani ? 'err1' : 'err2') : ''}`}>End: </p>
+                                        <InputGroup className="input-group-alternative">
+                                            <InputGroupAddon addonType="prepend">
+                                                <InputGroupText>
+                                                    <i className="ni ni-calendar-grid-58" />
+                                                </InputGroupText>
+                                            </InputGroupAddon>
+                                            <ReactDatetime
+                                                onChange={e => form.checkout = formatDate(e._d)}
+                                                inputProps={{
+                                                    placeholder: "dd/MM/yyyy"
+                                                }}
+                                                timeFormat={false}
+                                            />
+                                        </InputGroup>
+                                    </FormGroup>
+                                </Col>
+                            </Row>
+                        </div>
+                        <div className="modal-footer">
+                            <Button
+                                color="link"
+                                data-dismiss="modal"
+                                type="button"
+                                onClick={() => setShow(false)}
+                            >
+                                Cancel
+                            </Button>
+                            <Button color="primary" type="button" className="ml-auto" onClick={addDiscount}>
+                                Create
+                            </Button>
+                        </div>
+                    </>}
                 </Modal>
             </>
     );

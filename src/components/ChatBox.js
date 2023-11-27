@@ -1,9 +1,14 @@
-import { useEffect, useState, useRef, useLayoutEffect } from "react";
+import { useEffect, useState, useRef } from "react";
 import { getCookie, postAsyncWithToken } from "utils/request";
 import { format } from "date-fns";
 import { Form, FormGroup, InputGroup, InputGroupAddon, InputGroupText, Input } from "reactstrap";
+import { useDispatch } from "react-redux";
+import { actions } from "store/AlertSlice"
+import Loading from "components/Loading";
 
 const ChatBox = ({ socket, chatuserid, chatUserName }) => {
+    const [loading, setLoading] = useState(false);
+    const dispatch = useDispatch();
     const userid = getCookie("userid");
     const [messages, setMessages] = useState([]);
     const [message, setMessage] = useState('');
@@ -44,10 +49,19 @@ const ChatBox = ({ socket, chatuserid, chatUserName }) => {
         }
         async function getData() {
             const url = process.env.REACT_APP_API_URL + "/chats/load-messages";
+            setLoading(true)
             const response = await postAsyncWithToken(url, {
                 users: [userid, chatuserid],
             });
-            setMessages(response.data.messages);
+            if (response.data) { setMessages(response.data.messages); } else {
+                dispatch(
+                    actions.createAlert({
+                        message: "Error occur",
+                        type: "error"
+                    })
+                );
+            }
+            setLoading(false)
         }
         if (userid && chatuserid) {
             getData();
@@ -68,7 +82,6 @@ const ChatBox = ({ socket, chatuserid, chatUserName }) => {
             updatedAt: new Date(),
             message: message,
         };
-
         const response = await postAsyncWithToken(url, msg);
         if (response.status === 201) {
             socket.current.emit("sendmessage", msg);
@@ -76,13 +89,26 @@ const ChatBox = ({ socket, chatuserid, chatUserName }) => {
             msgs.push(msg);
             setMessages(msgs);
             setMessage("");
+            dispatch(
+                actions.createAlert({
+                    message: "Sent message!",
+                    type: "success"
+                })
+            );
+        } else {
+            dispatch(
+                actions.createAlert({
+                    message: "Error occur",
+                    type: "error"
+                })
+            );
         }
     };
 
     return (
         <div className="chat-box">
             <div id="chat-list" ref={messagesEndRef} className="chat-list-mess">
-                <ul>
+                {loading ? <Loading /> : <ul>
                     {messages && messages.map((message, index) =>
                         <li key={index} className={'chat-mess-row' + (message.from === chatuserid ? '' : " curr-user-mess")}>
                             {message.from === chatuserid ?
@@ -96,7 +122,7 @@ const ChatBox = ({ socket, chatuserid, chatUserName }) => {
                                 </>}
                         </li>
                     )}
-                </ul>
+                </ul>}
             </div>
             <Form className="chat-inform">
                 <FormGroup className="mb-3">
