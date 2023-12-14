@@ -16,9 +16,10 @@ import store from "store";
 import Homestay from "pages/Owner/Homestay";
 import Discount from "pages/Owner/Discount";
 import Chat from "pages/Chat";
+import VisitorLayout from "layouts/VisitorLayout";
 import UserLayout from "layouts/UserLayout";
 import HomePage from "pages/HomePage";
-import Booking from "pages/User/Booking";
+import Booking from "pages/visitor/Booking";
 import 'utils/i18n';
 import HomestaySlug from "pages/Owner/HomestaySlug";
 
@@ -46,8 +47,9 @@ function App() {
             <Route path="/login" exact element={<Login />} />
             <Route path="/register" exact element={<Register />} />
             <Route path="/chat" exact element={<Chat />} />
+            <Route path="/user" exact element={<UserLayout />} />
             <Route path="/homestay/:id" exact element={<DefaultLayout><HomestaySlug /></DefaultLayout>} />
-            <Route path="/visitor" element={<UserLayout />}>
+            <Route path="/visitor" element={<VisitorLayout />}>
               <Route index element={<Navigate to={'booking'} />} />
               <Route path="booking" element={<DefaultLayout><Booking /></DefaultLayout>} />
             </Route>

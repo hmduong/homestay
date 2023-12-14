@@ -42,6 +42,9 @@ const BookingListCard = ({ booking, triggerRerender }) => {
         func: () => { },
     });
     const [loading, setLoading] = useState(false);
+
+    const [loadingModal, setLoadingModal] = useState(false);
+    const [isOpenDeposit, setIsOpenDeposit] = useState(false)
     const [cookies, setCookie, removeCookie] = useCookies(["role"]);
     const navigate = useNavigate();
     const check = () => {
@@ -66,12 +69,19 @@ const BookingListCard = ({ booking, triggerRerender }) => {
             return true;
         }
     };
-    const accept = () => {
+    const updateBooking = (status) => {
+        const message = {
+            accepted: "Ok nhé?",
+            confirmed: "Xác nhận đặt cọc?",
+            stayed: "Ở nhé?",
+            declined: "Xóa nhé?",
+            expired: "Xác nhận hết hạn?",
+        }
         setIsOpenModal(true);
         setActionsEdit({
-            title: "Ok nhé?",
+            title: message[status],
             func: async () => {
-                let res = await editBooking({ status: "accepted" });
+                let res = await editBooking({ status: status });
                 if (res) {
                     setIsOpenModal(false);
                     dispatch(
@@ -91,61 +101,7 @@ const BookingListCard = ({ booking, triggerRerender }) => {
                 }
             },
         });
-    };
-    const stayed = () => {
-        setIsOpenModal(true);
-        setActionsEdit({
-            title: "Ở nhé?",
-            func: async () => {
-                setLoading(true)
-                let res = await editBooking({ status: "stayed" });
-                if (res) {
-                    setIsOpenModal(false);
-                    dispatch(
-                        actions.createAlert({
-                            message: "Updated booking",
-                            type: "success"
-                        })
-                    );
-                    triggerRerender()
-                } else {
-                    dispatch(
-                        actions.createAlert({
-                            message: "Error occur",
-                            type: "error"
-                        })
-                    );
-                }
-                setLoading(false)
-            },
-        });
-    };
-    const decline = () => {
-        setIsOpenModal(true);
-        setActionsEdit({
-            title: "Xóa nhé?",
-            func: async () => {
-                let res = await editBooking({ status: "declined" });
-                if (res) {
-                    setIsOpenModal(false);
-                    dispatch(
-                        actions.createAlert({
-                            message: "Updated booking",
-                            type: "success"
-                        })
-                    );
-                    triggerRerender()
-                } else {
-                    dispatch(
-                        actions.createAlert({
-                            message: "Error occur",
-                            type: "error"
-                        })
-                    );
-                }
-            },
-        });
-    };
+    }
     const addService = (id) => {
         const found = services.find(
             (service) => service.service._id === serviceList[id]._id
@@ -221,53 +177,97 @@ const BookingListCard = ({ booking, triggerRerender }) => {
                 </h5>
             </div>
             <div className={`booking-actions${hover ? " listactive" : ""}`}>
-                <Button
-                    onClick={check}
-                    color="primary"
-                    style={{ marginRight: 0, marginBottom: "8px" }}
-                >
-                    Check Homestay
-                </Button>
                 {booking.status === "requested" &&
-                    cookies.role === "homestay owner" && (
+                    (
                         <>
                             <Button
                                 style={{ marginRight: 0, marginBottom: "8px" }}
                                 color="success"
-                                onClick={accept}
+                                onClick={() => updateBooking('accepted')}
                             >
                                 Accept
                             </Button>
                             <Button
                                 style={{ marginRight: 0 }}
                                 color="warning"
-                                onClick={decline}
+                                onClick={() => updateBooking("declined")}
                             >
                                 Decline
                             </Button>
                         </>
                     )}
-                {booking.status === "accepted" && cookies.role === "homestay owner" && (
+                {booking.status === "accepted" && (
+                    <>
+                        <Button
+                            style={{ marginRight: 0, marginBottom: "8px" }}
+                            color="danger"
+                            onClick={() => updateBooking("expired")}
+                        >
+                            Expired
+                        </Button>
+                    </>
+                )}
+                {booking.status === "deposited" && (
                     <>
                         <Button
                             style={{ marginRight: 0, marginBottom: "8px" }}
                             color="success"
-                            onClick={stayed}
+                            onClick={() => setIsOpenDeposit(true)}
                         >
-                            Stayed
+                            Check deposit
                         </Button>
+                        <Modal
+                            className="modal-dialog-centered"
+                            isOpen={isOpenDeposit}
+                            toggle={() => setIsOpenDeposit(false)}
+                        >
+
+                            {loadingModal ? <Loading /> : <Row>
+                                <Col md={12} className="m-2 mt-3">
+                                    <h5>
+                                        Deposit
+                                    </h5>
+                                </Col>
+                                <Col md="12" className='m-2'>
+                                    <img width={400} height={400} src={`http://localhost:3333/bookings/${booking._id}/bill`} alt="" />
+                                </Col>
+                                <Col md="12" className='booking-submit'>
+                                    <Button color='primary' onClick={() => updateBooking("confirmed")}>Confirm</Button>
+                                    <Button color='danger' onClick={() => updateBooking("declined")}>Decline</Button>
+                                </Col>
+                            </Row>}
+                        </Modal>
+                    </>
+                )}
+                {booking.status === "confirmed" && (
+                    <>
                         <Button
-                            style={{ marginRight: 0 }}
+                            style={{ marginRight: 0, marginBottom: "8px" }}
+                            color="success"
+                            onClick={() => updateBooking("stayed")}
+                        >
+                            Stay
+                        </Button>
+                        {/* <Button
+                            style={{ marginRight: 0, marginBottom: "8px" }}
                             color="default"
                             onClick={() => setIsOpenService(true)}
                         >
-                            Service
+                            Services
+                        </Button> */}
+                        <Button
+                            style={{ marginRight: 0 }}
+                            color="danger"
+                            onClick={() => updateBooking("expired")}
+                        >
+                            Expired
                         </Button>
                     </>
                 )}
                 {booking.status === "stayed" && (
                     <Button
                         style={{ marginRight: 0 }}
+                        color="default"
                         onClick={() => setIsOpenService(true)}
                     >
                         Services

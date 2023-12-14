@@ -9,7 +9,6 @@ import {
     NavItem,
     Nav,
     Container,
-    Modal,
     UncontrolledDropdown,
     DropdownToggle,
     Dropdown,
@@ -36,7 +35,6 @@ function MainNavbar() {
         "role",
         "userid"
     ]);
-    const [isOpenModal, setIsOpenModal] = useState(false);
     const [isOpenNotification, setIsOpenNotification] = useState(false);
     const [isNewNoti, setIsNewNoti] = useState(false);
     const [notifications, setNotifications] = useState([]);
@@ -73,16 +71,8 @@ function MainNavbar() {
         };
     }, []);
 
-    const openLoginModal = (modal) => {
-        setIsOpenModal(modal);
-    };
-
-    const logout = () => {
-        removeCookie("currentuser", { path: '/' });
-        removeCookie("userid", { path: '/' });
-        removeCookie("role", { path: '/' });
-        removeCookie("name", { path: '/' });
-        navigate("/");
+    const toUserPage = () => {
+        navigate("/user");
     };
 
     const openNotification = () => {
@@ -161,45 +151,7 @@ function MainNavbar() {
                                 <NavItem className="d-none d-lg-block ml-lg-4">
                                     {cookies.name ? (
                                         <>
-                                            <Avatar onclick={() => openLoginModal(true)} name={cookies.name} />
-                                            <Modal
-                                                className="modal-dialog-centered"
-                                                isOpen={isOpenModal}
-                                                toggle={() => openLoginModal(false)}
-                                            >
-                                                <div className="modal-header">
-                                                    <h6 className="modal-title" id="modal-title-default">
-                                                        {t('logout.title')}
-                                                    </h6>
-                                                    <button
-                                                        aria-label="Close"
-                                                        className="close"
-                                                        data-dismiss="modal"
-                                                        type="button"
-                                                        onClick={() => openLoginModal(false)}
-                                                    >
-                                                        <span>×</span>
-                                                    </button>
-                                                </div>
-                                                <div className="modal-body">
-                                                    <p>
-                                                        {t('logout.content')}
-                                                    </p>
-                                                </div>
-                                                <div className="modal-footer">
-                                                    <Button
-                                                        color="link"
-                                                        data-dismiss="modal"
-                                                        type="button"
-                                                        onClick={() => openLoginModal(false)}
-                                                    >
-                                                        {t('cancel')}
-                                                    </Button>
-                                                    <Button color="primary" type="button" className="ml-auto" onClick={logout}>
-                                                        {t('ok')}
-                                                    </Button>
-                                                </div>
-                                            </Modal>
+                                            <Avatar onclick={toUserPage} name={cookies.name} />
                                         </>
                                     ) : (
                                         <Button

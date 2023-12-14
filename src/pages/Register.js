@@ -71,58 +71,17 @@ function Register() {
   return (
     <>
       <main>
-        <section className="section section-shaped section-lg" style={{ height: "100vh" }}>
+        <section className="section section-shaped section-lg" style={{ height: "100vh", padding: 0 }}>
           <DarkBubbleBackground />
           <Container className="pt-lg-4">
-            <Row className="justify-content-center">
+            <Row className="register-wrapper">
               <Col lg="5">
                 <Card className="bg-secondary shadow border-0">
                   {loading ? <Loading /> : <>
-                    <CardHeader className="bg-white pb-5">
-                      <div className="text-muted text-center mb-3">
-                        <small>Sign up with</small>
-                      </div>
-                      <div className="text-center">
-                        <Button
-                          className="btn-neutral btn-icon mr-4"
-                          color="default"
-                          href="#pablo"
-                          onClick={(e) => e.preventDefault()}
-                        >
-                          <span className="btn-inner--icon mr-1">
-                            <img
-                              alt="..."
-                              src={
-                                require("assets/img/icons/common/github.svg")
-                                  .default
-                              }
-                            />
-                          </span>
-                          <span className="btn-inner--text">Github</span>
-                        </Button>
-                        <Button
-                          className="btn-neutral btn-icon ml-1"
-                          color="default"
-                          href="#pablo"
-                          onClick={(e) => e.preventDefault()}
-                        >
-                          <span className="btn-inner--icon mr-1">
-                            <img
-                              alt="..."
-                              src={
-                                require("assets/img/icons/common/google.svg")
-                                  .default
-                              }
-                            />
-                          </span>
-                          <span className="btn-inner--text">Google</span>
-                        </Button>
-                      </div>
-                    </CardHeader>
                     <CardBody className="px-lg-5 py-lg-5">
-                      <div className="text-center text-muted mb-4">
-                        <small>Or sign up with credentials</small>
-                      </div>
+                      <h4 className="text-center text-muted mb-4">
+                        Sign up
+                      </h4>
                       <Form role="form">
                         <FormGroup>
                           <InputGroup className="input-group-alternative mb-3">
@@ -181,13 +140,18 @@ function Register() {
                         <Picker refe={state} />
                         <div className="text-center">
                           <Button
-                            className="mt-4"
+                            className="mt-2 mb-2"
                             color="primary"
                             type="button"
                             onClick={handleRegister}
                           >
                             Create account
                           </Button>
+                        </div>
+                        <div className="text-center">
+                          <a className="text-light" href="/login">
+                            <small>Go to login</small>
+                          </a>
                         </div>
                       </Form>
                     </CardBody>

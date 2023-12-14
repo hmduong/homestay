@@ -10,9 +10,8 @@ function Booking() {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
     const [bookings, setBookings] = useState([]);
+    const [rerender, triggerRerender] = useState(false);
     useEffect(() => {
-        document.documentElement.scrollTop = 0;
-        document.scrollingElement.scrollTop = 0;
         async function getData() {
             setLoading(true)
             const response = await getYourBooking();
@@ -29,14 +28,14 @@ function Booking() {
             setLoading(false)
         }
         getData();
-    }, []);
+    }, [rerender]);
 
     return (
         <>
             <Container>
                 <h1>Your booking</h1>
                 {loading ? <Loading /> : <Card className="booking-container shadow">
-                    {bookings && bookings.map((booking, key) => <div key={key}><BookingCard booking={booking} /></div>
+                    {bookings && bookings.map((booking, key) => <div key={key}><BookingCard booking={booking} triggerRerender={() => triggerRerender(!rerender)} /></div>
                     )}</Card>}
             </Container>
         </>

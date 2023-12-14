@@ -2,13 +2,11 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import {
-    Button,
     UncontrolledCollapse,
     NavbarBrand,
     Navbar,
     NavItem,
     Nav,
-    Modal,
 } from "reactstrap";
 import Avatar from "components/Avatar";
 import { useTranslation } from "react-i18next";
@@ -28,7 +26,6 @@ const OwnerNavbar = ({ refe }) => {
     ]);
     const navigate = useNavigate();
     const [collapseClasses, setCollapseClasses] = useState("");
-    const [isOpenModal, setIsOpenModal] = useState(false);
 
     const onExiting = () => {
         setCollapseClasses("collapsing-out");
@@ -38,16 +35,8 @@ const OwnerNavbar = ({ refe }) => {
         setCollapseClasses("");
     };
 
-    const openLoginModal = (modal) => {
-        setIsOpenModal(modal);
-    };
-
-    const logout = () => {
-        removeCookie("currentuser", { path: '/' });
-        removeCookie("userid", { path: '/' });
-        removeCookie("role", { path: '/' });
-        removeCookie("name", { path: '/' });
-        navigate("/");
+    const toUserPage = () => {
+        navigate("/user");
     };
 
     return (
@@ -79,45 +68,7 @@ const OwnerNavbar = ({ refe }) => {
                                 <img onClick={changeLanguage} width={40} src={enLang ? "https://flagicons.lipis.dev/flags/4x3/gb.svg" : "https://flagicons.lipis.dev/flags/4x3/vn.svg"} alt="" />
                             </NavItem>
                             <NavItem className="d-none d-lg-block ml-lg-4 mr-4">
-                                <Avatar onclick={() => openLoginModal(true)} name={cookies.name} />
-                                <Modal
-                                    className="modal-dialog-centered"
-                                    isOpen={isOpenModal}
-                                    toggle={() => openLoginModal(false)}
-                                >
-                                    <div className="modal-header">
-                                        <h5 className="modal-title" id="modal-title-default">
-                                            {t('logout.title')}
-                                        </h5>
-                                        <button
-                                            aria-label="Close"
-                                            className="close"
-                                            data-dismiss="modal"
-                                            type="button"
-                                            onClick={() => openLoginModal(false)}
-                                        >
-                                            <span>×</span>
-                                        </button>
-                                    </div>
-                                    <div className="modal-body">
-                                        <p>
-                                            {t('logout.content')}
-                                        </p>
-                                    </div>
-                                    <div className="modal-footer">
-                                        <Button
-                                            color="link"
-                                            data-dismiss="modal"
-                                            type="button"
-                                            onClick={() => openLoginModal(false)}
-                                        >
-                                            {t('cancel')}
-                                        </Button>
-                                        <Button color="primary" type="button" className="ml-auto" onClick={logout}>
-                                            {t('ok')}
-                                        </Button>
-                                    </div>
-                                </Modal>
+                                <Avatar onclick={toUserPage} name={cookies.name} />
                             </NavItem>
                         </Nav>
                     </UncontrolledCollapse>

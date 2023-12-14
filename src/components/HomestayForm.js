@@ -54,7 +54,7 @@ const HomestayForm = ({ turnOff, triggerRerender, editPayload }) => {
                         type: "success"
                     })
                 );
-                await saveImage(res.data._id);
+                await saveImages(res.data._id);
                 turnOff();
                 setForm({ ...defaultForm });
                 triggerRerender();
@@ -73,13 +73,13 @@ const HomestayForm = ({ turnOff, triggerRerender, editPayload }) => {
             toggleAni(!ani);
         }
     };
-    const saveImage = async (id) => {
+    const saveImages = async (id) => {
         const formData = new FormData();
         if (files && files.length)
             for (let i = 0; i < files.length; i++) {
                 formData.append("files", files[i]);
             }
-        const url = process.env.REACT_APP_BACK_END + "/homestays/" + id;
+        const url = process.env.REACT_APP_API_URL + "/homestays/" + id;
         const res = await multipleFilesUpload(url, formData);
         if (res.status >= 400 || !res) console.log("err");
     };

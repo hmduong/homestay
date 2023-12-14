@@ -173,10 +173,12 @@ const DetailHomestay = ({ homestay, owner, triggerRerender }) => {
                         type: "success",
                     })
                 );
+                setLoading2(false);
             } else {
+                console.log(res);
                 dispatch(
                     actions.createAlert({
-                        message: "Error occur",
+                        message: res.data.message,
                         type: "error",
                     })
                 );

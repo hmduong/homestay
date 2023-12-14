@@ -1,5 +1,6 @@
 import { useCookies } from "react-cookie";
-import { Outlet, Navigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
+import User from "pages/User";
 
 function UserLayout() {
     const [cookies, setCookie, removeCookie] = useCookies([
@@ -7,13 +8,9 @@ function UserLayout() {
     ]);
 
     return (
-        <>
-            {cookies.role === "visitor" ? (
-                <Outlet />
-            ) : (
-                <Navigate to="/login" replace={true} />
-            )}
-        </>
+        cookies.role ? <>
+            <User />
+        </> : <Navigate to="/login" replace={true} />
     );
 }
 
