@@ -14,6 +14,7 @@ import {
     Dropdown,
     DropdownMenu,
     DropdownItem,
+    Modal
 } from "reactstrap";
 import { useCookies } from "react-cookie";
 import Avatar from "components/Avatar";
@@ -24,6 +25,7 @@ import { useTranslation } from "react-i18next";
 function MainNavbar() {
     const { t, i18n } = useTranslation();
     const [enLang, setEnLang] = useState(true);
+    const [isOpenModal, setIsOpenModal] = useState(false);
     const changeLanguage = () => {
         setEnLang(!enLang)
         i18n.changeLanguage(enLang ? 'vi' : 'en')
@@ -38,9 +40,19 @@ function MainNavbar() {
     const [isOpenNotification, setIsOpenNotification] = useState(false);
     const [isNewNoti, setIsNewNoti] = useState(false);
     const [notifications, setNotifications] = useState([]);
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+    const toggle = () => setDropdownOpen((prevState) => !prevState);
+    const logout = () => {
+        removeCookie("currentuser", { path: '/' });
+        removeCookie("userid", { path: '/' });
+        removeCookie("role", { path: '/' });
+        removeCookie("name", { path: '/' });
+        navigate("/");
+    };
 
     const currentPage = () => {
         const path = document.location.pathname
+        if (path === "/user") return ""
         return path === '/visitor/booking' ? 'booking' : 'homestay'
     }
 
@@ -151,7 +163,56 @@ function MainNavbar() {
                                 <NavItem className="d-none d-lg-block ml-lg-4">
                                     {cookies.name ? (
                                         <>
-                                            <Avatar onclick={toUserPage} name={cookies.name} />
+                                            <Dropdown isOpen={dropdownOpen}
+                                                toggle={toggle}
+                                                direction={"down"}
+                                                className="avatar-droprown">
+                                                <DropdownToggle className="dropdown-btn">
+                                                    <Avatar name={cookies.name} />
+                                                </DropdownToggle>
+                                                <DropdownMenu className="mt-5">
+                                                    <DropdownItem onClick={toUserPage}>About you</DropdownItem>
+                                                    <DropdownItem onClick={() => { setIsOpenModal(true); }}>Log out</DropdownItem>
+                                                </DropdownMenu>
+                                            </Dropdown>
+                                            <Modal
+                                                className="modal-dialog-centered"
+                                                isOpen={isOpenModal}
+                                                toggle={() => setIsOpenModal(false)}
+                                            >
+                                                <div className="modal-header">
+                                                    <h6 className="modal-title" id="modal-title-default">
+                                                        {t('logout.title')}
+                                                    </h6>
+                                                    <button
+                                                        aria-label="Close"
+                                                        className="close"
+                                                        data-dismiss="modal"
+                                                        type="button"
+                                                        onClick={() => setIsOpenModal(false)}
+                                                    >
+                                                        <span>×</span>
+                                                    </button>
+                                                </div>
+                                                <div className="modal-body">
+                                                    <p>
+                                                        {t('logout.content')}
+                                                    </p>
+                                                </div>
+                                                <div className="modal-footer">
+                                                    <Button
+                                                        color="link"
+                                                        data-dismiss="modal"
+                                                        type="button"
+                                                        onClick={() => setIsOpenModal(false)}
+                                                    >
+                                                        {t('cancel')}
+                                                    </Button>
+                                                    <Button color="primary" type="button" className="ml-auto" onClick={logout}>
+                                                        {t('ok')}
+                                                    </Button>
+                                                </div>
+                                            </Modal>
                                         </>
                                     ) : (
                                         <Button

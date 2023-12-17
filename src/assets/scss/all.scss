@@ -862,9 +862,36 @@
         }
     }
 
+    .the-split {
+        width: 2px;
+        height: 200px;
+        background: #b3b3b3;
+        margin-left: 30px;
+    }
+
     .user-text {
         flex: 1;
         padding-left: 20px;
+    }
+
+    .user-info-header {
+        display: flex;
+        justify-content: space-between;
+
+        h3 {
+            font-weight: 700;
+            margin: 0;
+        }
+    }
+
+    .user-info-input {
+        display: flex;
+        align-items: center;
+        margin-top: 20px;
+
+        span {
+            width: 120px;
+        }
     }
 
     .logout-btn {
@@ -902,4 +929,19 @@
     height: 70vh;
     align-items: center;
     justify-content: center;
+}
+
+//navbar-main {
+.navbar-main {
+    .avatar-droprown {
+        height: 0;
+    }
+
+    .dropdown-btn {
+        width: 0;
+        height: 0;
+        border: none;
+        padding: 0;
+        margin-top: -45px;
+    }
 }
