@@ -124,7 +124,7 @@ const dataQuarterPie = {
 
 const Statistics = () => {
   const dispatch = useDispatch();
-  const [year, setYear] = useState("2022");
+  const [year, setYear] = useState("2023");
   const [type, setType] = useState("Money");
   const [homestay, setHomeStay] = useState(null);
   const [list, setList] = useState({
@@ -232,6 +232,7 @@ const Statistics = () => {
             <option value="2020">Year: 2020</option>
             <option value="2021">Year: 2021</option>
             <option value="2022">Year: 2022</option>
+            <option value="2023">Year: 2023</option>
           </select>
           <select
             name="type"

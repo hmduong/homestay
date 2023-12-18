@@ -24,18 +24,29 @@ const Main = () => {
     const [cookies, setCookie, removeCookie] = useCookies(["role"]);
     const [checkin, setCheckin] = useState(null);
     const [checkout, setCheckout] = useState(null);
-    const [city, setCity] = useState("Ha Noi");
-    const [price, setPrice] = useState(5000000);
+    const [city, setCity] = useState("");
+    const [price, setPrice] = useState(null);
     const [homestays, setHomestays] = useState([]);
     const [loading, setLoading] = useState(false);
     const dispatch = useDispatch();
+    const prices = [1000000, 2000000, 3000000, 4000000, 5000000]
+
+    const priceChange = (newPrice) => {
+        if (newPrice) setPrice(prices[newPrice - 1]);
+        else setPrice("")
+    }
+
+    const cityChange = (newCity) => {
+        if (newCity) setCity(defaultGeo.geoList[newCity - 1]);
+        else setCity("")
+    }
 
     const searchHandler = async () => {
         const data = {
             city,
             checkin,
             checkout,
-            price
+            price: price || 0
         };
         setLoading(true)
         const response = await search(data);
@@ -62,38 +73,82 @@ const Main = () => {
         return (
             <div className="main-page">
                 <Row className="main-filter">
+                    <Col md={12} className="main-page-header">
+                        <i className="fa fa-home" aria-hidden="true"></i>
+                        <h2>Search</h2>
+                    </Col>
                     <Col md="3">
-                        <FormGroup>
+                        <FormGroup style={{ position: 'relative' }}>
                             <p className="input-label">City</p>
                             <Input
+                                placeholder="Chọn thành phố"
+                                className="main-filter-select"
+                                type="text"
+                                value={city}
+                            ></Input>
+                            <Input
+                                className="main-filter-select-dropdown"
                                 type="select"
-                                onChange={(e) =>
-                                    setCity(defaultGeo.geoList[e.target.selectedIndex])
-                                }
+                                onChange={(e) => cityChange(e.target.selectedIndex)}
                             >
+                                <option
+                                    style={{ display: "none" }}
+                                    value={""}
+                                ></option>
                                 <option value="Ha Noi">Ha Noi</option>
-                                <option value="Ho Chi Minh">Ho Chi Minh</option>
                                 <option value="Da Nang">Da Nang</option>
+                                <option value="Ho Chi Minh">Ho Chi Minh</option>
                                 <option value="Hue">Hue</option>
                                 <option value="Can Tho">Can Tho</option>
                             </Input>
+                            {city && (
+                                <div
+                                    className="main-select-clear"
+                                    onClick={() => cityChange(0)}
+                                >
+                                    <i
+                                        className="fa fa-times"
+                                        aria-hidden="true"
+                                    ></i>
+                                </div>
+                            )}
                         </FormGroup>
                     </Col>
                     <Col md="3">
-                        <FormGroup>
+                        <FormGroup style={{ position: 'relative' }}>
                             <p className="input-label">Price</p>
                             <Input
+                                placeholder="Mức giá"
+                                className="main-filter-select"
+                                type="text"
+                                value={price}
+                            ></Input>
+                            <Input
+                                className="main-filter-select-dropdown"
                                 type="select"
-                                onChange={(e) =>
-                                    setPrice((e.target.selectedIndex + 1) * 1000000)
-                                }
+                                onChange={(e) => priceChange(e.target.selectedIndex)}
                             >
-                                <option value="5000000">5000000</option>
-                                <option value="4000000">4000000</option>
-                                <option value="3000000">3000000</option>
-                                <option value="2000000">2000000</option>
-                                <option value="1000000">1000000</option>
+                                <option
+                                    style={{ display: "none" }}
+                                    value={null}
+                                ></option>
+                                {prices.map((price, index) => (
+                                    <option key={index} value={price}>
+                                        {price}
+                                    </option>
+                                ))}
                             </Input>
+                            {price != 0 && price != null && (
+                                <div
+                                    className="main-select-clear"
+                                    onClick={() => priceChange(null)}
+                                >
+                                    <i
+                                        className="fa fa-times"
+                                        aria-hidden="true"
+                                    ></i>
+                                </div>
+                            )}
                         </FormGroup>
                     </Col>
                     <Col md="3">
@@ -146,6 +201,15 @@ const Main = () => {
                         <></>
                     )}
                 </Row>}
+                <Row>
+                    <Col md={12} className="main-page-header">
+                        <i className="fa fa-home" aria-hidden="true"></i>
+                        <h2>Top homestay</h2>
+                    </Col>
+                    <Col md={12}>
+                        Top homestay
+                    </Col>
+                </Row>
             </div>
         );
     }

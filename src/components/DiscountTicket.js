@@ -43,8 +43,8 @@ const DiscountTicket = ({ discount, onClick }) => {
                 onMouseOver={() => setHover(true)}>
                 <div className="ticket-detail">
                     <h2 style={{ width: 'fit-content', cursor: 'pointer', fontWeight: 'bolder' }}>{discount.name}</h2>
-                    <div>checkin: {format(new Date(discount.checkin), "dd/MM/yyyy")}</div>
-                    <div>checkout: {format(new Date(discount.checkout), "dd/MM/yyyy")}</div>
+                    <div>start: {format(new Date(discount.checkin), "dd/MM/yyyy")}</div>
+                    <div>end: {format(new Date(discount.checkout), "dd/MM/yyyy")}</div>
                     <div>quantity: {discount.quantity}</div>
                     <div>used: {discount.used}</div>
                     <div>Homestays: {discount.homestays.map((homestay, key) => <span key={key}>{homestay?.name}, </span>)}</div>

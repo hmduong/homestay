@@ -515,6 +515,50 @@
     }
 }
 
+.main-page-header {
+    position: relative;
+    height: 60px;
+
+    i {
+        position: absolute;
+        color: #5e72e4;
+        background: white;
+        border-radius: 50%;
+        padding: 10px;
+        font-size: 40px;
+        z-index: 0;
+        border: 1px solid #5e72e4;
+    }
+
+    h2 {
+        position: absolute;
+        font-weight: 700;
+        z-index: 2;
+        top: 5px;
+        left: 80px;
+    }
+}
+
+.main-filter-select {
+    z-index: 0;
+}
+
+.main-filter-select-dropdown {
+    opacity: 0;
+    z-index: 1;
+    position: absolute;
+    top: 27px;
+    width: 100%;
+}
+
+.main-select-clear {
+    position: absolute;
+    z-index: 3;
+    top: 36px;
+    right: 8px;
+    cursor: pointer;
+}
+
 .main-filter {
     margin-bottom: 8px;
 }
