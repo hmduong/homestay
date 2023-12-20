@@ -163,13 +163,14 @@ const BookingListCard = ({ booking, triggerRerender }) => {
             <div className="booking-info">
                 <div className="sub-info">
                     <div style={{ paddingLeft: "8px" }}>
+                        <h5>Tenant: {booking.user.name}</h5>
                         <h5>Check in: {format(new Date(booking.checkin), "dd/MM/yyyy")}</h5>
                         <h5>
                             Check out: {format(new Date(booking.checkout), "dd/MM/yyyy")}
                         </h5>
                         <h5>Phone: {booking.phone}</h5>
-                        <h5>People: {booking.people}</h5>
                         <h5>Money: {booking.money}</h5>
+                        <h5>Deposited: {booking.deposit}</h5>
                     </div>
                 </div>
                 <h5 className={`booking-status list ${booking.status}`}>

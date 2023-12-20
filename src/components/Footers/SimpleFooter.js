@@ -92,7 +92,7 @@ class SimpleFooter extends React.Component {
                     href="https://www.creative-tim.com?ref=adsr-footer"
                     target="_blank"
                   >
-                    Creative Tim
+                    Tran Khanh Le
                   </a>
                   .
                 </div>
@@ -104,7 +104,7 @@ class SimpleFooter extends React.Component {
                       href="https://www.creative-tim.com?ref=adsr-footer"
                       target="_blank"
                     >
-                      Creative Tim
+                      Tran Khanh Le
                     </NavLink>
                   </NavItem>
                   <NavItem>

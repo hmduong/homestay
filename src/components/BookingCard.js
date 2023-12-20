@@ -204,16 +204,18 @@ const BookingCard = ({ booking, triggerRerender }) => {
 
                         {loading ? <Loading /> : <Row>
                             <Col md={12} className="m-2 mt-3">
-                                <h5>
+                                <h4>
                                     Deposit
-                                </h5>
+                                </h4>
                             </Col>
                             <Col md={12}>
-                                <img style={{ width: '100%', height: '400px' }} src={process.env.REACT_APP_API_URL + "/users/" + booking.homestay.owner + "/banking"} alt="" />
+                                <h6 className='ml-2'>Vui lòng số tiền đặt cọc là <span style={{ color: 'red' }}>{booking.deposit} VND</span> để hoàn tất quá trình đặt phòng</h6>
+                                <p className={`mb-0 ml-2 input-label`} >Quét mã QR để thanh toán</p>
+                                <img className='p-2' style={{ width: '100%', height: '400px' }} src={process.env.REACT_APP_API_URL + "/users/" + booking.homestay.owner + "/banking"} alt="" />
                             </Col>
                             <Col md="12" className='m-2'>
                                 <FormGroup>
-                                    <p className={`mb-0 input-label ${validateErr.bill ? (ani ? 'err1' : 'err2') : ''}`} >Bill</p>
+                                    <p className={`mb-0 input-label ${validateErr.bill ? (ani ? 'err1' : 'err2') : ''}`} >Tải ảnh giao dịch</p>
                                     <Input
                                         type="file"
                                         accept=".jpg,.png"

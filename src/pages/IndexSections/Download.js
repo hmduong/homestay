@@ -5,10 +5,10 @@
 =========================================================
 
 * Product Page: https://www.creative-tim.com/product/argon-design-system-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
+* Copyright 2023 Tran Khanh Le (https://www.creative-tim.com)
 * Licensed under MIT (https://github.com/creativetimofficial/argon-design-system-react/blob/master/LICENSE.md)
 
-* Coded by Creative Tim
+* Coded by Tran Khanh Le
 
 =========================================================
 
@@ -37,7 +37,7 @@ class Download extends React.Component {
                 </h2>
                 <p className="lead">
                   Cause if you do, it can be yours for FREE. Hit the button
-                  below to navigate to Creative Tim where you can find the
+                  below to navigate to Tran Khanh Le where you can find the
                   Design System in React. Start a new project or give an old
                   Bootstrap project a new look!
                 </p>
