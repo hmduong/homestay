@@ -55,6 +55,9 @@ export default {
         choose: 'Chọn',
         aboutYou: 'Hồ sơ',
         bill: 'Hóa đơn',
+        rate: 'Đánh giá',
+        uploadBillImage: 'Tải ảnh giao dịch',
+        scanQRPayment: 'Quét mã QR để thanh toán',
         logout: {
             title: 'Đăng xuất',
             content: 'Bạn có chắc muốn đăng xuất không?',
@@ -90,6 +93,7 @@ export default {
             comment: 'Bình luận',
             sendReview: 'Gửi đánh giá',
             checkHomestay: 'Kiểm tra Homestay',
+            detailReview: 'Chi tiết đánh giá',
             bookings: {
                 title: 'Số đơn đặt',
                 all: 'Tất cả',
@@ -102,7 +106,9 @@ export default {
                 stayed: "Ở nhé?",
                 declined: "Xóa nhé?",
                 expired: "Xác nhận hết hạn?",
-            }
+            },
+            map: 'Bản đồ',
+            showMap: 'Hiển thị bản đồ',
         },
         search: {
             title: 'Tìm kiếm',

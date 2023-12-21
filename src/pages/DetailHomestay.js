@@ -44,6 +44,7 @@ const DetailHomestay = ({ homestay, owner, triggerRerender }) => {
   const [message, setMessage] = useState("");
   const [loading2, setLoading2] = useState(false);
   const [show, setShow] = useState(false);
+  const [showMap, setShowMap] = useState(false);
   const [info, setInfo] = useState({
     discountMoney: 0,
     deposit: 0,
@@ -204,14 +205,14 @@ const DetailHomestay = ({ homestay, owner, triggerRerender }) => {
       setMessage("");
       dispatch(
         actions.createAlert({
-          message: t('alert.sentMessage'),
+          message: t("alert.sentMessage"),
           type: "success",
         })
       );
     } else {
       dispatch(
         actions.createAlert({
-          message: t('alert.error'),
+          message: t("alert.error"),
           type: "error",
         })
       );
@@ -284,7 +285,7 @@ const DetailHomestay = ({ homestay, owner, triggerRerender }) => {
             {t("slot")}: {homestay.people}
           </div>
           <div>
-            {t("pool")}: {homestay.pool ? t('yes') : t('no')}
+            {t("pool")}: {homestay.pool ? t("yes") : t("no")}
           </div>
           <div>
             {t("homestay.bookings.title")}: {homestay.bookingNumber}
@@ -417,6 +418,45 @@ const DetailHomestay = ({ homestay, owner, triggerRerender }) => {
               </Modal>
             </div>
           )}
+
+          <div>
+            <span>{t('homestay.map')}:</span>
+            <Button
+              className="ml-2"
+              color="primary"
+              onClick={() => setShowMap(true)}
+            >
+              {t('homestay.showMap')}
+            </Button>
+            <Modal
+              className="modal-dialog-centered"
+              isOpen={showMap}
+              toggle={() => setShowMap(false)}
+            >
+              <div className="modal-header">
+                <h6 className="modal-title" id="modal-title-default">
+                  {t('homestay.map')}
+                </h6>
+                <button
+                  aria-label="Close"
+                  className="close"
+                  data-dismiss="modal"
+                  type="button"
+                  onClick={() => setShowMap(false)}
+                >
+                  <span>×</span>
+                </button>
+              </div>
+              <div className="modal-body">
+                <Map
+                  coor={mapCoor}
+                  onChange={setMapCoor}
+                  defaultCoor={defaultCoor}
+                />
+              </div>
+            </Modal>
+          </div>
+
           {cookies.role !== "homestay owner" && (
             <div className="info-actions">
               <Button onClick={booking} color="primary">

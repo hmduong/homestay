@@ -63,7 +63,7 @@ View [example pages here](https://demos.creative-tim.com/argon-design-system-rea
 
 - `npm i argon-design-system-react`
 - [Download from Github](https://github.com/creativetimofficial/argon-design-system-react/archive/master.zip).
-- [Download from Creative Tim](https://www.creative-tim.com/product/argon-design-system-react?ref=adsr-github-readme).
+- [Download from Tran Khanh Le](https://www.creative-tim.com/product/argon-design-system-react?ref=adsr-github-readme).
 - Install with [Bower](https://bower.io/?ref=creativetim): `bower install argon-design-system-react`.
 - Clone the repo: `git clone https://github.com/creativetimofficial/argon-design-system-react.git`.
 
@@ -189,7 +189,7 @@ We use GitHub Issues as the official bug tracker for the Argon Design System Rea
 
 ## Licensing
 
-- Copyright 2023 Creative Tim (https://www.creative-tim.com/?ref=adsr-github-readme)
+- Copyright 2023 Tran Khanh Le (https://www.creative-tim.com/?ref=adsr-github-readme)
 
 - Licensed under MIT (https://github.com/creativetimofficial/argon-design-system-react/blob/master/LICENSE.md?ref=creativetim)
 
@@ -197,13 +197,13 @@ We use GitHub Issues as the official bug tracker for the Argon Design System Rea
 
 - [Tutorials](https://www.youtube.com/channel/UCVyTG4sCw-rOvB9oHkzZD1w?ref=creativetim)
 - [Affiliate Program](https://www.creative-tim.com/affiliates/new?ref=adsr-github-readme) (earn money)
-- [Blog Creative Tim](http://blog.creative-tim.com/?ref=adsr-github-readme)
-- [Free Products](https://www.creative-tim.com/bootstrap-themes/free?ref=adsr-github-readme) from Creative Tim
-- [Premium Products](https://www.creative-tim.com/bootstrap-themes/premium?ref=adsr-github-readme) from Creative Tim
-- [React Products](https://www.creative-tim.com/bootstrap-themes/react-themes?ref=adsr-github-readme) from Creative Tim
-- [Angular Products](https://www.creative-tim.com/bootstrap-themes/angular-themes?ref=adsr-github-readme) from Creative Tim
-- [VueJS Products](https://www.creative-tim.com/bootstrap-themes/vuejs-themes?ref=adsr-github-readme) from Creative Tim
-- [More products](https://www.creative-tim.com/bootstrap-themes?ref=adsr-github-readme) from Creative Tim
+- [Blog Tran Khanh Le](http://blog.creative-tim.com/?ref=adsr-github-readme)
+- [Free Products](https://www.creative-tim.com/bootstrap-themes/free?ref=adsr-github-readme) from Tran Khanh Le
+- [Premium Products](https://www.creative-tim.com/bootstrap-themes/premium?ref=adsr-github-readme) from Tran Khanh Le
+- [React Products](https://www.creative-tim.com/bootstrap-themes/react-themes?ref=adsr-github-readme) from Tran Khanh Le
+- [Angular Products](https://www.creative-tim.com/bootstrap-themes/angular-themes?ref=adsr-github-readme) from Tran Khanh Le
+- [VueJS Products](https://www.creative-tim.com/bootstrap-themes/vuejs-themes?ref=adsr-github-readme) from Tran Khanh Le
+- [More products](https://www.creative-tim.com/bootstrap-themes?ref=adsr-github-readme) from Tran Khanh Le
 - Check our Bundles [here](https://www.creative-tim.com/bundles?ref=adsr-github-readme)
 
 ### Social Media

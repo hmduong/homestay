@@ -14,8 +14,9 @@ const DiscountTicket = ({ discount, onClick }) => {
     const [hover, setHover] = useState(false)
     const [hide, setHide] = useState(false)
     const [loading, setLoading] = useState(false);
+    const [dHomestay, setDHomestay] = useState([])
     useEffect(() => {
-        if (discount) discount.homestays = discount.homestays.map(homestay => homestay?.name)
+        if (discount) setDHomestay(discount.homestays.map(homestay => homestay?.name))
     }, [])
     const deactivate = async (id) => {
         setLoading(true)
@@ -50,7 +51,7 @@ const DiscountTicket = ({ discount, onClick }) => {
                     <div>{t('end')}: {format(new Date(discount.checkout), "dd/MM/yyyy")}</div>
                     <div>{t('quantity')}: {discount.quantity}</div>
                     <div>{t('used')}: {discount.used}</div>
-                    <div>Homestays: {discount.homestays.map((homestay, key) => <span key={key}>{homestay?.name}, </span>)}</div>
+                    <div>Homestays: {dHomestay.map((homestayName, key) => <span key={key}>{homestayName}, </span>)}</div>
                     <h6 className={`discount-active ${discount.active && !hide ? 'active' : 'inactive'}`}>{discount.active ? t('active') : t('deactivated')}</h6>
                 </div>
                 <div className="ticket-percent">

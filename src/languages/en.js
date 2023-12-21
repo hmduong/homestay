@@ -55,6 +55,9 @@ export default {
         choose: 'Choose',
         aboutYou: 'About you',
         bill: 'Bill',
+        rate: 'Rate',
+        uploadBillImage: 'Upload bill image',
+        scanQR: 'Scan qr to payment',
         logout: {
             title: 'Log out',
             content: 'Are you sure you want to log out?',
@@ -90,6 +93,7 @@ export default {
             sendReview: 'Send review',
             comment: 'Comment',
             checkHomestay: 'Check Homestay',
+            detailReview: 'Detail review',
             bookings: {
                 title: 'Bookings',
                 all: 'All',
@@ -102,7 +106,9 @@ export default {
                 stayed: "Stay here?",
                 declined: "Delete?",
                 expired: "Confirm expired?",
-            }
+            },
+            map: 'Map',
+            showMap: 'Show map',
         },
         search: {
             title: 'Search',

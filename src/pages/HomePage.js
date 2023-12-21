@@ -19,6 +19,7 @@ import { formatDate } from "utils/date";
 import { useDispatch } from "react-redux";
 import { actions } from "store/AlertSlice"
 import Loading from "components/Loading";
+import { getTop } from "services/homestayManagementService";
 import { useTranslation } from 'react-i18next';
 
 const Main = () => {
@@ -28,7 +29,9 @@ const Main = () => {
     const [city, setCity] = useState("");
     const [price, setPrice] = useState(null);
     const [homestays, setHomestays] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const [topHomestays, setTopHomestays] = useState([]);
+    const [loadingSearch, setLoadingSearch] = useState(false);
+    const [loadingTop, setLoadingTop] = useState(false);
     const dispatch = useDispatch();
     const prices = [1000000, 2000000, 3000000, 4000000, 5000000]
     const { t, i18n } = useTranslation();
@@ -43,6 +46,23 @@ const Main = () => {
         else setCity("")
     }
 
+    const topHandler = async () => {
+        setLoadingSearch(true)
+        const response = await getTop({ limit: 3 });
+        if (response.data.homestays) {
+            setTopHomestays(response.data.homestays);
+        }
+        else {
+            dispatch(
+                actions.createAlert({
+                    message: "Error occur",
+                    type: "error"
+                })
+            );
+        }
+        setLoadingSearch(false)
+    };
+
     const searchHandler = async () => {
         const data = {
             city,
@@ -50,7 +70,7 @@ const Main = () => {
             checkout,
             price: price || 0
         };
-        setLoading(true)
+        setLoadingTop(true)
         const response = await search(data);
         if (response.status < 299) {
             setHomestays(response.data.homestays);
@@ -62,11 +82,15 @@ const Main = () => {
                 })
             );
         }
-        setLoading(false)
+        setLoadingTop(false)
     };
 
     useEffect(() => {
-        searchHandler();
+        topHandler()
+    }, [])
+
+    useEffect(() => {
+        if (checkin || checkout || city || price) searchHandler(); else setHomestays([])
     }, [checkin, checkout, city, price]);
 
     if (cookies.role === "homestay owner") {
@@ -192,15 +216,13 @@ const Main = () => {
                         </FormGroup>
                     </Col>
                 </Row>
-                {loading ? <Loading /> : <Row>
-                    {homestays ? (
+                {loadingSearch ? <Loading /> : <Row>
+                    {homestays && (
                         homestays.map((homestay, index) => (
                             <Col key={index} className="mb-4" md="4">
                                 <HomestayCard homestay={homestay} />
                             </Col>
                         ))
-                    ) : (
-                        <></>
                     )}
                 </Row>}
                 <Row>
@@ -208,10 +230,15 @@ const Main = () => {
                         <i className="fa fa-home" aria-hidden="true"></i>
                         <h2>{t('topHomestay')}</h2>
                     </Col>
-                    <Col md={12}>
-                        {t('topHomestay')}
-                    </Col>
                 </Row>
+                {loadingTop ? <Loading /> :
+                    <Row className="mt-4">
+                        {topHomestays && topHomestays.map((homestay, index) => (
+                            <Col key={index} className="mb-4" md="4">
+                                <HomestayCard homestay={homestay} />
+                            </Col>
+                        ))}
+                    </Row>}
             </div>
         );
     }

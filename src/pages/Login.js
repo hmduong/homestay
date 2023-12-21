@@ -32,11 +32,15 @@ const Login = () => {
   useEffect(() => {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
-    document.addEventListener('keypress', function (e) {
+    const enterlogin = (e) => {
       if (e.key === 'Enter') {
         handleLogin()
       }
-    })
+    }
+    document.addEventListener('keypress', enterlogin)
+    return () => {
+      document.removeEventListener('keypress', enterlogin)
+    }
   }, []);
   const [cookies, setCookie, removeCookie] = useCookies([
     "currentuser",

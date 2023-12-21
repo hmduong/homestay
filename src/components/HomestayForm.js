@@ -192,14 +192,16 @@ const HomestayForm = ({ turnOff, triggerRerender, editPayload }) => {
                             </FormGroup>
                         </Col>
                         <Col md="6">
-                            <FormGroup>
+                            <FormGroup style={{ position: 'relative' }}>
                                 <p className={`input-label`}>{t('images')}</p>
                                 <Input
+                                    className="img-input form-control"
                                     type="file"
                                     accept=".jpg,.png"
                                     multiple
                                     onChange={(e) => setFiles(e.target.files)}
                                 />
+                                {files && files.length ? <div className="img-input-mask">{files.length} file</div> : <div className="img-input-mask">Upload file</div>}
                             </FormGroup>
                         </Col>
                         <Col md="6">

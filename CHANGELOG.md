@@ -17,14 +17,14 @@
 
 - Changed all 1.0.0 versioning to v1.1.0
 - Solved https://github.com/creativetimofficial/argon-design-system-react/issues/2
-- Changes to match [Argon Design System](https://www.creative-tim.com/product/argon-design-system?ref=adsr-changelog) by Creative Tim
+- Changes to match [Argon Design System](https://www.creative-tim.com/product/argon-design-system?ref=adsr-changelog) by Tran Khanh Le
 - - `src/components/Footers/CardsFooter.js`
 - - `src/views/IndexSections/Datepicker.js`
 - Solved build issue
 
 ### Major style changes
 
-- Changed the whole scss/css files and folders to match those of [Argon Design System](https://www.creative-tim.com/product/argon-design-system?ref=adsr-changelog) by Creative Tim
+- Changed the whole scss/css files and folders to match those of [Argon Design System](https://www.creative-tim.com/product/argon-design-system?ref=adsr-changelog) by Tran Khanh Le
 
 ### Deleted components
 
@@ -82,4 +82,4 @@ Please update the following components: DateTime
 ### Original Release
 
 - Added Reactstrap as base framework
-- Added design from Argon Design System by Creative Tim
+- Added design from Argon Design System by Tran Khanh Le

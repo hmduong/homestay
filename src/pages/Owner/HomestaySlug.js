@@ -47,7 +47,7 @@ const HomestaySlug = () => {
         <Loading />
     ) : (
         <>
-            <Container>
+            {data.homestay && <Container>
                 <div style={{ display: "flex", justifyContent: cookies.role === "homestay owner" ? "space-between" : 'center' }}>
                     <h2
                         style={{
@@ -58,7 +58,7 @@ const HomestaySlug = () => {
                             color: cookies.role === "homestay owner" ? '' : '#FFF'
                         }}
                     >
-                        {data.homestay.name}
+                        {data.homestay && data.homestay.name}
                     </h2>
                     {cookies.role === "homestay owner" && (
                         <>
@@ -86,7 +86,7 @@ const HomestaySlug = () => {
                                 </div>
                                 <div className="modal-body">
                                     <p>
-                                        {t('homestay.slug.delete.body')} {data.homestay.name} ?
+                                        {t('homestay.slug.delete.body')} {data.homestay && data.homestay.name} ?
                                     </p>
                                 </div>
                                 <div className="modal-footer">
@@ -107,14 +107,14 @@ const HomestaySlug = () => {
                     )}
                 </div>
                 <DetailHomestay homestay={data.homestay} owner={data.owner} triggerRerender={() => triggerRerender(!rerender)} />
-            </Container>
+            </Container>}
             {cookies.role === "homestay owner" && (
                 <>
-                    <BookingList homestay={data.homestay} />
+                    {data.homestay && <BookingList homestay={data.homestay} />}
                     <Statistics />
                 </>
             )}
-            <Review homestay={data.homestay} />
+            {data.homestay && <Review homestay={data.homestay} />}
         </>
     );
 };
