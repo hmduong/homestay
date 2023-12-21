@@ -50,7 +50,7 @@ const HomestayForm = ({ turnOff, triggerRerender, editPayload }) => {
             if (res.status < 299) {
                 dispatch(
                     actions.createAlert({
-                        message: editPayload ? "Edited homestay" : "Created homestay",
+                        message: editPayload ? t('alert.editedHomestay') : t('alert.createdHomestay'),
                         type: "success"
                     })
                 );
@@ -61,7 +61,7 @@ const HomestayForm = ({ turnOff, triggerRerender, editPayload }) => {
             } else {
                 dispatch(
                     actions.createAlert({
-                        message: "Error occur",
+                        message: t('alert.error'),
                         type: "error"
                     })
                 );
@@ -153,11 +153,11 @@ const HomestayForm = ({ turnOff, triggerRerender, editPayload }) => {
                                         });
                                     }}
                                 >
-                                    <option value="Ha Noi">Ha Noi</option>
-                                    <option value="Ho Chi Minh">Ho Chi Minh</option>
-                                    <option value="Da Nang">Da Nang</option>
-                                    <option value="Hue">Hue</option>
-                                    <option value="Can Tho">Can Tho</option>
+                                    <option value="Ha Noi">{t('search.address.hanoi')}</option>
+                                    <option value="Da Nang">{t('search.address.danang')}</option>
+                                    <option value="Ho Chi Minh">{t('search.address.hochiminh')}</option>
+                                    <option value="Hue">{t('search.address.hue')}</option>
+                                    <option value="Can Tho">{t('search.address.cantho')}</option>
                                 </Input>
                             </FormGroup>
                         </Col>

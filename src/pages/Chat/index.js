@@ -7,9 +7,12 @@ import { Navigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { actions } from "store/AlertSlice"
 import Loading from "components/Loading";
+import { useTranslation } from "react-i18next";
 
 const Chat = () => {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
+
   const [cookies, setCookie, removeCookie] = useCookies([
     "currentuser",
     "name"
@@ -27,7 +30,7 @@ const Chat = () => {
       } else {
         dispatch(
           actions.createAlert({
-            message: "Error occur",
+            message: t('alert.error'),
             type: "error"
           })
         );

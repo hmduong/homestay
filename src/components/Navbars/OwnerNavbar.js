@@ -19,12 +19,14 @@ import { useTranslation } from "react-i18next";
 
 const OwnerNavbar = ({ refe }) => {
     const { t, i18n } = useTranslation();
-    const [enLang, setEnLang] = useState(true);
+    const languageStore = JSON.parse(localStorage.getItem('language'));
+    const [enLang, setEnLang] = useState(languageStore == 'vi' ? false : true ?? true);
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const changeLanguage = () => {
-        setEnLang(!enLang)
-        i18n.changeLanguage(enLang ? 'vi' : 'en')
+        setEnLang(!enLang);
+        localStorage.setItem('language', JSON.stringify(enLang ? 'vi' : 'en'))
+        i18n.changeLanguage(enLang ? 'vi' : 'en');
     }
     const [cookies, setCookie, removeCookie] = useCookies([
         "currentuser",
@@ -98,8 +100,8 @@ const OwnerNavbar = ({ refe }) => {
                                         <Avatar name={cookies.name} />
                                     </DropdownToggle>
                                     <DropdownMenu className="mt-5">
-                                        <DropdownItem onClick={toUserPage}>About you</DropdownItem>
-                                        <DropdownItem onClick={() => { setIsOpenModal(true); }}>Log out</DropdownItem>
+                                        <DropdownItem onClick={toUserPage}>{t('aboutYou')}</DropdownItem>
+                                        <DropdownItem onClick={() => { setIsOpenModal(true); }}>{t('logout.title')}</DropdownItem>
                                     </DropdownMenu>
                                 </Dropdown>
                                 <Modal

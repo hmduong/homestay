@@ -10,9 +10,11 @@ import { editBook } from "services/booking";
 import { useDispatch } from "react-redux";
 import { actions } from "store/AlertSlice"
 import Loading from "./Loading";
+import { useTranslation } from "react-i18next";
 
 const BookingListCard = ({ booking, triggerRerender }) => {
     const dispatch = useDispatch();
+    const { t } = useTranslation();
     useEffect(() => {
         const fetch = async () => {
             const response = await getBooking(booking._id);
@@ -71,11 +73,11 @@ const BookingListCard = ({ booking, triggerRerender }) => {
     };
     const updateBooking = (status) => {
         const message = {
-            accepted: "Ok nhé?",
-            confirmed: "Xác nhận đặt cọc?",
-            stayed: "Ở nhé?",
-            declined: "Xóa nhé?",
-            expired: "Xác nhận hết hạn?",
+            accepted: t('homestay.messageAlert.accepted'),
+            confirmed: t('homestay.messageAlert.confirmed'),
+            stayed: t('homestay.messageAlert.stayed'),
+            declined: t('homestay.messageAlert.declined'),
+            expired: t('homestay.messageAlert.expired'),
         }
         setIsOpenModal(true);
         setActionsEdit({
@@ -86,7 +88,7 @@ const BookingListCard = ({ booking, triggerRerender }) => {
                     setIsOpenModal(false);
                     dispatch(
                         actions.createAlert({
-                            message: "Updated booking",
+                            message: t('alert.updated'),
                             type: "success"
                         })
                     );
@@ -94,7 +96,7 @@ const BookingListCard = ({ booking, triggerRerender }) => {
                 } else {
                     dispatch(
                         actions.createAlert({
-                            message: "Error occur",
+                            message: t('alert.updated'),
                             type: "error"
                         })
                     );
@@ -133,7 +135,7 @@ const BookingListCard = ({ booking, triggerRerender }) => {
         if (res) {
             dispatch(
                 actions.createAlert({
-                    message: "Updated service!",
+                    message: t('alert.updatedService'),
                     type: "success"
                 })
             );
@@ -141,7 +143,7 @@ const BookingListCard = ({ booking, triggerRerender }) => {
         } else {
             dispatch(
                 actions.createAlert({
-                    message: "Error occur",
+                    message: t('alert.error'),
                     type: "error"
                 })
             );
@@ -163,13 +165,13 @@ const BookingListCard = ({ booking, triggerRerender }) => {
             <div className="booking-info">
                 <div className="sub-info">
                     <div style={{ paddingLeft: "8px" }}>
-                        <h5>Check in: {format(new Date(booking.checkin), "dd/MM/yyyy")}</h5>
+                        <h5>{t('checkin')}: {format(new Date(booking.checkin), "dd/MM/yyyy")}</h5>
                         <h5>
-                            Check out: {format(new Date(booking.checkout), "dd/MM/yyyy")}
+                            {t('checkout')}: {format(new Date(booking.checkout), "dd/MM/yyyy")}
                         </h5>
-                        <h5>Phone: {booking.phone}</h5>
-                        <h5>People: {booking.people}</h5>
-                        <h5>Money: {booking.money}</h5>
+                        <h5>{t('phone')}: {booking.phone}</h5>
+                        <h5>{t('people')}: {booking.people}</h5>
+                        <h5>{t('money')}: {booking.money}</h5>
                     </div>
                 </div>
                 <h5 className={`booking-status list ${booking.status}`}>
@@ -185,14 +187,14 @@ const BookingListCard = ({ booking, triggerRerender }) => {
                                 color="success"
                                 onClick={() => updateBooking('accepted')}
                             >
-                                Accept
+                                {t('accept')}
                             </Button>
                             <Button
                                 style={{ marginRight: 0 }}
                                 color="warning"
                                 onClick={() => updateBooking("declined")}
                             >
-                                Decline
+                                {t('decline')}
                             </Button>
                         </>
                     )}
@@ -203,7 +205,7 @@ const BookingListCard = ({ booking, triggerRerender }) => {
                             color="danger"
                             onClick={() => updateBooking("expired")}
                         >
-                            Expired
+                            {t('expired')}
                         </Button>
                     </>
                 )}
@@ -214,7 +216,7 @@ const BookingListCard = ({ booking, triggerRerender }) => {
                             color="success"
                             onClick={() => setIsOpenDeposit(true)}
                         >
-                            Check deposit
+                            {t('checkDeposit')}
                         </Button>
                         <Modal
                             className="modal-dialog-centered"
@@ -225,15 +227,15 @@ const BookingListCard = ({ booking, triggerRerender }) => {
                             {loadingModal ? <Loading /> : <Row>
                                 <Col md={12} className="m-2 mt-3">
                                     <h5>
-                                        Deposit
+                                        {t('deposit')}
                                     </h5>
                                 </Col>
                                 <Col md="12" className='m-2'>
                                     <img width={400} height={400} src={`http://localhost:3333/bookings/${booking._id}/bill`} alt="" />
                                 </Col>
                                 <Col md="12" className='booking-submit'>
-                                    <Button color='primary' onClick={() => updateBooking("confirmed")}>Confirm</Button>
-                                    <Button color='danger' onClick={() => updateBooking("declined")}>Decline</Button>
+                                    <Button color='primary' onClick={() => updateBooking("confirmed")}>{t('confirm')}</Button>
+                                    <Button color='danger' onClick={() => updateBooking("declined")}>{t('decline')}</Button>
                                 </Col>
                             </Row>}
                         </Modal>
@@ -246,7 +248,7 @@ const BookingListCard = ({ booking, triggerRerender }) => {
                             color="success"
                             onClick={() => updateBooking("stayed")}
                         >
-                            Stay
+                           {t('stay')}
                         </Button>
                         {/* <Button
                             style={{ marginRight: 0, marginBottom: "8px" }}
@@ -260,7 +262,7 @@ const BookingListCard = ({ booking, triggerRerender }) => {
                             color="danger"
                             onClick={() => updateBooking("expired")}
                         >
-                            Expired
+                            {t('expired')}
                         </Button>
                     </>
                 )}
@@ -270,7 +272,7 @@ const BookingListCard = ({ booking, triggerRerender }) => {
                         color="default"
                         onClick={() => setIsOpenService(true)}
                     >
-                        Services
+                        {t('services')}
                     </Button>
                 )}
                 <Modal
@@ -294,7 +296,7 @@ const BookingListCard = ({ booking, triggerRerender }) => {
                             </button>
                         </div>
                         <div className="modal-body">
-                            <p>Are you sure?</p>
+                            <p>{t('confirmSure')}</p>
                         </div>
                         <div className="modal-footer">
                             <Button
@@ -303,7 +305,7 @@ const BookingListCard = ({ booking, triggerRerender }) => {
                                 type="button"
                                 onClick={() => setIsOpenModal(false)}
                             >
-                                Cancel
+                                {t('cancel')}
                             </Button>
                             <Button
                                 color="primary"
@@ -311,7 +313,7 @@ const BookingListCard = ({ booking, triggerRerender }) => {
                                 className="ml-auto"
                                 onClick={actionsEdit.func}
                             >
-                                OK
+                                {t('ok')}
                             </Button>
                         </div>
                     </>}
@@ -324,7 +326,7 @@ const BookingListCard = ({ booking, triggerRerender }) => {
                     {loading ? <Loading /> : <>
                         <div className="modal-header">
                             <h5 className="modal-title" id="modal-title-default">
-                                Services
+                                {t('services')}
                             </h5>
                         </div>
                         <div className="modal-body" style={{ padding: "8px 20px" }}>
@@ -336,7 +338,7 @@ const BookingListCard = ({ booking, triggerRerender }) => {
                                         <div className="bookings-picker">
                                             <Button className="picker-btn">
                                                 <i className="fa fa-plus-circle" aria-hidden="true"></i>{" "}
-                                                Add service
+                                                {t('addService')}
                                             </Button>
                                             <Input
                                                 className="booking-select"
@@ -367,7 +369,7 @@ const BookingListCard = ({ booking, triggerRerender }) => {
                                                         <Input onChange={(e) => qtyChange(service._id, e.target.value)} style={{ width: 100 }} type="number" defaultValue={service.quantity} />
                                                     </Col>
                                                 ))}
-                                                {services.length === 0 && <Col> nodata</Col>}
+                                                {services.length === 0 && <Col>{t('noData')}</Col>}
                                             </Row>
                                         </div>
                                     </FormGroup>
@@ -381,7 +383,7 @@ const BookingListCard = ({ booking, triggerRerender }) => {
                                 type="button"
                                 onClick={() => setIsOpenService(false)}
                             >
-                                Cancel
+                                {t('cancel')}
                             </Button>
                             <Button
                                 color="primary"
@@ -389,7 +391,7 @@ const BookingListCard = ({ booking, triggerRerender }) => {
                                 className="ml-auto"
                                 onClick={updateServices}
                             >
-                                Update
+                                {t('update')}
                             </Button>
                         </div>
                     </>}

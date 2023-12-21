@@ -5,9 +5,12 @@ import { deactivateDiscount } from "services/discount";
 import { useDispatch } from "react-redux";
 import { actions } from "store/AlertSlice"
 import Loading from "components/Loading";
+import { useTranslation } from "react-i18next";
 
 const DiscountTicket = ({ discount, onClick }) => {
     const dispatch = useDispatch();
+    const { t } = useTranslation();
+
     const [hover, setHover] = useState(false)
     const [hide, setHide] = useState(false)
     const [loading, setLoading] = useState(false);
@@ -20,7 +23,7 @@ const DiscountTicket = ({ discount, onClick }) => {
         if (res.status < 400) {
             dispatch(
                 actions.createAlert({
-                    message: "Deactivated!",
+                    message: t('alert.deactivated'),
                     type: "success"
                 })
             );
@@ -28,7 +31,7 @@ const DiscountTicket = ({ discount, onClick }) => {
         } else {
             dispatch(
                 actions.createAlert({
-                    message: "Error occur",
+                    message: t('alert.error'),
                     type: "error"
                 })
             );
@@ -43,17 +46,17 @@ const DiscountTicket = ({ discount, onClick }) => {
                 onMouseOver={() => setHover(true)}>
                 <div className="ticket-detail">
                     <h2 style={{ width: 'fit-content', cursor: 'pointer', fontWeight: 'bolder' }}>{discount.name}</h2>
-                    <div>start: {format(new Date(discount.checkin), "dd/MM/yyyy")}</div>
-                    <div>end: {format(new Date(discount.checkout), "dd/MM/yyyy")}</div>
-                    <div>quantity: {discount.quantity}</div>
-                    <div>used: {discount.used}</div>
+                    <div>{t('start')}: {format(new Date(discount.checkin), "dd/MM/yyyy")}</div>
+                    <div>{t('end')}: {format(new Date(discount.checkout), "dd/MM/yyyy")}</div>
+                    <div>{t('quantity')}: {discount.quantity}</div>
+                    <div>{t('used')}: {discount.used}</div>
                     <div>Homestays: {discount.homestays.map((homestay, key) => <span key={key}>{homestay?.name}, </span>)}</div>
-                    <h6 className={`discount-active ${discount.active && !hide ? 'active' : 'inactive'}`}>{discount.active ? 'Active' : 'Deactivated'}</h6>
+                    <h6 className={`discount-active ${discount.active && !hide ? 'active' : 'inactive'}`}>{discount.active ? t('active') : t('deactivated')}</h6>
                 </div>
                 <div className="ticket-percent">
                     <h1>{discount.percentage}%</h1>
                 </div>
-                {discount.active && !hide && <div className={`deactive-btn${hover ? ' active' : ''}`}><Button color="primary" onClick={() => deactivate(discount._id)}>Deactive</Button></div>}
+                {discount.active && !hide && <div className={`deactive-btn${hover ? ' active' : ''}`}><Button color="primary" onClick={() => deactivate(discount._id)}>{t('deactive')}</Button></div>}
             </Card>) :
             <>
                 <UncontrolledTooltip
@@ -61,7 +64,7 @@ const DiscountTicket = ({ discount, onClick }) => {
                     placement="bottom"
                     target="add-homestay"
                 >
-                    Add discount
+                    {t('discount.addDiscount')}
                 </UncontrolledTooltip>
                 <Card onClick={onClick} id='add-homestay' className="discount-ticket add-discount slide-container card-lift--hover shadow border-0">
                     <i className='fa fa-plus'></i>

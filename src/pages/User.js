@@ -11,9 +11,12 @@ import { multipleFilesUpload } from "utils/request";
 import MainNavbar from "components/Navbars/MainNavbar";
 import OwnerNavbar from "components/Navbars/OwnerNavbar";
 import { postAsyncWithToken } from "utils/request";
+import { useTranslation } from "react-i18next";
 
 const User = () => {
     const dispatch = useDispatch();
+    const { t } = useTranslation();
+
     const [cookies, setCookie, removeCookie] = useCookies([
         "currentuser",
         "name",
@@ -48,7 +51,7 @@ const User = () => {
                 setIsOpenActive(false)
                 dispatch(
                     actions.createAlert({
-                        message: "Active successed!",
+                        message: t('alert.activeSuccessful'),
                         type: "success"
                     })
                 );
@@ -56,7 +59,7 @@ const User = () => {
             } else {
                 dispatch(
                     actions.createAlert({
-                        message: "Error occur!",
+                        message: t('alert.error'),
                         type: "error"
                     })
                 );
@@ -80,7 +83,7 @@ const User = () => {
         if (response.data.user) {
             dispatch(
                 actions.createAlert({
-                    message: "Edit user info success!",
+                    message: t('alert.editUserInfo'),
                     type: "success"
                 })
             );
@@ -88,7 +91,7 @@ const User = () => {
         } else {
             dispatch(
                 actions.createAlert({
-                    message: "Error occur",
+                    message: t('alert.error'),
                     type: "error"
                 })
             );
@@ -130,7 +133,7 @@ const User = () => {
             if (response.data.user) {
                 dispatch(
                     actions.createAlert({
-                        message: "Change password success!",
+                        message: t('alert.changePasswordSuccessful'),
                         type: "success"
                     })
                 );
@@ -140,7 +143,7 @@ const User = () => {
             } else {
                 dispatch(
                     actions.createAlert({
-                        message: "Error occur",
+                        message: t('alert.error'),
                         type: "error"
                     })
                 );
@@ -181,14 +184,14 @@ const User = () => {
                     </div>
                     <div className="the-split"></div>
                     <div className="user-text">
-                        <div className="user-info-header"><h3>User info</h3> {enableEdit ? <Button color="success" onClick={editUser}>Save</Button> : <Button color="primary" onClick={() => setEnableEdit(true)}>Edit</Button>}</div>
-                        <div className="user-info-input"><span>Name:</span><Input disabled={!enableEdit} value={name} onChange={e => setName(e.target.value)} defaultValue={userInfo.name} /></div>
-                        <div className="user-info-input"><span>User name:</span><Input disabled={!enableEdit} value={username} onChange={e => setUsername(e.target.value)} defaultValue={userInfo.username} /></div>
+                        <div className="user-info-header"><h3>{t('authAction.userInfo')}</h3> {enableEdit ? <Button color="success" onClick={editUser}>{t('authAction.save')}</Button> : <Button color="primary" onClick={() => setEnableEdit(true)}>{t('authAction.edit')}</Button>}</div>
+                        <div className="user-info-input"><span>{t('authAction.name')}:</span><Input disabled={!enableEdit} value={name} onChange={e => setName(e.target.value)} defaultValue={userInfo.name} /></div>
+                        <div className="user-info-input"><span>{t('authAction.userName')}:</span><Input disabled={!enableEdit} value={username} onChange={e => setUsername(e.target.value)} defaultValue={userInfo.username} /></div>
                         <div className="user-info-input"><span>Email:</span><Input disabled={!enableEdit} value={email} onChange={e => setEmail(e.target.value)} defaultValue={userInfo.email} /></div>
-                        <div className="user-info-input"><span>Phone:</span><Input disabled={!enableEdit} value={phone} onChange={e => setPhone(e.target.value)} defaultValue={userInfo.phone} /></div>
+                        <div className="user-info-input"><span>{t('authAction.phone')}:</span><Input disabled={!enableEdit} value={phone} onChange={e => setPhone(e.target.value)} defaultValue={userInfo.phone} /></div>
                         <div className="user-info-input">
-                            <span>Password:</span>
-                            <Button className="ml-n3" color="dangerr" onClick={() => setIsOpenModal(true)}>Change password</Button>
+                            <span>{t('authAction.password')}:</span>
+                            <Button className="ml-n3" color="dangerr" onClick={() => setIsOpenModal(true)}>{t('authAction.changePassword')}</Button>
                             <Modal
                                 className="modal-dialog-centered"
                                 isOpen={isOpenModal}
@@ -198,12 +201,12 @@ const User = () => {
                                 {loadingModal ? <Loading /> : <Row className="modal-body">
                                     <Col md={12} className="m-2 mt-3">
                                         <h5>
-                                            Change password
+                                            {t('authAction.changePassword')}
                                         </h5>
                                     </Col>
                                     <Col md="12" className='m-2'>
                                         <FormGroup>
-                                            <p className={`input-label ml-n2 ${validateErr.password ? (ani ? "err1" : "err2") : ""}`}>Recent password</p>
+                                            <p className={`input-label ml-n2 ${validateErr.password ? (ani ? "err1" : "err2") : ""}`}>{t('authAction.recentPassword')}</p>
                                             <Input
                                                 type="password"
                                                 value={password}
@@ -214,7 +217,7 @@ const User = () => {
                                     </Col>
                                     <Col md="12" className='m-2'>
                                         <FormGroup>
-                                            <p className={`input-label ml-n2 ${validateErr.newPassword ? (ani ? "err1" : "err2") : ""}`}>New password</p>
+                                            <p className={`input-label ml-n2 ${validateErr.newPassword ? (ani ? "err1" : "err2") : ""}`}>{t('authAction.newPassword')}</p>
                                             <Input
                                                 type="password"
                                                 value={newPassword}
@@ -225,7 +228,7 @@ const User = () => {
                                     </Col>
                                     <Col md="12" className='m-2'>
                                         <FormGroup>
-                                            <p className={`input-label ml-n2 ${validateErr.repeatePassword ? (ani ? "err1" : "err2") : ""}`}>Repeate password</p>
+                                            <p className={`input-label ml-n2 ${validateErr.repeatePassword ? (ani ? "err1" : "err2") : ""}`}>{t('authAction.repeatPassword')}</p>
                                             <Input
                                                 type="password"
                                                 value={repeatePassword}
@@ -235,15 +238,15 @@ const User = () => {
                                         </FormGroup>
                                     </Col>
                                     <Col md="12" className='booking-submit'>
-                                        <Button color='primary' onClick={changePassword}>Submit</Button>
+                                        <Button color='primary' onClick={changePassword}>{t('authAction.submit')}</Button>
                                     </Col>
                                 </Row>}
                             </Modal>
                         </div>
-                        {cookies.role === "homestay owner" && <div className="user-info-input"><span>Qrcode:</span>
+                        {cookies.role === "homestay owner" && <div className="user-info-input"><span>{t('authAction.QRCode')}:</span>
                             {userInfo.bankqr ?
                                 <>
-                                    <Button className="ml-n3" color="dangerr" onClick={() => setIsOpenQr(true)}>Check Qr</Button>
+                                    <Button className="ml-n3" color="dangerr" onClick={() => setIsOpenQr(true)}>{t('authAction.checkQR')}</Button>
                                     <Modal
                                         className="modal-dialog-centered"
                                         isOpen={isOpenQr}
@@ -253,7 +256,7 @@ const User = () => {
                                         {loading ? <Loading /> : <Row>
                                             <Col md={12} className="m-2 mt-3">
                                                 <h5>
-                                                    Your qr
+                                                    {t('authAction.yourQR')}
                                                 </h5>
                                             </Col>
                                             <Col md="12" className='m-2'>
@@ -263,7 +266,7 @@ const User = () => {
                                     </Modal>
                                 </> :
                                 <>
-                                    <Button color="primaryy" className="mt-5 btn" onClick={() => setIsOpenActive(true)}>Active</Button>
+                                    <Button color="primaryy" className="mt-5 btn" onClick={() => setIsOpenActive(true)}>{t('authAction.active')}</Button>
                                     <Modal
                                         className="modal-dialog-centered"
                                         isOpen={isOpenActive}
@@ -273,7 +276,7 @@ const User = () => {
                                         {loading ? <Loading /> : <Row>
                                             <Col md={12} className="m-2 mt-3">
                                                 <h5>
-                                                    Active account
+                                                    {t('authAction.activeAccount')}
                                                 </h5>
                                             </Col>
                                             <Col md="12" className='m-2'>
@@ -287,7 +290,7 @@ const User = () => {
                                                 </FormGroup>
                                             </Col>
                                             <Col md="12" className='booking-submit'>
-                                                <Button color='primary' onClick={uploadBankqr}>Submit</Button>
+                                                <Button color='primary' onClick={uploadBankqr}>{t('authAction.submit')}</Button>
                                             </Col>
                                         </Row>}
                                     </Modal>

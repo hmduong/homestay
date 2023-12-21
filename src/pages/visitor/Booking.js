@@ -5,9 +5,11 @@ import { getYourBooking } from "services/booking";
 import { useDispatch } from "react-redux";
 import { actions } from "store/AlertSlice"
 import Loading from "components/Loading";
+import { useTranslation } from "react-i18next";
 
 function Booking() {
     const dispatch = useDispatch();
+    const { t } = useTranslation();
     const [loading, setLoading] = useState(false);
     const [bookings, setBookings] = useState([]);
     const [rerender, triggerRerender] = useState(false);
@@ -20,7 +22,7 @@ function Booking() {
             } else {
                 dispatch(
                     actions.createAlert({
-                        message: "Error occur",
+                        message: t('alert.error'),
                         type: "error"
                     })
                 );
@@ -33,7 +35,7 @@ function Booking() {
     return (
         <>
             <Container>
-                <h1>Your booking</h1>
+                <h1>{t('booking.header')}</h1>
                 {loading ? <Loading /> : <Card className="booking-container shadow">
                     {bookings && bookings.map((booking, key) => <div key={key}><BookingCard booking={booking} triggerRerender={() => triggerRerender(!rerender)} /></div>
                     )}</Card>}

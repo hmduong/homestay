@@ -15,7 +15,9 @@ import { Link } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import Loading from "components/Loading";
 import { useDispatch } from "react-redux";
-import { actions } from "store/AlertSlice"
+import { actions } from "store/AlertSlice";
+import { useTranslation } from "react-i18next";
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -26,6 +28,7 @@ ChartJS.register(
   Legend
 );
 
+
 export const optionsPie = {
   responsive: true,
   plugins: {
@@ -35,95 +38,112 @@ export const optionsPie = {
   },
 };
 
-const labels = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-];
 
-const dataPie = {
-  labels,
-  datasets: [
-    {
-      label: "# of Votes",
-      data: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      backgroundColor: [
-        "rgba(255, 99, 132, 0.2)",
-        "rgba(54, 162, 235, 0.2)",
-        "rgba(255, 206, 86, 0.2)",
-        "rgba(75, 192, 192, 0.2)",
-        "rgba(153, 102, 255, 0.2)",
-        "rgba(255, 159, 64, 0.2)",
-        "rgb(152, 239, 171)",
-        "rgb(216, 251, 187)",
-        "rgb(210, 145, 188)",
-        "rgb(195, 250, 232)",
-        "rgb(195, 200, 237)",
-        "rgb(195, 165, 237)",
-      ],
-      borderColor: [
-        "rgba(255, 99, 132, 1)",
-        "rgba(54, 162, 235, 1)",
-        "rgba(255, 206, 86, 1)",
-        "rgba(75, 192, 192, 1)",
-        "rgba(153, 102, 255, 1)",
-        "rgba(255, 159, 64, 1)",
-        "rgba(255, 99, 132, 1)",
-        "rgba(54, 162, 235, 1)",
-        "rgba(255, 206, 86, 1)",
-        "rgba(75, 192, 192, 1)",
-        "rgba(153, 102, 255, 1)",
-        "rgba(255, 159, 64, 1)",
-      ],
-      borderWidth: 1,
-    },
-  ],
-};
-
-const dataQuarter = {
-  labels: ["Quarter 1", "Quarter 2", "Quarter 3", "Quarter 4"],
-  datasets: [
-    {
-      label: "Money",
-      data: [0, 0, 0, 0],
-      backgroundColor: "rgba(255, 99, 132, 0.5)",
-    },
-  ],
-};
-const dataQuarterPie = {
-  labels: ["Quarter 1", "Quarter 2", "Quarter 3", "Quarter 4"],
-  datasets: [
-    {
-      label: "Money",
-      data: [1, 0, 0, 0],
-      backgroundColor: [
-        "rgba(255, 99, 132, 0.2)",
-        "rgba(54, 162, 235, 0.2)",
-        "rgba(255, 206, 86, 0.2)",
-        "rgb(195, 165, 237)",
-      ],
-      borderColor: [
-        "rgba(255, 99, 132, 1)",
-        "rgba(54, 162, 235, 1)",
-        "rgba(255, 206, 86, 1)",
-        "rgba(75, 192, 192, 1)",
-      ],
-      borderWidth: 1,
-    },
-  ],
-};
 
 const Statistics = () => {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
+
+  const labels = [
+    t('statistic.month.january'),
+    t('statistic.month.february'),
+    t('statistic.month.march'),
+    t('statistic.month.april'),
+    t('statistic.month.may'),
+    t('statistic.month.june'),
+    t('statistic.month.july'),
+    t('statistic.month.aug'),
+    t('statistic.month.sep'),
+    t('statistic.month.oct'),
+    t('statistic.month.nov'),
+    t('statistic.month.dec'),
+  ];
+  
+  const dataPie = {
+    labels,
+    datasets: [
+      {
+        label: "# of Votes",
+        data: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        backgroundColor: [
+          "rgba(255, 99, 132, 0.2)",
+          "rgba(54, 162, 235, 0.2)",
+          "rgba(255, 206, 86, 0.2)",
+          "rgba(75, 192, 192, 0.2)",
+          "rgba(153, 102, 255, 0.2)",
+          "rgba(255, 159, 64, 0.2)",
+          "rgb(152, 239, 171)",
+          "rgb(216, 251, 187)",
+          "rgb(210, 145, 188)",
+          "rgb(195, 250, 232)",
+          "rgb(195, 200, 237)",
+          "rgb(195, 165, 237)",
+        ],
+        borderColor: [
+          "rgba(255, 99, 132, 1)",
+          "rgba(54, 162, 235, 1)",
+          "rgba(255, 206, 86, 1)",
+          "rgba(75, 192, 192, 1)",
+          "rgba(153, 102, 255, 1)",
+          "rgba(255, 159, 64, 1)",
+          "rgba(255, 99, 132, 1)",
+          "rgba(54, 162, 235, 1)",
+          "rgba(255, 206, 86, 1)",
+          "rgba(75, 192, 192, 1)",
+          "rgba(153, 102, 255, 1)",
+          "rgba(255, 159, 64, 1)",
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
+  
+  const dataQuarter = {
+    labels: [
+      t('statistic.quater') + " 1", 
+      t('statistic.quater') + " 2",
+      t('statistic.quater') + " 3", 
+      t('statistic.quater') + " 4"
+    ],
+    datasets: [
+      {
+        label: t('money'),
+        data: [0, 0, 0, 0],
+        backgroundColor: "rgba(255, 99, 132, 0.5)",
+      },
+    ],
+  };
+  const dataQuarterPie = {
+    labels: [
+      t('statistic.quater') + " 1", 
+      t('statistic.quater') + " 2",
+      t('statistic.quater') + " 3", 
+      t('statistic.quater') + " 4"
+    ],
+    datasets: [
+      {
+        label: t('money'),
+        data: [1, 0, 0, 0],
+        backgroundColor: [
+          "rgba(255, 99, 132, 0.2)",
+          "rgba(54, 162, 235, 0.2)",
+          "rgba(255, 206, 86, 0.2)",
+          "rgb(195, 165, 237)",
+        ],
+        borderColor: [
+          "rgba(255, 99, 132, 1)",
+          "rgba(54, 162, 235, 1)",
+          "rgba(255, 206, 86, 1)",
+          "rgba(75, 192, 192, 1)",
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
+
+
+
+
   const [year, setYear] = useState("2023");
   const [type, setType] = useState("Money");
   const [homestay, setHomeStay] = useState(null);
@@ -131,7 +151,7 @@ const Statistics = () => {
     labels,
     datasets: [
       {
-        label: "Money",
+        label: t('money'),
         data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         backgroundColor: "rgba(255, 99, 132, 0.5)",
       },
@@ -166,17 +186,22 @@ const Statistics = () => {
           labels,
           datasets: [
             {
-              label: type,
+              label: t(`${type.toLowerCase()}`),
               data: response.data.list,
               backgroundColor: "rgba(255, 99, 132, 0.5)",
             },
           ],
         });
         setQuarterList({
-          labels: ["Quarter 1", "Quarter 2", "Quarter 3", "Quarter 4"],
+          labels: [
+            t('statistic.quater') + " 1", 
+            t('statistic.quater') + " 2",
+            t('statistic.quater') + " 3", 
+            t('statistic.quater') + " 4"
+          ],
           datasets: [
             {
-              label: type,
+              label: t(`${type.toLowerCase()}`),
               data: response.data.quarterList,
               backgroundColor: "rgba(255, 99, 132, 0.5)",
             },
@@ -186,7 +211,7 @@ const Statistics = () => {
           ...dataPie.datasets[0],
           data: response.data.list,
         };
-        setListPie({ ...dataPie, label: type, datasets: [datasetsPie] });
+        setListPie({ ...dataPie, label: t(`${type.toLowerCase()}`), datasets: [datasetsPie] });
         const datasetsQuarterPie = {
           ...dataQuarterPie.datasets[0],
           data: response.data.quarterList,
@@ -194,13 +219,13 @@ const Statistics = () => {
 
         setQuarterListPie({
           ...dataQuarterPie,
-          label: type,
+          label: t(`${type.toLowerCase()}`),
           datasets: [datasetsQuarterPie],
         });
       } else {
         dispatch(
           actions.createAlert({
-            message: "Error occur",
+            message: t('alert.error'),
             type: "error"
           })
         );
@@ -213,7 +238,7 @@ const Statistics = () => {
   return (
     <>
       <div className="container" style={{ marginTop: 24 }}>
-        <h2>Statistic</h2>
+        <h2>{t('statistic.title')}</h2>
         <Link to={"/homestays/" + homestay?._id}>
           <h1 className="text-center" style={{ margin: "20px" }}>
             {homestay?.name}
@@ -229,10 +254,10 @@ const Statistics = () => {
             onChange={(e) => setYear(e.target.value)}
             value={year}
           >
-            <option value="2020">Year: 2020</option>
-            <option value="2021">Year: 2021</option>
-            <option value="2022">Year: 2022</option>
-            <option value="2023">Year: 2023</option>
+            <option value="2020">{t('year')} 2020</option>
+            <option value="2021">{t('year')} 2021</option>
+            <option value="2022">{t('year')} 2022</option>
+            <option value="2023">{t('year')} 2023</option>
           </select>
           <select
             name="type"
@@ -240,8 +265,8 @@ const Statistics = () => {
             onChange={(e) => setType(e.target.value)}
             value={type}
           >
-            <option value="Money">Money</option>
-            <option value="Guests">Guests</option>
+            <option value="Money">{t('money')}</option>
+            <option value="Guests">{t('guests')}</option>
           </select>
         </div>
         {loading ? <Loading /> : (
@@ -255,7 +280,7 @@ const Statistics = () => {
               </div>
             </div>
             <p className="text-center" style={{ margin: "15px" }}>
-              Monthly Statistics
+            {t('statistic.monthlyStatistics')}
             </p>
             <div className="row" style={{ marginTop: "30px" }}>
               <div className="col-md-8">
@@ -266,7 +291,7 @@ const Statistics = () => {
               </div>
             </div>
             <p className="text-center" style={{ margin: "15px" }}>
-              Quarterly Statistics
+            {t('statistic.quarterlyStatistics')}
             </p>
           </div>
         )}
@@ -275,7 +300,7 @@ const Statistics = () => {
           className="text-center"
           style={{ marginTop: "60px", marginBottom: "60px" }}
         >
-          Total: {total}
+          {t('total')}: {total}
         </h4>
       </div>
     </>

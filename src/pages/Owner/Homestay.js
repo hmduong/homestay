@@ -29,7 +29,7 @@ const Homestay = () => {
             } else {
                 dispatch(
                     actions.createAlert({
-                        message: "Error occur",
+                        message: t('alert.error'),
                         type: "error"
                     })
                 );

@@ -19,6 +19,7 @@ import { formatDate } from "utils/date";
 import { useDispatch } from "react-redux";
 import { actions } from "store/AlertSlice"
 import Loading from "components/Loading";
+import { useTranslation } from 'react-i18next';
 
 const Main = () => {
     const [cookies, setCookie, removeCookie] = useCookies(["role"]);
@@ -30,6 +31,7 @@ const Main = () => {
     const [loading, setLoading] = useState(false);
     const dispatch = useDispatch();
     const prices = [1000000, 2000000, 3000000, 4000000, 5000000]
+    const { t, i18n } = useTranslation();
 
     const priceChange = (newPrice) => {
         if (newPrice) setPrice(prices[newPrice - 1]);
@@ -55,7 +57,7 @@ const Main = () => {
         } else {
             dispatch(
                 actions.createAlert({
-                    message: "Error occur",
+                    message: t('alert.error'),
                     type: "error"
                 })
             );
@@ -75,13 +77,13 @@ const Main = () => {
                 <Row className="main-filter">
                     <Col md={12} className="main-page-header">
                         <i className="fa fa-home" aria-hidden="true"></i>
-                        <h2>Search</h2>
+                        <h2>{t('search.title')}</h2>
                     </Col>
                     <Col md="3">
                         <FormGroup style={{ position: 'relative' }}>
-                            <p className="input-label">City</p>
+                            <p className="input-label">{t('city')}</p>
                             <Input
-                                placeholder="Chọn thành phố"
+                                placeholder={t('search.selectCity')}
                                 className="main-filter-select"
                                 type="text"
                                 value={city}
@@ -95,11 +97,11 @@ const Main = () => {
                                     style={{ display: "none" }}
                                     value={""}
                                 ></option>
-                                <option value="Ha Noi">Ha Noi</option>
-                                <option value="Da Nang">Da Nang</option>
-                                <option value="Ho Chi Minh">Ho Chi Minh</option>
-                                <option value="Hue">Hue</option>
-                                <option value="Can Tho">Can Tho</option>
+                                <option value="Ha Noi">{t('search.address.hanoi')}</option>
+                                <option value="Da Nang">{t('search.address.danang')}</option>
+                                <option value="Ho Chi Minh">{t('search.address.hochiminh')}</option>
+                                <option value="Hue">{t('search.address.hue')}</option>
+                                <option value="Can Tho">{t('search.address.cantho')}</option>
                             </Input>
                             {city && (
                                 <div
@@ -116,9 +118,9 @@ const Main = () => {
                     </Col>
                     <Col md="3">
                         <FormGroup style={{ position: 'relative' }}>
-                            <p className="input-label">Price</p>
+                            <p className="input-label">{t('price')}</p>
                             <Input
-                                placeholder="Mức giá"
+                                placeholder={t('search.priceHolder')}
                                 className="main-filter-select"
                                 type="text"
                                 value={price}
@@ -153,7 +155,7 @@ const Main = () => {
                     </Col>
                     <Col md="3">
                         <FormGroup>
-                            <p className="input-label">Check in</p>
+                            <p className="input-label">{t('checkin')}</p>
                             <InputGroup className="input-group-alternative">
                                 <InputGroupAddon addonType="prepend">
                                     <InputGroupText>
@@ -172,7 +174,7 @@ const Main = () => {
                     </Col>
                     <Col md="3">
                         <FormGroup>
-                            <p className="input-label">Check out</p>
+                            <p className="input-label">{t('checkout')}</p>
                             <InputGroup className="input-group-alternative">
                                 <InputGroupAddon addonType="prepend">
                                     <InputGroupText>
@@ -204,10 +206,10 @@ const Main = () => {
                 <Row>
                     <Col md={12} className="main-page-header">
                         <i className="fa fa-home" aria-hidden="true"></i>
-                        <h2>Top homestay</h2>
+                        <h2>{t('topHomestay')}</h2>
                     </Col>
                     <Col md={12}>
-                        Top homestay
+                        {t('topHomestay')}
                     </Col>
                 </Row>
             </div>
