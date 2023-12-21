@@ -24,11 +24,13 @@ import { useTranslation } from "react-i18next";
 
 function MainNavbar() {
     const { t, i18n } = useTranslation();
-    const [enLang, setEnLang] = useState(true);
+    const languageStore = JSON.parse(localStorage.getItem('language'));
+    const [enLang, setEnLang] = useState(languageStore == 'vi' ? false : true ?? true);
     const [isOpenModal, setIsOpenModal] = useState(false);
     const changeLanguage = () => {
-        setEnLang(!enLang)
-        i18n.changeLanguage(enLang ? 'vi' : 'en')
+        setEnLang(!enLang); 
+        localStorage.setItem('language', JSON.stringify(enLang ? 'vi' : 'en'))
+        i18n.changeLanguage(enLang ? 'vi' : 'en');
     }
     const navigate = useNavigate();
     const [cookies, setCookie, removeCookie] = useCookies([
@@ -133,7 +135,7 @@ function MainNavbar() {
                                     <UncontrolledDropdown nav>
                                         <DropdownToggle nav onClick={() => navigate('/chat')}>
                                             <i className="ni ni-ui-04 d-lg-none mr-1" />
-                                            <span className="nav-link-inner--text">Chat <i className="fa fa-external-link" aria-hidden="true"></i></span>
+                                            <span className="nav-link-inner--text">{t('sideBar.chat')} <i className="fa fa-external-link" aria-hidden="true"></i></span>
                                         </DropdownToggle>
                                     </UncontrolledDropdown>
                                 </Nav>
@@ -171,8 +173,8 @@ function MainNavbar() {
                                                     <Avatar name={cookies.name} />
                                                 </DropdownToggle>
                                                 <DropdownMenu className="mt-5">
-                                                    <DropdownItem onClick={toUserPage}>About you</DropdownItem>
-                                                    <DropdownItem onClick={() => { setIsOpenModal(true); }}>Log out</DropdownItem>
+                                                    <DropdownItem onClick={toUserPage}>{t('aboutYou')}</DropdownItem>
+                                                    <DropdownItem onClick={() => { setIsOpenModal(true); }}>{t('logout.title')}</DropdownItem>
                                                 </DropdownMenu>
                                             </Dropdown>
                                             <Modal

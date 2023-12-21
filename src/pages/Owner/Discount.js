@@ -67,14 +67,14 @@ const Discount = () => {
                 setShow(false)
                 dispatch(
                     actions.createAlert({
-                        message: "Added discount",
+                        message: t('alert.addedDiscount'),
                         type: "success"
                     })
                 );
             } else {
                 dispatch(
                     actions.createAlert({
-                        message: "Error occur",
+                        message: t('alert.error'),
                         type: "error"
                     })
                 );
@@ -100,7 +100,7 @@ const Discount = () => {
             <>
                 <div className="homestay-head">
                     <h1>{t('discount.header')}</h1>
-                    <Button onClick={openModal} color="primary" className="add-btn">Create</Button>
+                    <Button onClick={openModal} color="primary" className="add-btn">{t('create')}</Button>
                 </div>
                 <Row>
                     {
@@ -120,7 +120,7 @@ const Discount = () => {
                     {loading2 ? <Loading /> : <>
                         <div className="modal-header">
                             <h6 className="modal-title" id="modal-title-default">
-                                Create new discount
+                            {t('discount.createNew')}
                             </h6>
                             <button
                                 aria-label="Close"
@@ -136,13 +136,13 @@ const Discount = () => {
                             <Row>
                                 <Col md="6">
                                     <FormGroup>
-                                        <p className={`input-label ${validateErr.quantity ? (ani ? 'err1' : 'err2') : ''}`}>Quantity: </p>
+                                        <p className={`input-label ${validateErr.quantity ? (ani ? 'err1' : 'err2') : ''}`}>{t('quantity')}: </p>
                                         <Input type="number" onChange={e => form.quantity = e.target.value} />
                                     </FormGroup>
                                 </Col>
                                 <Col md="6">
                                     <FormGroup>
-                                        <p className={`input-label ${validateErr.percentage ? (ani ? 'err1' : 'err2') : ''}`}>Percantage: </p>
+                                        <p className={`input-label ${validateErr.percentage ? (ani ? 'err1' : 'err2') : ''}`}>{t('percentage')}: </p>
                                         <Input type="number" onChange={e => form.percentage = e.target.value} />
                                     </FormGroup>
                                 </Col>
@@ -153,7 +153,7 @@ const Discount = () => {
                                             <div className="homestays-apply">
                                                 {homestaysApply.map((homestay, key) => <span key={key}>{homestay.name}, </span>)}
                                             </div>
-                                            <div className="picker-btn">Choose</div>
+                                            <div className="picker-btn">{t('choose')}</div>
                                             <Input
                                                 className="homestay-select"
                                                 type="select"
@@ -171,7 +171,7 @@ const Discount = () => {
                                 </Col>
                                 <Col md="6">
                                     <FormGroup>
-                                        <p className={`input-label ${validateErr.checkin ? (ani ? 'err1' : 'err2') : ''}`}>Start: </p>
+                                        <p className={`input-label ${validateErr.checkin ? (ani ? 'err1' : 'err2') : ''}`}>{t('start')}: </p>
                                         <InputGroup className="input-group-alternative">
                                             <InputGroupAddon addonType="prepend">
                                                 <InputGroupText>
@@ -190,7 +190,7 @@ const Discount = () => {
                                 </Col>
                                 <Col md="6">
                                     <FormGroup>
-                                        <p className={`input-label ${validateErr.checkout ? (ani ? 'err1' : 'err2') : ''}`}>End: </p>
+                                        <p className={`input-label ${validateErr.checkout ? (ani ? 'err1' : 'err2') : ''}`}>{t('end')}: </p>
                                         <InputGroup className="input-group-alternative">
                                             <InputGroupAddon addonType="prepend">
                                                 <InputGroupText>
@@ -216,10 +216,10 @@ const Discount = () => {
                                 type="button"
                                 onClick={() => setShow(false)}
                             >
-                                Cancel
+                                {t('cancel')}
                             </Button>
                             <Button color="primary" type="button" className="ml-auto" onClick={addDiscount}>
-                                Create
+                                {t('create')}
                             </Button>
                         </div>
                     </>}

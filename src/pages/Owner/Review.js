@@ -3,8 +3,10 @@ import ReviewCard from "components/ReviewCard";
 import { useState, useEffect } from "react";
 import { Container, Row } from "reactstrap";
 import { getReviewsByHomestayId } from "services/review";
+import { useTranslation } from "react-i18next";
 
 function Review({ homestay }) {
+    const { t } = useTranslation();
     const [reviews, setReviews] = useState([]);
     const [loading, setLoading] = useState(false);
     const getData = async () => {
@@ -24,7 +26,7 @@ function Review({ homestay }) {
             <Container style={{ minHeight: '300px', marginTop: 24 }}>
                 {loading ? <Loading /> :
                     <>
-                        <h2>Reviews</h2>
+                        <h2>{t('homestay.reviews')}</h2>
                         <Row>
                             {reviews?.map(review => <ReviewCard key={review._id} review={review} />)}
                         </Row>

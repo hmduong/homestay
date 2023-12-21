@@ -11,9 +11,11 @@ import { actions } from "store/AlertSlice"
 import Loading from "components/Loading";
 import { editBook } from 'services/booking';
 import { multipleFilesUpload } from "utils/request";
+import { useTranslation } from 'react-i18next';
 
 const BookingCard = ({ booking, triggerRerender }) => {
     const dispatch = useDispatch();
+    const { t } = useTranslation();
     const form = {
         comment: null
     }
@@ -49,7 +51,7 @@ const BookingCard = ({ booking, triggerRerender }) => {
                 setValidateErr({})
                 dispatch(
                     actions.createAlert({
-                        message: "Review successed!",
+                        message: t('alert.reviewSuccessful'),
                         type: "success"
                     })
                 );
@@ -57,7 +59,7 @@ const BookingCard = ({ booking, triggerRerender }) => {
             } else {
                 dispatch(
                     actions.createAlert({
-                        message: "Error occur!",
+                        message:  t('alert.error'),
                         type: "error"
                     })
                 );
@@ -94,7 +96,7 @@ const BookingCard = ({ booking, triggerRerender }) => {
                 setValidateErr({})
                 dispatch(
                     actions.createAlert({
-                        message: "Deposit successed!",
+                        message: t('alert.depositSuccessful'),
                         type: "success"
                     })
                 );
@@ -102,7 +104,7 @@ const BookingCard = ({ booking, triggerRerender }) => {
             } else {
                 dispatch(
                     actions.createAlert({
-                        message: "Error occur!",
+                        message: t('alert.error'),
                         type: "error"
                     })
                 );
@@ -132,13 +134,13 @@ const BookingCard = ({ booking, triggerRerender }) => {
                 <h2>{booking.homestay.name}</h2>
                 <div className='sub-info'>
                     <div>
-                        <p>Check in: {format(new Date(booking.checkin), "dd/MM/yyyy")}</p>
-                        <p>Check out: {format(new Date(booking.checkout), "dd/MM/yyyy")}</p>
+                        <p>{t('checkin')}: {format(new Date(booking.checkin), "dd/MM/yyyy")}</p>
+                        <p>{t('checkout')}: {format(new Date(booking.checkout), "dd/MM/yyyy")}</p>
                     </div>
                     <div>
-                        <p>Phone: {booking.phone}</p>
-                        <p>People: {booking.people}</p>
-                        <p>Money: {booking.money}</p>
+                        <p>{t('phone')}: {booking.phone}</p>
+                        <p>{t('people')}: {booking.people}</p>
+                        <p>{t('money')}: {booking.money}</p>
                     </div>
                 </div>
                 <h5 className={`booking-status ${booking.status}`}>{booking.status}</h5>
@@ -159,10 +161,10 @@ const BookingCard = ({ booking, triggerRerender }) => {
                 </Slide>
             </div>
             <div className={`booking-actions${hover ? ' active' : ''}`}>
-                <Button onClick={check} color='primary' style={{ marginRight: 0, marginBottom: '8px' }}>Check Homestay</Button>
+                <Button onClick={check} color='primary' style={{ marginRight: 0, marginBottom: '8px' }}>{t('homestay.checkHomestay')}</Button>
                 {
                     booking.status === 'stayed' &&
-                    <><Button onClick={() => setIsOpenReview(true)}>Review</Button>
+                    <><Button onClick={() => setIsOpenReview(true)}>{t('homestay.reviews')}</Button>
                         <Modal
                             className="modal-dialog-centered"
                             isOpen={isOpenReview}
@@ -171,7 +173,7 @@ const BookingCard = ({ booking, triggerRerender }) => {
                             {loading ? <Loading /> : <Row>
                                 <Col md={12} className="m-2 mt-3">
                                     <h5>
-                                        Review
+                                        {t('homestay.reviews')}
                                     </h5>
                                 </Col>
                                 <Col md="12" className='booking-rate'>
@@ -183,19 +185,19 @@ const BookingCard = ({ booking, triggerRerender }) => {
                                 </Col>
                                 <Col md="12" className='p-4'>
                                     <FormGroup>
-                                        <p className={`mb-0 input-label ${validateErr.comment ? (ani ? 'err1' : 'err2') : ''}`} >Comment</p>
+                                        <p className={`mb-0 input-label ${validateErr.comment ? (ani ? 'err1' : 'err2') : ''}`} >{t('homestay.comment')}</p>
                                         <Input type="textarea" onChange={e => form.comment = e.target.value} />
                                     </FormGroup>
                                 </Col>
                                 <Col md="12" className='booking-submit'>
-                                    <Button color='primary' onClick={sendReview}>Send review</Button>
+                                    <Button color='primary' onClick={sendReview}>{t('homestay.sendReview')}</Button>
                                 </Col>
                             </Row>}
                         </Modal></>
                 }
                 {booking.status === 'accepted' && <><Button
                     onClick={() => setIsOpenDeposit(true)}
-                >Deposit</Button>
+                >{t('deposit')}</Button>
                     <Modal
                         className="modal-dialog-centered"
                         isOpen={isOpenDeposit}
@@ -204,18 +206,18 @@ const BookingCard = ({ booking, triggerRerender }) => {
 
                         {loading ? <Loading /> : <Row>
                             <Col md={12} className="m-2 mt-3">
-                                <h4>
-                                    Deposit
-                                </h4>
+                                <h5>
+                                    {t('deposit')}
+                                </h5>
                             </Col>
                             <Col md={12}>
                                 <h6 className='ml-2'>Vui lòng số tiền đặt cọc là <span style={{ color: 'red' }}>{booking.deposit} VND</span> để hoàn tất quá trình đặt phòng</h6>
-                                <p className={`mb-0 ml-2 input-label`} >Quét mã QR để thanh toán</p>
+                                <p className={`mb-0 ml-2 input-label`} >{t('scanQRPayment')}</p>
                                 <img className='p-2' style={{ width: '100%', height: '400px' }} src={process.env.REACT_APP_API_URL + "/users/" + booking.homestay.owner + "/banking"} alt="" />
                             </Col>
                             <Col md="12" className='m-2'>
                                 <FormGroup>
-                                    <p className={`mb-0 input-label ${validateErr.bill ? (ani ? 'err1' : 'err2') : ''}`} >Tải ảnh giao dịch</p>
+                                    <p className={`mb-0 input-label ${validateErr.bill ? (ani ? 'err1' : 'err2') : ''}`} >{t('uploadBillImage')}</p>
                                     <Input
                                         type="file"
                                         accept=".jpg,.png"
@@ -225,7 +227,7 @@ const BookingCard = ({ booking, triggerRerender }) => {
                                 </FormGroup>
                             </Col>
                             <Col md="12" className='booking-submit'>
-                                <Button color='primary' onClick={sendDeposit}>Submit</Button>
+                                <Button color='primary' onClick={sendDeposit}>{t('authAction.submit')}</Button>
                             </Col>
                         </Row>}
                     </Modal></>

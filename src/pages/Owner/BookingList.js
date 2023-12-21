@@ -5,27 +5,48 @@ import { getBookingListByHomestay } from "services/booking";
 import { useDispatch } from "react-redux";
 import { actions } from "store/AlertSlice"
 import Loading from "components/Loading";
+import { useTranslation } from "react-i18next";
 
 function BookingList({ homestay }) {
     const dispatch = useDispatch();
+    const { t } = useTranslation();
+    
     const [bookings, setBookings] = useState([]);
     const [name, setName] = useState('');
     const [date, setDate] = useState('');
     const [tabIndex, setTab] = useState(0);
     const [rerender, triggerRerender] = useState(false);
     const [loading, setLoading] = useState(false);
-    const tabs = ['requested', 'accepted', 'stayed', 'declined']
+    // const tabs = ['requested', 'accepted', 'stayed', 'declined'];
+    const tabs = [
+        {
+            title: t('requested'),
+            value: 'requested',
+        },
+        {
+            title: t('accepted'),
+            value: 'accepted',
+        },
+        {
+            title: t('stayed'),
+            value: 'stayed',
+        },
+        {
+            title: t('declined'),
+            value: 'declined',
+        },
+    ];
     const getData = async (tab = 0) => {
         setLoading(true)
         let query =
-            `${process.env.REACT_APP_API_URL}/bookings/homestay/${homestay._id}?tab=${tabs[tab]}&&username=${name}&&time=${date}`;
+            `${process.env.REACT_APP_API_URL}/bookings/homestay/${homestay._id}?tab=${tabs[tab]?.value}&&username=${name}&&time=${date}`;
         const response = await getBookingListByHomestay(query);
         if (response.status === 200) {
             setBookings(response.data.bookingList);
         } else {
             dispatch(
                 actions.createAlert({
-                    message: "Error occur",
+                    message: t('alert.error'),
                     type: "error"
                 })
             );
@@ -33,6 +54,7 @@ function BookingList({ homestay }) {
         setLoading(false)
     }
     const switchTab = async (t) => {
+        console.log(t)
         setTab(t)
         await getData(t)
     }
@@ -40,12 +62,16 @@ function BookingList({ homestay }) {
         getData();
     }, [rerender]);
 
+    const capitalizeFirstLetter = (string) => {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
     return (
         <><Container style={{ minHeight: '300px', marginTop: 24 }}>
-            <h2>Bookings</h2>
+            <h2>{t('homestay.bookings.title')}</h2>
             <Row className="mb-3">
                 <Col md='6'>
-                    <p className="mb-0">User name</p>
+                    <p className="mb-0">{t('userName')}</p>
                     <Input
                         className="input-text"
                         placeholder="Aa"
@@ -53,15 +79,15 @@ function BookingList({ homestay }) {
                     />
                 </Col>
                 <Col md='6'>
-                    <p className="mb-0">Time</p>
+                    <p className="mb-0">{t('time')}</p>
                     <Input
                         className="input-text"
                         placeholder="Aa"
                         type="select"
                     >
-                        <option>All</option>
-                        <option>This week</option>
-                        <option>This month</option>
+                        <option>{t('homestay.bookings.all')}</option>
+                        <option>{t('homestay.bookings.thisWeek')}</option>
+                        <option>{t('homestay.bookings.thisMonth')}</option>
                     </Input>
                 </Col>
             </Row>
@@ -73,7 +99,7 @@ function BookingList({ homestay }) {
                             onClick={() => switchTab(key)}
                             style={{ cursor: 'pointer' }}
                         >
-                            {tab}
+                            {capitalizeFirstLetter(tab?.title)}
                         </NavLink>
                     </NavItem>
                 )}
@@ -89,7 +115,7 @@ function BookingList({ homestay }) {
                                         {bookings && bookings.map((booking, index) => <Col md='6' key={index}><BookingListCard booking={booking} triggerRerender={() => triggerRerender(!rerender)} /></Col>
                                         )}
                                     </Row>
-                                    : <div>No data</div>
+                                    : <div>{t('noData')}</div>
                                 }
                             </Card>
                         </TabPane>

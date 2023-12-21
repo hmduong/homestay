@@ -5,10 +5,13 @@ import { Form, FormGroup, InputGroup, InputGroupAddon, InputGroupText, Input } f
 import { useDispatch } from "react-redux";
 import { actions } from "store/AlertSlice"
 import Loading from "components/Loading";
+import { useTranslation } from "react-i18next";
 
 const ChatBox = ({ socket, chatuserid, chatUserName }) => {
     const [loading, setLoading] = useState(false);
     const dispatch = useDispatch();
+    const { t } = useTranslation();
+
     const userid = getCookie("userid");
     const [messages, setMessages] = useState([]);
     const [message, setMessage] = useState('');
@@ -56,7 +59,7 @@ const ChatBox = ({ socket, chatuserid, chatUserName }) => {
             if (response.data) { setMessages(response.data.messages); } else {
                 dispatch(
                     actions.createAlert({
-                        message: "Error occur",
+                        message: t('alert.error'),
                         type: "error"
                     })
                 );
@@ -91,14 +94,14 @@ const ChatBox = ({ socket, chatuserid, chatUserName }) => {
             setMessage("");
             dispatch(
                 actions.createAlert({
-                    message: "Sent message!",
+                    message: t('alert.sentMessage'),
                     type: "success"
                 })
             );
         } else {
             dispatch(
                 actions.createAlert({
-                    message: "Error occur",
+                    message: t('alert.error'),
                     type: "error"
                 })
             );
