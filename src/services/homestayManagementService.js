@@ -31,3 +31,8 @@ export async function getHomestay(id) {
   const url = process.env.REACT_APP_API_URL + `/homestays/${id}`;
   return getAsync(url);
 }
+
+export async function getTop(payload) {
+  const url = process.env.REACT_APP_API_URL + `/homestays/top?limit=${payload.limit}`;
+  return getAsync(url);
+}

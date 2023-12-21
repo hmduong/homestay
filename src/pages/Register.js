@@ -27,11 +27,15 @@ function Register() {
   useEffect(() => {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
-    document.addEventListener('keypress', function (e) {
+    const enterregister = (e) => {
       if (e.key === 'Enter') {
         handleRegister()
       }
-    })
+    }
+    document.addEventListener('keypress', enterregister)
+    return () => {
+      document.removeEventListener('keypress', enterregister)
+    }
   }, []);
 
   const handleRegister = async () => {
