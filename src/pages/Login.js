@@ -21,10 +21,13 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { actions } from "store/AlertSlice"
 import Loading from "components/Loading";
+import { useTranslation } from "react-i18next";
 
 const Login = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch();
+  const { t } = useTranslation();
+
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     document.documentElement.scrollTop = 0;
@@ -69,7 +72,7 @@ const Login = () => {
       } else {
         dispatch(
           actions.createAlert({
-            message: "Error occur",
+            message: t('alert.error'),
             type: "error"
           })
         );
@@ -90,7 +93,7 @@ const Login = () => {
                   {loading ? <Loading /> : <>
                     <CardBody className="px-lg-5 py-lg-5">
                       <h4 className="text-center text-muted mb-4">
-                        Sign in
+                        {t('authAction.signIn')}
                       </h4>
                       <Form role="form">
                         <FormGroup className="mb-3">
@@ -100,7 +103,7 @@ const Login = () => {
                                 <i className="ni ni-single-02" />
                               </InputGroupText>
                             </InputGroupAddon>
-                            <Input placeholder="User name" type="text" onChange={(e) => loginForm.username = e.target.value} />
+                            <Input placeholder={t('authAction.userName')} type="text" onChange={(e) => loginForm.username = e.target.value} />
                           </InputGroup>
                         </FormGroup>
                         <FormGroup>
@@ -111,7 +114,7 @@ const Login = () => {
                               </InputGroupText>
                             </InputGroupAddon>
                             <Input
-                              placeholder="Password"
+                              placeholder={t('authAction.password')}
                               type="password"
                               autoComplete="off"
                               onChange={(e) => loginForm.password = e.target.value}
@@ -125,12 +128,12 @@ const Login = () => {
                             type="button"
                             onClick={handleLogin}
                           >
-                            Sign in
+                            {t('authAction.signIn')}
                           </Button>
                         </div>
                         <div className="text-center">
                           <a className="text-light" href="/register">
-                            <small>Create a new account</small>
+                            <small>{t('authAction.createNewAccount')}</small>
                           </a>
                         </div>
                       </Form>

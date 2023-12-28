@@ -10,9 +10,11 @@ import { actions } from "store/AlertSlice"
 import Loading from "components/Loading";
 import { editBook } from 'services/booking';
 import { multipleFilesUpload } from "utils/request";
+import { useTranslation } from 'react-i18next';
 
 const BookingCard = ({ indexkey, booking, triggerRerender }) => {
     const dispatch = useDispatch();
+    const { t } = useTranslation();
     const form = {
         comment: null
     }
@@ -49,7 +51,7 @@ const BookingCard = ({ indexkey, booking, triggerRerender }) => {
                 setValidateErr({})
                 dispatch(
                     actions.createAlert({
-                        message: "Review successed!",
+                        message: t('alert.reviewSuccessful'),
                         type: "success"
                     })
                 );
@@ -57,7 +59,7 @@ const BookingCard = ({ indexkey, booking, triggerRerender }) => {
             } else {
                 dispatch(
                     actions.createAlert({
-                        message: "Error occur!",
+                        message:  t('alert.error'),
                         type: "error"
                     })
                 );
@@ -94,7 +96,7 @@ const BookingCard = ({ indexkey, booking, triggerRerender }) => {
                 setValidateErr({})
                 dispatch(
                     actions.createAlert({
-                        message: "Deposit successed!",
+                        message: t('alert.depositSuccessful'),
                         type: "success"
                     })
                 );
@@ -102,7 +104,7 @@ const BookingCard = ({ indexkey, booking, triggerRerender }) => {
             } else {
                 dispatch(
                     actions.createAlert({
-                        message: "Error occur!",
+                        message: t('alert.error'),
                         type: "error"
                     })
                 );
@@ -139,7 +141,7 @@ const BookingCard = ({ indexkey, booking, triggerRerender }) => {
                         <p>{format(new Date(booking.checkin), "dd/MM/yyyy")} - {format(new Date(booking.checkout), "dd/MM/yyyy")}</p>
                     </div>
                     <div className='bi-info bitotal'>
-                        <h6>Total money</h6>
+                        <h6>{t('money')}</h6>
                         <p>{booking.money} VNĐ</p>
                     </div>
                     <div className='bi-info bistatus'>
@@ -159,7 +161,7 @@ const BookingCard = ({ indexkey, booking, triggerRerender }) => {
                     </div>
                     <div style={{ width: '45%' }}>
                         <div className='bi-expand bipeople'>
-                            <h6>People:</h6> <p>{booking.people}</p>
+                            <h6>{t('people')}:</h6> <p>{booking.people}</p>
                         </div>
                         <div className='bi-expand bideposit'>
                             <h6>Total deposit:</h6> <p>{booking.deposit} VNĐ</p>
@@ -176,7 +178,7 @@ const BookingCard = ({ indexkey, booking, triggerRerender }) => {
                                     placement="bottom"
                                     target="reviewBtn"
                                 >
-                                    Review
+                                    {t('homestay.reviews')}
                                 </UncontrolledTooltip>
                                 <Modal
                                     className="modal-dialog-centered"
@@ -186,7 +188,7 @@ const BookingCard = ({ indexkey, booking, triggerRerender }) => {
                                     {loading ? <Loading /> : <Row>
                                         <Col md={12} className="m-2 mt-3">
                                             <h5>
-                                                Review
+                                                {t('homestay.reviews')}
                                             </h5>
                                         </Col>
                                         <Col md="12" className='booking-rate'>
@@ -198,12 +200,12 @@ const BookingCard = ({ indexkey, booking, triggerRerender }) => {
                                         </Col>
                                         <Col md="12" className='p-4'>
                                             <FormGroup>
-                                                <p className={`mb-0 input-label ${validateErr.comment ? (ani ? 'err1' : 'err2') : ''}`} >Comment</p>
+                                                <p className={`mb-0 input-label ${validateErr.comment ? (ani ? 'err1' : 'err2') : ''}`} >{t('homestay.comment')}</p>
                                                 <Input type="textarea" onChange={e => form.comment = e.target.value} />
                                             </FormGroup>
                                         </Col>
                                         <Col md="12" className='booking-submit'>
-                                            <Button onClick={sendReview}>Send review</Button>
+                                            <Button onClick={sendReview}>{t('homestay.sendReview')}</Button>
                                         </Col>
                                     </Row>}
                                 </Modal></>
@@ -216,7 +218,7 @@ const BookingCard = ({ indexkey, booking, triggerRerender }) => {
                                 placement="bottom"
                                 target="depositBtn"
                             >
-                                Deposit
+                                {t('deposit')}
                             </UncontrolledTooltip>
                             <Modal
                                 className="modal-dialog-centered"
@@ -227,17 +229,17 @@ const BookingCard = ({ indexkey, booking, triggerRerender }) => {
                                 {loading ? <Loading /> : <Row>
                                     <Col md={12} className="m-2 mt-3">
                                         <h4>
-                                            Deposit
+                                            {t('deposit')}
                                         </h4>
                                     </Col>
                                     <Col md={12}>
                                         <h6 className='ml-2'>Vui lòng số tiền đặt cọc là <span style={{ color: 'red' }}>{booking.deposit} VND</span> để hoàn tất quá trình đặt phòng</h6>
-                                        <p className={`mb-0 ml-2 input-label`} >Quét mã QR để thanh toán</p>
+                                        <p className={`mb-0 ml-2 input-label`} >{t('scanQRPayment')}</p>
                                         <img className='p-2' style={{ width: '100%', height: '400px' }} src={process.env.REACT_APP_API_URL + "/users/" + booking.homestay.owner + "/banking"} alt="" />
                                     </Col>
                                     <Col md="12" className='m-2'>
                                         <FormGroup>
-                                            <p className={`mb-0 input-label ${validateErr.bill ? (ani ? 'err1' : 'err2') : ''}`} >Tải ảnh giao dịch</p>
+                                            <p className={`mb-0 input-label ${validateErr.bill ? (ani ? 'err1' : 'err2') : ''}`} >{t('uploadBillImage')}</p>
                                             <Input
                                                 type="file"
                                                 accept=".jpg,.png"
@@ -247,7 +249,7 @@ const BookingCard = ({ indexkey, booking, triggerRerender }) => {
                                         </FormGroup>
                                     </Col>
                                     <Col md="12" className='booking-submit'>
-                                        <Button color='primary' onClick={sendDeposit}>Submit</Button>
+                                        <Button color='primary' onClick={sendDeposit}>{t('authAction.submit')}</Button>
                                     </Col>
                                 </Row>}
                             </Modal>

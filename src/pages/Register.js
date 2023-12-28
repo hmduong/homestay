@@ -20,10 +20,13 @@ import Picker from "components/Picker";
 import { useDispatch } from "react-redux";
 import { actions } from "store/AlertSlice"
 import Loading from "components/Loading";
+import { useTranslation } from "react-i18next";
 
 function Register() {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+  const { t } = useTranslation();
+
   useEffect(() => {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
@@ -51,7 +54,7 @@ function Register() {
       } else {
         dispatch(
           actions.createAlert({
-            message: "Error occur",
+            message: t('alert.error'),
             type: "error"
           })
         );
@@ -69,8 +72,8 @@ function Register() {
   }
   const state = {
     isLeft: true,
-    leftName: "Visitor",
-    rightName: "Owner"
+    leftName: t('authAction.visitor'),
+    rightName: t('authAction.owner')
   }
   return (
     <>
@@ -84,7 +87,7 @@ function Register() {
                   {loading ? <Loading /> : <>
                     <CardBody className="px-lg-5 py-lg-5">
                       <h4 className="text-center text-muted mb-4">
-                        Sign up
+                        {t('authAction.signUp')}
                       </h4>
                       <Form role="form">
                         <FormGroup>
@@ -94,7 +97,7 @@ function Register() {
                                 <i className="fa fa-id-card-o" />
                               </InputGroupText>
                             </InputGroupAddon>
-                            <Input placeholder="User name" type="text" onChange={(e) => registerForm.username = e.target.value} />
+                            <Input placeholder={t('authAction.userName')} type="text" onChange={(e) => registerForm.username = e.target.value} />
                           </InputGroup>
                         </FormGroup>
                         <FormGroup>
@@ -104,7 +107,7 @@ function Register() {
                                 <i className="fa fa-user" />
                               </InputGroupText>
                             </InputGroupAddon>
-                            <Input placeholder="Name" type="text" onChange={(e) => registerForm.name = e.target.value} />
+                            <Input placeholder={t('authAction.name')} type="text" onChange={(e) => registerForm.name = e.target.value} />
                           </InputGroup>
                         </FormGroup>
                         <FormGroup>
@@ -125,7 +128,7 @@ function Register() {
                               </InputGroupText>
                             </InputGroupAddon>
                             <Input
-                              placeholder="Password"
+                              placeholder={t('authAction.password')}
                               type="password"
                               autoComplete="off" onChange={(e) => registerForm.password = e.target.value}
                             />
@@ -138,7 +141,7 @@ function Register() {
                                 <i className="fa fa-phone" />
                               </InputGroupText>
                             </InputGroupAddon>
-                            <Input placeholder="Phone" type="text" onChange={(e) => registerForm.phone = e.target.value} />
+                            <Input placeholder={t('authAction.phone')} type="text" onChange={(e) => registerForm.phone = e.target.value} />
                           </InputGroup>
                         </FormGroup>
                         <Picker refe={state} />
@@ -149,12 +152,12 @@ function Register() {
                             type="button"
                             onClick={handleRegister}
                           >
-                            Create account
+                            {t('authAction.createAccount')}
                           </Button>
                         </div>
                         <div className="text-center">
                           <a className="text-light" href="/login">
-                            <small>Go to login</small>
+                            <small>{t('authAction.goToLogin')}</small>
                           </a>
                         </div>
                       </Form>

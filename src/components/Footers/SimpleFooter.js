@@ -9,8 +9,10 @@ import {
   Col,
   UncontrolledTooltip,
 } from "reactstrap";
+import { withTranslation  } from "react-i18next";
 class SimpleFooter extends React.Component {
   render() {
+    const { t } = this.props;
     return (
       <>
         <footer className=" footer">
@@ -18,10 +20,10 @@ class SimpleFooter extends React.Component {
             <Row className=" row-grid align-items-center mb-5">
               <Col lg="6">
                 <h3 className=" text-primary font-weight-light mb-2">
-                  Thank you for supporting us!
+                  {t('footer.thanks')}
                 </h3>
                 <h4 className=" mb-0 font-weight-light">
-                  Let's get in touch on any of these platforms.
+                  {t('footer.detailSocials')}
                 </h4>
               </Col>
               <Col className="text-lg-center btn-wrapper" lg="6">
@@ -37,7 +39,7 @@ class SimpleFooter extends React.Component {
                   </span>
                 </Button>
                 <UncontrolledTooltip delay={0} target="tooltip475038074">
-                  Follow us
+                  {t('footer.followUs')}
                 </UncontrolledTooltip>
                 <Button
                   className="btn-icon-only rounded-circle ml-1"
@@ -51,7 +53,7 @@ class SimpleFooter extends React.Component {
                   </span>
                 </Button>
                 <UncontrolledTooltip delay={0} target="tooltip837440414">
-                  Like us
+                  {t('footer.likeUs')}
                 </UncontrolledTooltip>
                 <Button
                   className="btn-icon-only rounded-circle ml-1"
@@ -65,7 +67,7 @@ class SimpleFooter extends React.Component {
                   </span>
                 </Button>
                 <UncontrolledTooltip delay={0} target="tooltip829810202">
-                  Follow us
+                  {t('footer.followUs')}
                 </UncontrolledTooltip>
                 <Button
                   className="btn-icon-only rounded-circle ml-1"
@@ -79,7 +81,7 @@ class SimpleFooter extends React.Component {
                   </span>
                 </Button>
                 <UncontrolledTooltip delay={0} target="tooltip495507257">
-                  Star on Github
+                  {t('footer.starGithub')}
                 </UncontrolledTooltip>
               </Col>
             </Row>
@@ -112,7 +114,7 @@ class SimpleFooter extends React.Component {
                       href="https://www.creative-tim.com/presentation?ref=adsr-footer"
                       target="_blank"
                     >
-                      About Us
+                      {t('footer.aboutUs')}
                     </NavLink>
                   </NavItem>
                   <NavItem>
@@ -128,7 +130,7 @@ class SimpleFooter extends React.Component {
                       href="https://github.com/creativetimofficial/argon-design-system-react/blob/master/LICENSE.md"
                       target="_blank"
                     >
-                      MIT License
+                      {t('footer.mitLicense')}
                     </NavLink>
                   </NavItem>
                 </Nav>
@@ -141,4 +143,4 @@ class SimpleFooter extends React.Component {
   }
 }
 
-export default SimpleFooter;
+export default withTranslation()(SimpleFooter);

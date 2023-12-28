@@ -2,10 +2,12 @@ import { format } from "date-fns";
 import { Card, Col, Modal, Button } from "reactstrap";
 import Avatar from "./Avatar";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 
 function ReviewCard({ review }) {
-    const [show, setShow] = useState(false)
+    const [show, setShow] = useState(false);
+    const { t } = useTranslation();
 
     const detail = () => {
         console.log(review);
@@ -32,7 +34,7 @@ function ReviewCard({ review }) {
             >
                 <div className="modal-header">
                     <h6 className="modal-title" id="modal-title-default">
-                        Detail review {review.user.name}
+                        {t('homestay.detailReview')} {review.user.name}
                     </h6>
                     <button
                         aria-label="Close"
@@ -45,13 +47,13 @@ function ReviewCard({ review }) {
                     </button>
                 </div>
                 <div className="modal-body">
-                    Rate: <div style={{ color: 'yellow', width: 100 }}>{new Array(review.rate).fill(0).map((q, key) => <i key={key} style={{ marginLeft: 3 }} className="fa fa-star" aria-hidden="true"></i>)}</div>
-                    Comment: <p style={{ paddingBottom: 0 }}>{review.comment}</p>
-                    Time: <p style={{ paddingBottom: 0 }}>{format(new Date(review.updatedAt), "dd/MM/yyyy")}</p>
+                    {t('rate')}: <div style={{ color: 'yellow', width: 100 }}>{new Array(review.rate).fill(0).map((q, key) => <i key={key} style={{ marginLeft: 3 }} className="fa fa-star" aria-hidden="true"></i>)}</div>
+                    {t('homestay.comment')}: <p style={{ paddingBottom: 0 }}>{review.comment}</p>
+                    {t('time')}: <p style={{ paddingBottom: 0 }}>{format(new Date(review.updatedAt), "dd/MM/yyyy")}</p>
                 </div>
                 <div className="modal-footer">
                     <Button color="primary" type="button" className="ml-auto" onClick={() => setShow(false)}>
-                        OK
+                        {t('ok')}
                     </Button>
                 </div>
             </Modal>

@@ -6,8 +6,8 @@ import vi from 'languages/vi'
 i18n
     .use(initReactI18next)
     .init({
-        fallbackLng: 'en',
-        lng: "en",
+        fallbackLng: JSON.parse(localStorage.getItem('language')) ?? 'en',
+        lng: JSON.parse(localStorage.getItem('language')) ?? 'en',
         resources: {
             en: en,
             vi: vi,
