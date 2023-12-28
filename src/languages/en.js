@@ -1,7 +1,7 @@
 export default {
     translation: {
         yes: 'Yes',
-        no:'No',
+        no: 'No',
         cancel: 'Cancel',
         ok: 'OK',
         update: 'Update',
@@ -56,6 +56,7 @@ export default {
         aboutYou: 'About you',
         bill: 'Bill',
         rate: 'Rate',
+        status: 'Status',
         uploadBillImage: 'Upload bill image',
         scanQR: 'Scan qr to payment',
         logout: {
@@ -70,7 +71,9 @@ export default {
         },
         booking: {
             self: 'Booking',
-            header: 'Your discount'
+            header: 'Your bookings',
+            depositAlert1: 'Please place a deposit amount of ',
+            depositAlert2: ' to complete the room setup process.'
         },
         homestay: {
             header: 'Your Homestays',
@@ -121,7 +124,7 @@ export default {
                 hue: 'Hue',
                 cantho: 'Can Tho'
             }
-        },   
+        },
         topHomestay: 'Top homestay',
         footer: {
             thanks: 'Thank you for supporting us!',

@@ -59,7 +59,7 @@ const BookingCard = ({ indexkey, booking, triggerRerender }) => {
             } else {
                 dispatch(
                     actions.createAlert({
-                        message:  t('alert.error'),
+                        message: t('alert.error'),
                         type: "error"
                     })
                 );
@@ -133,11 +133,11 @@ const BookingCard = ({ indexkey, booking, triggerRerender }) => {
                 onMouseOver={() => setHover(true)}>
                 <div className='booking-info' onClick={() => setIsExpand(!isExpand)}>
                     <div className='bi-info biname'>
-                        <h6>Name</h6>
+                        <h6>{t('name')}</h6>
                         <h5>{booking.homestay.name}</h5>
                     </div>
                     <div className='bi-info bitime'>
-                        <h6>Time</h6>
+                        <h6>{t('time')}</h6>
                         <p>{format(new Date(booking.checkin), "dd/MM/yyyy")} - {format(new Date(booking.checkout), "dd/MM/yyyy")}</p>
                     </div>
                     <div className='bi-info bitotal'>
@@ -145,7 +145,7 @@ const BookingCard = ({ indexkey, booking, triggerRerender }) => {
                         <p>{booking.money} VNĐ</p>
                     </div>
                     <div className='bi-info bistatus'>
-                        <h6>Status</h6>
+                        <h6>{t('status')}</h6>
                         <h5 className={`booking-status ${booking.status}`}>{booking.status}</h5>
                     </div>
                     <i className={`fa fa-angle-${isExpand ? 'up' : 'down'} bi-dropdown`} aria-hidden="true"></i>
@@ -153,10 +153,10 @@ const BookingCard = ({ indexkey, booking, triggerRerender }) => {
                 {isExpand && <div className='booking-expand'>
                     <div style={{ width: '35%' }}>
                         <div className='bi-expand bicity'>
-                            <h6>City:</h6> <p>{booking.homestay.city}</p>
+                            <h6>{t('city')}:</h6> <p>{booking.homestay.city}</p>
                         </div>
                         <div className='bi-expand biaddress'>
-                            <h6>Address:</h6> <p>{booking.homestay.address}</p>
+                            <h6>{t('address')}:</h6> <p>{booking.homestay.address}</p>
                         </div>
                     </div>
                     <div style={{ width: '45%' }}>
@@ -164,14 +164,14 @@ const BookingCard = ({ indexkey, booking, triggerRerender }) => {
                             <h6>{t('people')}:</h6> <p>{booking.people}</p>
                         </div>
                         <div className='bi-expand bideposit'>
-                            <h6>Total deposit:</h6> <p>{booking.deposit} VNĐ</p>
+                            <h6>{t('deposit')}:</h6> <p>{booking.deposit} VNĐ</p>
                         </div>
                     </div>
                     <div className='biexpand-btns' style={{ width: '20%' }}>
                         {
                             booking.status === 'stayed' &&
                             <>
-                                <Button className='depositbutton' id='reviewBtn' onClick={() => setIsOpenReview(true)} color='gray'>
+                                <Button className='checkhomestay' id='reviewBtn' onClick={() => setIsOpenReview(true)} color='default'>
                                     <i className="fa fa-star-o" aria-hidden="true"></i>
                                 </Button>
                                 <UncontrolledTooltip
@@ -212,7 +212,7 @@ const BookingCard = ({ indexkey, booking, triggerRerender }) => {
                         }
                         {booking.status === 'accepted' && <>
                             <Button className='checkhomestay' id='depositBtn' onClick={() => setIsOpenDeposit(true)} color='warning'>
-                                <i className="fa fa-credit-card-alt" aria-hidden="true"></i>
+                                <i className="fa fa-usd" aria-hidden="true"></i>
                             </Button>
                             <UncontrolledTooltip
                                 placement="bottom"
@@ -233,7 +233,7 @@ const BookingCard = ({ indexkey, booking, triggerRerender }) => {
                                         </h4>
                                     </Col>
                                     <Col md={12}>
-                                        <h6 className='ml-2'>Vui lòng số tiền đặt cọc là <span style={{ color: 'red' }}>{booking.deposit} VND</span> để hoàn tất quá trình đặt phòng</h6>
+                                        <h6 className='ml-2'>{t('booking.depositAlert1')}<span style={{ color: 'red' }}>{booking.deposit} VND</span>{t('booking.depositAlert2')}</h6>
                                         <p className={`mb-0 ml-2 input-label`} >{t('scanQRPayment')}</p>
                                         <img className='p-2' style={{ width: '100%', height: '400px' }} src={process.env.REACT_APP_API_URL + "/users/" + booking.homestay.owner + "/banking"} alt="" />
                                     </Col>
@@ -266,21 +266,6 @@ const BookingCard = ({ indexkey, booking, triggerRerender }) => {
                         </UncontrolledTooltip>
                     </div>
                 </div>}
-                {/* <div className='booking-img'>
-                    <Slide>{booking.homestay.images.length > 0 ?
-                        booking.homestay.images.map((img, idx) => <CardImg
-                            key={idx}
-                            className="each-slide"
-                            alt="..."
-                            src={imgLink(booking.homestay._id, idx)}
-                        />)
-                        : <CardImg
-                            className="each-slide"
-                            alt="..."
-                            src={require('assets/img/theme/team-1-800x800.jpg')}
-                        />}
-                    </Slide>
-                </div> */}
             </Card>
         </>
     )

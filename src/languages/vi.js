@@ -1,7 +1,7 @@
 export default {
     translation: {
         yes: 'Có',
-        no:'Không',
+        no: 'Không',
         cancel: 'Hủy',
         ok: 'OK',
         update: 'Cập nhật',
@@ -55,6 +55,7 @@ export default {
         choose: 'Chọn',
         aboutYou: 'Hồ sơ',
         bill: 'Hóa đơn',
+        status: 'Trạng thái',
         rate: 'Đánh giá',
         uploadBillImage: 'Tải ảnh giao dịch',
         scanQRPayment: 'Quét mã QR để thanh toán',
@@ -70,7 +71,9 @@ export default {
         },
         booking: {
             self: 'Đặt phòng',
-            header: 'Đơn đặt phòng của bạn'
+            header: 'Đơn đặt phòng của bạn',
+            depositAlert1: 'Vui lòng số tiền đặt cọc là ',
+            depositAlert2: ' để hoàn tất quá trình đặt phòng.'
         },
         homestay: {
             header: 'Homestay của bạn',
@@ -121,7 +124,7 @@ export default {
                 hue: 'Huế',
                 cantho: 'Cần Thơ'
             }
-        },  
+        },
         topHomestay: 'Homestay hàng đầu',
         footer: {
             thanks: 'Cảm ơn bạn đã ủng hộ chúng tôi!',
