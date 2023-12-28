@@ -669,17 +669,15 @@
 
 //booking {
 .booking-container {
-    padding: 16px 16px 0 16px;
+    color: #000;
 }
 
 .booking-card {
     position: relative;
-    height: 160px;
     display: flex;
-    margin-bottom: 16px;
     padding: 8px;
-    border: 2px solid #172b4d;
-    border-radius: 8px;
+    margin-bottom: 8px;
+    border: 0;
     overflow: hidden;
 
     &.list {
@@ -717,25 +715,12 @@
 
 .booking-info {
     flex: 1;
-    margin-right: 16px;
+    height: 60px;
+    margin-right: 60px;
     position: relative;
     display: flex;
-    flex-direction: column;
     align-items: flex-start;
-
-    .sub-info {
-        display: flex;
-        width: 100%;
-
-        &>div {
-            flex: 1;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-
-        }
-    }
+    justify-content: flex-start;
 
     p,
     h2,
@@ -743,19 +728,57 @@
         margin-bottom: 0;
     }
 
+    h6 {
+        font-size: 14px;
+        line-height: 14px;
+        margin-bottom: 4px;
+    }
+
     h5 {
-        font-size: 18px;
-        line-height: 25px;
+        line-height: 20px;
+    }
+
+    &>div {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: space-evenly;
+    }
+
+    .biname {
+        width: 35%;
+    }
+
+    .bitime {
+        width: 30%;
+    }
+
+    .bitotal {
+        width: 20%;
+    }
+
+    .bistatus {
+        width: 15%;
+    }
+
+    .bi-dropdown {
+        position: absolute;
+        top: 0;
+        right: -60px;
+        height: 100%;
+        width: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 24px;
     }
 
     .booking-status {
-        position: absolute;
-        top: -8px;
-        right: -164px;
-        padding: 4px;
-        border-bottom-left-radius: 8px;
-        z-index: 4;
+        border-radius: 4px;
+        line-height: 20px;
+        font-size: 16px;
         color: #fff;
+        padding: 2px;
 
         &.list {
             top: -4px;
@@ -796,6 +819,45 @@
     }
 }
 
+.booking-expand {
+    border-top: 1px solid #ccc;
+    padding-top: 4px;
+    display: flex;
+    margin-right: 60px;
+
+    h6,
+    p {
+        margin-bottom: 0;
+        line-height: 20px;
+        margin-right: 10px;
+    }
+
+    .bi-expand {
+        display: flex;
+    }
+
+    // .bipeople {
+    //     width: 20%;
+    // }
+
+    // .bideposit {
+    //     width: 20%;
+    // }
+
+    // .bicity {
+    //     width: 20%;
+    // }
+
+    // .biaddress {
+    //     width: 40%;
+    // }
+    .biexpand-btns {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
+}
+
 .booking-img {
     width: 140px;
     height: 140px;
@@ -803,19 +865,19 @@
 }
 
 .booking-actions {
-    position: absolute;
+    // position: absolute;
     height: 100%;
-    top: 0;
-    right: 0;
-    transform: translateX(100%);
-    transition: transform 0.3s;
-    z-index: 5;
+    // top: 0;
+    // right: 0;
+    // transform: translateX(100%);
+    // transition: transform 0.3s;
+    // z-index: 5;
     display: flex;
     flex-direction: column;
     justify-content: center;
 
     &.active {
-        transform: translateX(-156px);
+        // transform: translateX(-156px);
     }
 
     &.listactive {
@@ -1014,4 +1076,9 @@
     align-items: center;
     justify-content: center;
     border-radius: 5px;
+}
+
+//checkhomestay
+.checkhomestay {
+    width: fit-content;
 }

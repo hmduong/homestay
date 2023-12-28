@@ -2,8 +2,7 @@ import { format } from 'date-fns';
 import { useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
-import { Slide } from 'react-slideshow-image'
-import { Input, Button, CardImg, Col, FormGroup, Modal, Row } from 'reactstrap'
+import { Input, Button, Card, Col, FormGroup, Modal, Row, UncontrolledTooltip } from 'reactstrap'
 import { review } from 'services/review';
 import validator from 'utils/validator';
 import { useDispatch } from "react-redux";
@@ -12,7 +11,7 @@ import Loading from "components/Loading";
 import { editBook } from 'services/booking';
 import { multipleFilesUpload } from "utils/request";
 
-const BookingCard = ({ booking, triggerRerender }) => {
+const BookingCard = ({ indexkey, booking, triggerRerender }) => {
     const dispatch = useDispatch();
     const form = {
         comment: null
@@ -23,6 +22,7 @@ const BookingCard = ({ booking, triggerRerender }) => {
     const [isOpenDeposit, setIsOpenDeposit] = useState(false)
     const [reviewed, setReviewed] = useState(false)
     const [validateErr, setValidateErr] = useState({})
+    const [isExpand, setIsExpand] = useState(false)
     const [ani, toggleAni] = useState(false)
     const [loading, setLoading] = useState(false);
     const [bill, setBill] = useState(null);
@@ -125,114 +125,162 @@ const BookingCard = ({ booking, triggerRerender }) => {
     };
 
     return (
-        !reviewed && <div className="booking-card"
-            onMouseLeave={() => setHover(false)}
-            onMouseOver={() => setHover(true)}>
-            <div className='booking-info'>
-                <h2>{booking.homestay.name}</h2>
-                <div className='sub-info'>
-                    <div>
-                        <p>Check in: {format(new Date(booking.checkin), "dd/MM/yyyy")}</p>
-                        <p>Check out: {format(new Date(booking.checkout), "dd/MM/yyyy")}</p>
+        <>
+            <Card key={indexkey} className="booking-card shadow"
+                onMouseLeave={() => setHover(false)}
+                onMouseOver={() => setHover(true)}>
+                <div className='booking-info' onClick={() => setIsExpand(!isExpand)}>
+                    <div className='bi-info biname'>
+                        <h6>Name</h6>
+                        <h5>{booking.homestay.name}</h5>
                     </div>
-                    <div>
-                        <p>Phone: {booking.phone}</p>
-                        <p>People: {booking.people}</p>
-                        <p>Money: {booking.money}</p>
+                    <div className='bi-info bitime'>
+                        <h6>Time</h6>
+                        <p>{format(new Date(booking.checkin), "dd/MM/yyyy")} - {format(new Date(booking.checkout), "dd/MM/yyyy")}</p>
                     </div>
+                    <div className='bi-info bitotal'>
+                        <h6>Total money</h6>
+                        <p>{booking.money} VNĐ</p>
+                    </div>
+                    <div className='bi-info bistatus'>
+                        <h6>Status</h6>
+                        <h5 className={`booking-status ${booking.status}`}>{booking.status}</h5>
+                    </div>
+                    <i className={`fa fa-angle-${isExpand ? 'up' : 'down'} bi-dropdown`} aria-hidden="true"></i>
                 </div>
-                <h5 className={`booking-status ${booking.status}`}>{booking.status}</h5>
-            </div>
-            <div className='booking-img'>
-                <Slide>{booking.homestay.images.length > 0 ?
-                    booking.homestay.images.map((img, idx) => <CardImg
-                        key={idx}
-                        className="each-slide"
-                        alt="..."
-                        src={imgLink(booking.homestay._id, idx)}
-                    />)
-                    : <CardImg
-                        className="each-slide"
-                        alt="..."
-                        src={require('assets/img/theme/team-1-800x800.jpg')}
-                    />}
-                </Slide>
-            </div>
-            <div className={`booking-actions${hover ? ' active' : ''}`}>
-                <Button onClick={check} color='primary' style={{ marginRight: 0, marginBottom: '8px' }}>Check Homestay</Button>
-                {
-                    booking.status === 'stayed' &&
-                    <><Button onClick={() => setIsOpenReview(true)}>Review</Button>
-                        <Modal
-                            className="modal-dialog-centered"
-                            isOpen={isOpenReview}
-                            toggle={() => setIsOpenReview(false)}
+                {isExpand && <div className='booking-expand'>
+                    <div style={{ width: '35%' }}>
+                        <div className='bi-expand bicity'>
+                            <h6>City:</h6> <p>{booking.homestay.city}</p>
+                        </div>
+                        <div className='bi-expand biaddress'>
+                            <h6>Address:</h6> <p>{booking.homestay.address}</p>
+                        </div>
+                    </div>
+                    <div style={{ width: '45%' }}>
+                        <div className='bi-expand bipeople'>
+                            <h6>People:</h6> <p>{booking.people}</p>
+                        </div>
+                        <div className='bi-expand bideposit'>
+                            <h6>Total deposit:</h6> <p>{booking.deposit} VNĐ</p>
+                        </div>
+                    </div>
+                    <div className='biexpand-btns' style={{ width: '20%' }}>
+                        {
+                            booking.status === 'stayed' &&
+                            <>
+                                <Button className='depositbutton' id='reviewBtn' onClick={() => setIsOpenReview(true)} color='gray'>
+                                    <i className="fa fa-star-o" aria-hidden="true"></i>
+                                </Button>
+                                <UncontrolledTooltip
+                                    placement="bottom"
+                                    target="reviewBtn"
+                                >
+                                    Review
+                                </UncontrolledTooltip>
+                                <Modal
+                                    className="modal-dialog-centered"
+                                    isOpen={isOpenReview}
+                                    toggle={() => setIsOpenReview(false)}
+                                >
+                                    {loading ? <Loading /> : <Row>
+                                        <Col md={12} className="m-2 mt-3">
+                                            <h5>
+                                                Review
+                                            </h5>
+                                        </Col>
+                                        <Col md="12" className='booking-rate'>
+                                            <i style={{ color: 'yellow', marginRight: '8px', fontSize: '36px' }} onClick={() => setRate(1)} className={`fa fa-star`} aria-hidden="true"></i>
+                                            <i style={{ color: 'yellow', marginRight: '8px', fontSize: '36px' }} onClick={() => setRate(2)} className={`fa fa-star${rate > 1 ? '' : '-o'}`} aria-hidden="true"></i>
+                                            <i style={{ color: 'yellow', marginRight: '8px', fontSize: '36px' }} onClick={() => setRate(3)} className={`fa fa-star${rate > 2 ? '' : '-o'}`} aria-hidden="true"></i>
+                                            <i style={{ color: 'yellow', marginRight: '8px', fontSize: '36px' }} onClick={() => setRate(4)} className={`fa fa-star${rate > 3 ? '' : '-o'}`} aria-hidden="true"></i>
+                                            <i style={{ color: 'yellow', marginRight: '8px', fontSize: '36px' }} onClick={() => setRate(5)} className={`fa fa-star${rate > 4 ? '' : '-o'}`} aria-hidden="true"></i>
+                                        </Col>
+                                        <Col md="12" className='p-4'>
+                                            <FormGroup>
+                                                <p className={`mb-0 input-label ${validateErr.comment ? (ani ? 'err1' : 'err2') : ''}`} >Comment</p>
+                                                <Input type="textarea" onChange={e => form.comment = e.target.value} />
+                                            </FormGroup>
+                                        </Col>
+                                        <Col md="12" className='booking-submit'>
+                                            <Button onClick={sendReview}>Send review</Button>
+                                        </Col>
+                                    </Row>}
+                                </Modal></>
+                        }
+                        {booking.status === 'accepted' && <>
+                            <Button className='checkhomestay' id='depositBtn' onClick={() => setIsOpenDeposit(true)} color='warning'>
+                                <i className="fa fa-credit-card-alt" aria-hidden="true"></i>
+                            </Button>
+                            <UncontrolledTooltip
+                                placement="bottom"
+                                target="depositBtn"
+                            >
+                                Deposit
+                            </UncontrolledTooltip>
+                            <Modal
+                                className="modal-dialog-centered"
+                                isOpen={isOpenDeposit}
+                                toggle={() => setIsOpenDeposit(false)}
+                            >
+
+                                {loading ? <Loading /> : <Row>
+                                    <Col md={12} className="m-2 mt-3">
+                                        <h4>
+                                            Deposit
+                                        </h4>
+                                    </Col>
+                                    <Col md={12}>
+                                        <h6 className='ml-2'>Vui lòng số tiền đặt cọc là <span style={{ color: 'red' }}>{booking.deposit} VND</span> để hoàn tất quá trình đặt phòng</h6>
+                                        <p className={`mb-0 ml-2 input-label`} >Quét mã QR để thanh toán</p>
+                                        <img className='p-2' style={{ width: '100%', height: '400px' }} src={process.env.REACT_APP_API_URL + "/users/" + booking.homestay.owner + "/banking"} alt="" />
+                                    </Col>
+                                    <Col md="12" className='m-2'>
+                                        <FormGroup>
+                                            <p className={`mb-0 input-label ${validateErr.bill ? (ani ? 'err1' : 'err2') : ''}`} >Tải ảnh giao dịch</p>
+                                            <Input
+                                                type="file"
+                                                accept=".jpg,.png"
+                                                multiple
+                                                onChange={(e) => setBill(e.target.files[0])}
+                                            />
+                                        </FormGroup>
+                                    </Col>
+                                    <Col md="12" className='booking-submit'>
+                                        <Button color='primary' onClick={sendDeposit}>Submit</Button>
+                                    </Col>
+                                </Row>}
+                            </Modal>
+                        </>
+                        }
+                        <Button className='checkhomestay' id='checkBtn' onClick={check} color='primary'>
+                            <i className="fa fa-home" aria-hidden="true"></i>
+                        </Button>
+                        <UncontrolledTooltip
+                            placement="bottom"
+                            target="checkBtn"
                         >
-                            {loading ? <Loading /> : <Row>
-                                <Col md={12} className="m-2 mt-3">
-                                    <h5>
-                                        Review
-                                    </h5>
-                                </Col>
-                                <Col md="12" className='booking-rate'>
-                                    <i style={{ color: 'yellow', marginRight: '8px', fontSize: '36px' }} onClick={() => setRate(1)} className={`fa fa-star`} aria-hidden="true"></i>
-                                    <i style={{ color: 'yellow', marginRight: '8px', fontSize: '36px' }} onClick={() => setRate(2)} className={`fa fa-star${rate > 1 ? '' : '-o'}`} aria-hidden="true"></i>
-                                    <i style={{ color: 'yellow', marginRight: '8px', fontSize: '36px' }} onClick={() => setRate(3)} className={`fa fa-star${rate > 2 ? '' : '-o'}`} aria-hidden="true"></i>
-                                    <i style={{ color: 'yellow', marginRight: '8px', fontSize: '36px' }} onClick={() => setRate(4)} className={`fa fa-star${rate > 3 ? '' : '-o'}`} aria-hidden="true"></i>
-                                    <i style={{ color: 'yellow', marginRight: '8px', fontSize: '36px' }} onClick={() => setRate(5)} className={`fa fa-star${rate > 4 ? '' : '-o'}`} aria-hidden="true"></i>
-                                </Col>
-                                <Col md="12" className='p-4'>
-                                    <FormGroup>
-                                        <p className={`mb-0 input-label ${validateErr.comment ? (ani ? 'err1' : 'err2') : ''}`} >Comment</p>
-                                        <Input type="textarea" onChange={e => form.comment = e.target.value} />
-                                    </FormGroup>
-                                </Col>
-                                <Col md="12" className='booking-submit'>
-                                    <Button color='primary' onClick={sendReview}>Send review</Button>
-                                </Col>
-                            </Row>}
-                        </Modal></>
-                }
-                {booking.status === 'accepted' && <><Button
-                    onClick={() => setIsOpenDeposit(true)}
-                >Deposit</Button>
-                    <Modal
-                        className="modal-dialog-centered"
-                        isOpen={isOpenDeposit}
-                        toggle={() => setIsOpenDeposit(false)}
-                    >
-
-                        {loading ? <Loading /> : <Row>
-                            <Col md={12} className="m-2 mt-3">
-                                <h4>
-                                    Deposit
-                                </h4>
-                            </Col>
-                            <Col md={12}>
-                                <h6 className='ml-2'>Vui lòng số tiền đặt cọc là <span style={{ color: 'red' }}>{booking.deposit} VND</span> để hoàn tất quá trình đặt phòng</h6>
-                                <p className={`mb-0 ml-2 input-label`} >Quét mã QR để thanh toán</p>
-                                <img className='p-2' style={{ width: '100%', height: '400px' }} src={process.env.REACT_APP_API_URL + "/users/" + booking.homestay.owner + "/banking"} alt="" />
-                            </Col>
-                            <Col md="12" className='m-2'>
-                                <FormGroup>
-                                    <p className={`mb-0 input-label ${validateErr.bill ? (ani ? 'err1' : 'err2') : ''}`} >Tải ảnh giao dịch</p>
-                                    <Input
-                                        type="file"
-                                        accept=".jpg,.png"
-                                        multiple
-                                        onChange={(e) => setBill(e.target.files[0])}
-                                    />
-                                </FormGroup>
-                            </Col>
-                            <Col md="12" className='booking-submit'>
-                                <Button color='primary' onClick={sendDeposit}>Submit</Button>
-                            </Col>
-                        </Row>}
-                    </Modal></>
-                }
-
-            </div>
-        </div>
+                            Check homestay
+                        </UncontrolledTooltip>
+                    </div>
+                </div>}
+                {/* <div className='booking-img'>
+                    <Slide>{booking.homestay.images.length > 0 ?
+                        booking.homestay.images.map((img, idx) => <CardImg
+                            key={idx}
+                            className="each-slide"
+                            alt="..."
+                            src={imgLink(booking.homestay._id, idx)}
+                        />)
+                        : <CardImg
+                            className="each-slide"
+                            alt="..."
+                            src={require('assets/img/theme/team-1-800x800.jpg')}
+                        />}
+                    </Slide>
+                </div> */}
+            </Card>
+        </>
     )
 }
 
