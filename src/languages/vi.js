@@ -166,7 +166,9 @@ export default {
             discount: 'Mã giảm giá',
         },
         chat: {
-            out: 'Thoát',
+            owner: 'Chủ homestay',
+            visitor: 'Khách',
+            leave: 'Rời chat'
         },
         alert: {
             updated: 'Đã cập nhật đơn đặt!',

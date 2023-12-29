@@ -166,7 +166,9 @@ export default {
             discount: 'Discount',
         },
         chat: {
-            out: 'out',
+            owner: 'Homestay owner',
+            visitor: 'Visitor',
+            leave: 'Leave chat'
         },
         alert: {
             updated: 'Updated booking!',

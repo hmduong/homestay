@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { getCookie, postAsyncWithToken } from "utils/request";
 import { format } from "date-fns";
-import { Form, FormGroup, InputGroup, InputGroupAddon, InputGroupText, Input } from "reactstrap";
+import { Form, FormGroup, InputGroup, InputGroupAddon, InputGroupText, Input, Card } from "reactstrap";
 import { useDispatch } from "react-redux";
 import { actions } from "store/AlertSlice"
 import Loading from "components/Loading";
@@ -78,33 +78,35 @@ const ChatBox = ({ socket, chatuserid, chatUserName }) => {
     }, [arrivalMessage]);
 
     const submitHandler = async () => {
-        const url = process.env.REACT_APP_API_URL + "/chats/send-messages";
-        const msg = {
-            from: userid,
-            to: chatuserid,
-            updatedAt: new Date(),
-            message: message,
-        };
-        const response = await postAsyncWithToken(url, msg);
-        if (response.status === 201) {
-            socket.current.emit("sendmessage", msg);
-            const msgs = [...messages];
-            msgs.push(msg);
-            setMessages(msgs);
-            setMessage("");
-            dispatch(
-                actions.createAlert({
-                    message: t('alert.sentMessage'),
-                    type: "success"
-                })
-            );
-        } else {
-            dispatch(
-                actions.createAlert({
-                    message: t('alert.error'),
-                    type: "error"
-                })
-            );
+        if (message) {
+            const url = process.env.REACT_APP_API_URL + "/chats/send-messages";
+            const msg = {
+                from: userid,
+                to: chatuserid,
+                updatedAt: new Date(),
+                message: message,
+            };
+            const response = await postAsyncWithToken(url, msg);
+            if (response.status === 201) {
+                socket.current.emit("sendmessage", msg);
+                const msgs = [...messages];
+                msgs.push(msg);
+                setMessages(msgs);
+                setMessage("");
+                dispatch(
+                    actions.createAlert({
+                        message: t('alert.sentMessage'),
+                        type: "success"
+                    })
+                );
+            } else {
+                dispatch(
+                    actions.createAlert({
+                        message: t('alert.error'),
+                        type: "error"
+                    })
+                );
+            }
         }
     };
 
@@ -114,15 +116,10 @@ const ChatBox = ({ socket, chatuserid, chatUserName }) => {
                 {loading ? <Loading /> : <ul>
                     {messages && messages.map((message, index) =>
                         <li key={index} className={'chat-mess-row' + (message.from === chatuserid ? '' : " curr-user-mess")}>
-                            {message.from === chatuserid ?
-                                <>
-                                    {message.message}
-                                    <div className="chat-mess-time">{format(new Date(message.updatedAt), "dd/MM/yyyy")}</div>
-                                </> :
-                                <>
-                                    <div className="chat-mess-time">{format(new Date(message.updatedAt), "dd/MM/yyyy")}</div>
-                                    {message.message}
-                                </>}
+                            <Card className="chat-message shadow">
+                                <div className="cmtext">{message.message}</div>
+                                <div className="cmtime">{format(new Date(message.updatedAt), "dd/MM/yyyy")}</div>
+                            </Card>
                         </li>
                     )}
                 </ul>}

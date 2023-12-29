@@ -1,27 +1,27 @@
-import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
+import { useCookies } from "react-cookie";
 
-const ChatCard = ({ chat, curr, onclick }) => {
-    // const navigate = useNavigate()
-    // const link = `${props.chatuserid}`;
-    const opposit = chat.users.find((u) => u._id !== curr);
-    console.log(chat);
+const ChatCard = ({ chat, active, onclick }) => {
+    const [cookies, setCookie, removeCookie] = useCookies([
+        "name",
+        "userid"
+    ]);
+    const opposit = chat.users.find((u) => u._id !== cookies.userid);
     const click = () => {
         onclick(opposit)
-        // navigate(link)
     }
     return (
-        <div className="chat-card" onClick={click}>
+        <div className={`chat-card${active ? ' active' : ''}`} onClick={click}>
             <div className="chat-avt">
-                {opposit.name[0]}
+                {opposit.name[0].toUpperCase()}
             </div>
             <div className="chat-look">
-                <div className="chat-name">
+                <h6 className="chat-name">
                     {opposit.name}
-                </div>
+                </h6>
                 <div className="chat-last-content">
                     <div className="chat-last-mess">
-                        {chat.lastMessage.from === curr ? "Me: " : ""}
+                        {chat.lastMessage.from === cookies.name ? "Me: " : ""}
                         {chat.lastMessage.message}
                     </div>
                     <div className="chat-time">

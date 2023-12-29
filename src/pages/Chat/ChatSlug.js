@@ -10,9 +10,6 @@ const ChatSlug = ({ opposit }) => {
 
     return (
         <div className="chat-slug">
-            <div className="chat-current-user chat-header">
-                {opposit.name}
-            </div>
             <ChatBox
                 chatuserid={opposit._id}
                 chatUserName={opposit.name}
