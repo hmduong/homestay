@@ -47,14 +47,13 @@ const Chat = () => {
   }, []);
 
   return (cookies.currentuser ?
-    (loading ? <Loading /> :
-      <div style={{ background: '#00029422' }}>
-        <ChatNavbar currUserName={currUserName} />
-        <div style={{ display: 'flex' }}>
-          <ChartSidebar setOpposit={setOpposit} chats={chats} />
-          {opposit && <ChatSlug opposit={opposit} />}
-        </div>
-      </div>)
+    <div className="chat-page">
+      <ChatNavbar currUserName={currUserName} />
+      {loading ? <Loading /> : <div className="chat-content">
+        <ChartSidebar setOpposit={setOpposit} chats={chats} />
+        {opposit && <ChatSlug opposit={opposit} />}
+      </div>}
+    </div>
     : <Navigate to="/login" replace />
   );
 };

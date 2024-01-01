@@ -24,11 +24,9 @@ import { book } from "services/booking";
 import validator from "utils/validator";
 import { formatDate } from "utils/date";
 import { getDiscountsByHomestay } from "services/discount";
-import HomestayForm from "components/HomestayForm";
 import { useDispatch } from "react-redux";
 import { actions } from "store/AlertSlice";
 import Loading from "components/Loading";
-import { createService } from "services/serviceManagement";
 import { useTranslation } from "react-i18next";
 
 const DetailHomestay = ({ homestay, owner, triggerRerender }) => {
@@ -37,14 +35,13 @@ const DetailHomestay = ({ homestay, owner, triggerRerender }) => {
   const [cookies, setCookie, removeCookie] = useCookies(["role", "userid"]);
   const [isOpenChat, setIsOpenChat] = useState(false);
   const [isOpenForm, setIsOpenForm] = useState(false);
-  const [isOpenService, setIsOpenService] = useState(false);
   const [discounts, setDiscounts] = useState([]);
   const [discount, setDiscount] = useState({});
   const navigate = useNavigate();
   const [message, setMessage] = useState("");
   const [loading2, setLoading2] = useState(false);
-  const [show, setShow] = useState(false);
   const [showMap, setShowMap] = useState(false);
+  const [isShowInfo, setIsShowInfo] = useState(false);
   const [info, setInfo] = useState({
     discountMoney: 0,
     deposit: 0,
@@ -78,13 +75,9 @@ const DetailHomestay = ({ homestay, owner, triggerRerender }) => {
   const [ani, toggleAni] = useState(false);
   const [validateErr, setValidateErr] = useState({});
   const [form, setForm] = useState({ ...defaultForm });
-  const [validateErrService, setValidateErrService] = useState({});
-  const [formService, setFormService] = useState({
-    name: null,
-    description: null,
-    price: null,
-    homestay: id,
-  });
+  const toggleInfo = () => {
+    setIsShowInfo(!isShowInfo)
+  }
   const booking = async () => {
     if (cookies.userid) {
       await fetchDiscount();
@@ -219,221 +212,370 @@ const DetailHomestay = ({ homestay, owner, triggerRerender }) => {
     }
     setLoading2(false);
   };
-  const createServices = async () => {
-    const err = validator(
-      formService,
-      { empty: (v) => (!v ? "wut???" : null) },
-      { description: ["empty"], homestay: ["empty"] }
-    );
-    if (!err) {
-      const res = await createService(formService);
-      if (res < 299) {
-        setFormService({
-          name: null,
-          description: null,
-          price: null,
-          homestay: id,
-        });
-      }
-    } else {
-      console.log(err);
-      setValidateErrService(err);
-      toggleAni(!ani);
-    }
-  };
   return (
-    <Card className="booking-container shadow">
-      <div className="detail-homestay">
-        <Slide className="slide">
-          {homestay.images.length > 0 ? (
-            homestay.images.map((img, idx) => (
+    <>
+      <Card className="booking-container shadow detail-homestay">
+        <div className="detail-homestay">
+          <Slide className="slide">
+            {homestay.images.length > 0 ? (
+              homestay.images.map((img, idx) => (
+                <CardImg
+                  key={idx}
+                  className="each-slide"
+                  alt="..."
+                  src={imgLink(homestay._id, idx)}
+                />
+              ))
+            ) : (
               <CardImg
-                key={idx}
                 className="each-slide"
                 alt="..."
-                src={imgLink(homestay._id, idx)}
+                src={require("assets/img/theme/team-1-800x800.jpg")}
               />
-            ))
-          ) : (
-            <CardImg
-              className="each-slide"
-              alt="..."
-              src={require("assets/img/theme/team-1-800x800.jpg")}
-            />
-          )}
-        </Slide>
-        <div className="homestay-info">
-          <div className="detail-price">${homestay.price}</div>
-          <div className="detail-rate">
-            {new Array(Math.round(5)).fill().map((q, key) => (
-              <i
-                key={key}
-                style={{ color: "yellow" }}
-                className={
-                  Math.round(homestay.rate) > key
-                    ? "fa fa-star"
-                    : "fa fa-star-o"
-                }
-                aria-hidden="true"
-              ></i>
-            ))}
-          </div>
-          <div>
-            {t("address")}: {homestay.address}
-          </div>
-          <div>
-            {t("slot")}: {homestay.people}
-          </div>
-          <div>
-            {t("pool")}: {homestay.pool ? t("yes") : t("no")}
-          </div>
-          <div>
-            {t("homestay.bookings.title")}: {homestay.bookingNumber}
-          </div>
-          <div>
-            {t("city")}: {homestay.city}
-          </div>
-          <div>
-            {t("owner")}: {owner.name}
-          </div>
-
-          <div>
-            <span>{t('homestay.map')}:</span>
-            <Button
-              className="ml-2"
-              color="primary"
-              onClick={() => setShowMap(true)}
-            >
-              {t('homestay.showMap')}
-            </Button>
-            <Modal
-              className="modal-dialog-centered"
-              isOpen={showMap}
-              toggle={() => setShowMap(false)}
-            >
-              <div className="modal-header">
-                <h6 className="modal-title" id="modal-title-default">
-                  {t('homestay.map')}
-                </h6>
-                <button
-                  aria-label="Close"
-                  className="close"
-                  data-dismiss="modal"
-                  type="button"
-                  onClick={() => setShowMap(false)}
+            )}
+          </Slide>
+          <div className="homestay-info">
+            <div className="hi-first">
+              <h2 className="detail-price">{homestay.price}$</h2>
+              <div className="detail-rate">
+                {new Array(Math.round(5)).fill().map((q, key) => (
+                  <i
+                    key={key}
+                    style={{ color: "yellow" }}
+                    className={
+                      Math.round(homestay.rate) > key
+                        ? "fa fa-star"
+                        : "fa fa-star-o"
+                    }
+                    aria-hidden="true"
+                  ></i>
+                ))}
+              </div>
+            </div>
+            {isShowInfo && <div>
+              <div className="hi-second">
+                <div>
+                  <h5>{t("slot")}:</h5> {homestay.people}
+                </div>
+                <div>
+                  <h5>{t("pool")}:</h5> {homestay.pool ? t("yes") : t("no")}
+                </div>
+                <div>
+                  <h5>{t("homestay.bookings.title")}:</h5> {homestay.bookingNumber}
+                </div>
+                <div>
+                  <h5>{t("city")}:</h5> {homestay.city}
+                </div>
+              </div>
+              <div className="hi-third">
+                <div className="hi-fourth">
+                  <div>
+                    <h5>{t("owner")}:</h5> {owner.name}
+                  </div>
+                  <div>
+                    <h5>{t("address")}:</h5> {homestay.address}
+                  </div>
+                </div>
+                <Button
+                  style={{ width: 200 }}
+                  color="default"
+                  onClick={() => setShowMap(true)}
                 >
-                  <span>×</span>
-                </button>
+                  {t('homestay.showMap')}
+                </Button>
+                <Modal
+                  className="modal-dialog-centered"
+                  isOpen={showMap}
+                  toggle={() => setShowMap(false)}
+                >
+                  <div className="modal-header">
+                    <h6 className="modal-title" id="modal-title-default">
+                      {t('homestay.map')}
+                    </h6>
+                    <button
+                      aria-label="Close"
+                      className="close"
+                      data-dismiss="modal"
+                      type="button"
+                      onClick={() => setShowMap(false)}
+                    >
+                      <span>×</span>
+                    </button>
+                  </div>
+                  <div className="modal-body">
+                    <Map
+                      coor={mapCoor}
+                      onChange={setMapCoor}
+                      defaultCoor={defaultCoor}
+                    />
+                  </div>
+                </Modal>
               </div>
-              <div className="modal-body">
-                <Map
-                  coor={mapCoor}
-                  onChange={setMapCoor}
-                  defaultCoor={defaultCoor}
-                />
-              </div>
-            </Modal>
+            </div>}
+            <div className="homestay-info-hide" onClick={toggleInfo}>
+              <i className={`fa fa-window-${isShowInfo ? 'maximize' : 'minimize'}`} aria-hidden="true"></i>
+            </div>
           </div>
-          
-          {cookies.role === "homestay owner" && (
-            <div className="info-actions">
-              <Button onClick={() => setShow(true)} color="primary">
-                {t("homestay.slug.edit")}
-              </Button>
-              {show && (
-                <HomestayForm
-                  turnOff={() => setShow(false)}
-                  triggerRerender={triggerRerender}
-                  editPayload={homestay}
-                />
-              )}
-              <Button onClick={() => setIsOpenService(true)}>
-                {t("homestay.slug.createService")}
-              </Button>
-              <Modal
-                className="modal-dialog-centered"
-                isOpen={isOpenService}
-                toggle={() => setIsOpenService(false)}
-              >
-                <div className="modal-header">
+        </div>
+      </Card>
+      {cookies.role !== "homestay owner" && (
+        <div className="info-actions">
+          <Button onClick={booking} color="success">
+            {t("homestay.slug.bookHomestay")}
+          </Button>
+          <Button color="primary" onClick={chat}>{t("homestay.slug.chat")}</Button>
+          <Modal
+            className="modal-dialog-centered"
+            isOpen={isOpenChat}
+            toggle={() => setIsOpenChat(false)}
+          >
+            {loading2 ? (
+              <Loading />
+            ) : (
+              <Form className="detail-chat">
+                <FormGroup className="mb-3">
+                  <InputGroup
+                    className="input-group-alternative"
+                    color="primary"
+                  >
+                    <Input
+                      value={message}
+                      className="input-text"
+                      placeholder="Aa"
+                      type="text"
+                      onChange={(e) => setMessage(e.target.value)}
+                    />
+                  </InputGroup>
+                  <InputGroupAddon
+                    className="input-icon"
+                    onClick={submitChat}
+                    addonType="append"
+                  >
+                    <InputGroupText>
+                      <i className="fa fa-paper-plane" />
+                    </InputGroupText>
+                  </InputGroupAddon>
+                </FormGroup>
+              </Form>
+            )}
+          </Modal>
+          <Modal
+            className="modal-dialog-centered"
+            isOpen={isOpenForm}
+            toggle={() => {
+              setIsOpenForm(false);
+            }}
+          >
+            {loading2 ? (
+              <Loading />
+            ) : (
+              <>
+                <div className="modal-header" style={{ display: "block" }}>
                   <h4
                     className="modal-title"
                     style={{ fontWeight: "700" }}
                     id="modal-title-default"
                   >
-                    {t("homestay.slug.createService")}
+                    {t("booking.self")}
                   </h4>
-                  <button
-                    aria-label="Close"
-                    className="close"
-                    data-dismiss="modal"
-                    type="button"
-                    onClick={() => setIsOpenService(false)}
-                  >
-                    <span>×</span>
-                  </button>
+                  <p style={{ marginBottom: "0" }}>
+                    {t("homestay.slug.depositMess")}
+                  </p>
                 </div>
                 <div className="modal-body">
                   <Row>
-                    <Col md={12}>
+                    <Col md="12">
                       <FormGroup>
                         <p
-                          className={`input-label ${
-                            validateErrService.name
-                              ? ani
-                                ? "err1"
-                                : "err2"
-                              : ""
-                          }`}
+                          className={`input-label ${validateErr.email ? (ani ? "err1" : "err2") : ""
+                            }`}
                         >
-                          {t("name")}
+                          Email
                         </p>
                         <Input
                           type="text"
-                          onChange={(e) => (formService.name = e.target.value)}
+                          onChange={(e) => (form.email = e.target.value)}
                         />
                       </FormGroup>
                     </Col>
-                    <Col md={12}>
+                    <Col md="6">
                       <FormGroup>
                         <p
-                          className={`input-label ${
-                            validateErrService.price
-                              ? ani
-                                ? "err1"
-                                : "err2"
-                              : ""
-                          }`}
+                          className={`input-label ${validateErr.phone ? (ani ? "err1" : "err2") : ""
+                            }`}
                         >
-                          {t("price")}
+                          {t("phone")}
                         </p>
                         <Input
                           type="number"
-                          onChange={(e) => (formService.price = e.target.value)}
+                          onChange={(e) => (form.phone = e.target.value)}
                         />
                       </FormGroup>
                     </Col>
-                    <Col md={12}>
+                    <Col md="6">
                       <FormGroup>
                         <p
-                          className={`input-label ${
-                            validateErrService.description
-                              ? ani
-                                ? "err1"
-                                : "err2"
-                              : ""
-                          }`}
+                          className={`input-label ${validateErr.people
+                            ? ani
+                              ? "err1"
+                              : "err2"
+                            : ""
+                            }`}
                         >
-                          {t("description")}
+                          {t("slot")}
+                        </p>
+                        <Input
+                          type="number"
+                          onChange={(e) => (form.people = e.target.value)}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col md="6">
+                      <FormGroup>
+                        <p
+                          className={`input-label ${validateErr.checkin
+                            ? ani
+                              ? "err1"
+                              : "err2"
+                            : ""
+                            }`}
+                        >
+                          {t("checkin")}
+                        </p>
+                        <InputGroup className="input-group-alternative">
+                          <InputGroupAddon addonType="prepend">
+                            <InputGroupText>
+                              <i className="ni ni-calendar-grid-58" />
+                            </InputGroupText>
+                          </InputGroupAddon>
+                          <ReactDatetime
+                            onChange={(e) => {
+                              form.checkin = formatDate(e._d);
+                              fetchDiscount();
+                            }}
+                            inputProps={{
+                              placeholder: "mm/dd/yyyy",
+                            }}
+                            timeFormat={false}
+                          />
+                        </InputGroup>
+                      </FormGroup>
+                    </Col>
+                    <Col md="6">
+                      <FormGroup>
+                        <p
+                          className={`input-label ${validateErr.checkout
+                            ? ani
+                              ? "err1"
+                              : "err2"
+                            : ""
+                            }`}
+                        >
+                          {t("checkout")}
+                        </p>
+                        <InputGroup className="input-group-alternative">
+                          <InputGroupAddon addonType="prepend">
+                            <InputGroupText>
+                              <i className="ni ni-calendar-grid-58" />
+                            </InputGroupText>
+                          </InputGroupAddon>
+                          <ReactDatetime
+                            onChange={(e) => {
+                              form.checkout = formatDate(e._d);
+                              fetchDiscount();
+                            }}
+                            inputProps={{
+                              placeholder: "mm/dd/yyyy",
+                            }}
+                            timeFormat={false}
+                          />
+                        </InputGroup>
+                      </FormGroup>
+                    </Col>
+                    <Col md="12">
+                      <FormGroup>
+                        <p className={`input-label`}>
+                          {t("homestay.slug.note")}
                         </p>
                         <Input
                           type="textarea"
-                          onChange={(e) =>
-                            (formService.description = e.target.value)
-                          }
+                          onChange={(e) => (form.note = e.target.value)}
                         />
                       </FormGroup>
                     </Col>
+                    <Col md="12">
+                      <FormGroup
+                        style={{ marginBottom: 0, position: "relative" }}
+                      >
+                        <p className={`input-label`}>
+                          {t("discount.self")}
+                        </p>
+                        <Input
+                          className="discount-select"
+                          type="text"
+                          value={discount._id || ""}
+                          onChange={() => { }}
+                        ></Input>
+                        <Input
+                          type="select"
+                          value={{}}
+                          onChange={(e) =>
+                            caculate(discounts[e.target.selectedIndex - 1])
+                          }
+                          style={{ opacity: 0 }}
+                        >
+                          <option
+                            style={{ display: "none" }}
+                            value={{}}
+                          ></option>
+                          {discounts.map((discount, index) => (
+                            <option key={index} value={discount}>
+                              {discount._id}
+                            </option>
+                          ))}
+                        </Input>
+                        {discount._id && (
+                          <div
+                            className="discount-select-clear"
+                            onClick={() => caculate({})}
+                          >
+                            <i
+                              className="fa fa-times"
+                              aria-hidden="true"
+                            ></i>
+                          </div>
+                        )}
+                      </FormGroup>
+                    </Col>
+                    {
+                      <Col md="12">
+                        <p style={{ marginBottom: 0, marginTop: "8px" }}>
+                          {t("money")}: {homestay.price}
+                        </p>
+                      </Col>
+                    }
+                    {
+                      <Col md="12">
+                        <p style={{ marginBottom: 0 }}>
+                          {t("homestay.slug.deposit")}: {info.deposit}
+                        </p>
+                      </Col>
+                    }
+                    {
+                      <Col md="12">
+                        <p style={{ marginBottom: 0 }}>
+                          {t("homestay.slug.discount")}:{" "}
+                          {info.discountMoney}
+                        </p>
+                      </Col>
+                    }
+                    {
+                      <Col md="12">
+                        <h4 style={{ marginBottom: 0 }}>
+                          {t("total")}: {info.money}
+                        </h4>
+                      </Col>
+                    }
                   </Row>
                 </div>
                 <div className="modal-footer">
@@ -441,7 +583,11 @@ const DetailHomestay = ({ homestay, owner, triggerRerender }) => {
                     color="link"
                     data-dismiss="modal"
                     type="button"
-                    onClick={() => setIsOpenService(false)}
+                    onClick={() => {
+                      setIsOpenForm(false);
+                      setValidateErr({});
+                      setForm({ ...defaultForm });
+                    }}
                   >
                     {t("cancel")}
                   </Button>
@@ -449,311 +595,17 @@ const DetailHomestay = ({ homestay, owner, triggerRerender }) => {
                     color="primary"
                     type="button"
                     className="ml-auto"
-                    onClick={createServices}
+                    onClick={bookHomestay}
                   >
                     {t("ok")}
                   </Button>
                 </div>
-              </Modal>
-            </div>
-          )}
-
-          {cookies.role !== "homestay owner" && (
-            <div className="info-actions">
-              <Button onClick={booking} color="primary">
-                {t("homestay.slug.bookHomestay")}
-              </Button>
-              <Button onClick={chat}>{t("homestay.slug.chat")}</Button>
-              <Modal
-                className="modal-dialog-centered"
-                isOpen={isOpenChat}
-                toggle={() => setIsOpenChat(false)}
-              >
-                {loading2 ? (
-                  <Loading />
-                ) : (
-                  <Form className="detail-chat">
-                    <FormGroup className="mb-3">
-                      <InputGroup
-                        className="input-group-alternative"
-                        color="primary"
-                      >
-                        <Input
-                          value={message}
-                          className="input-text"
-                          placeholder="Aa"
-                          type="text"
-                          onChange={(e) => setMessage(e.target.value)}
-                        />
-                      </InputGroup>
-                      <InputGroupAddon
-                        className="input-icon"
-                        onClick={submitChat}
-                        addonType="append"
-                      >
-                        <InputGroupText>
-                          <i className="fa fa-paper-plane" />
-                        </InputGroupText>
-                      </InputGroupAddon>
-                    </FormGroup>
-                  </Form>
-                )}
-              </Modal>
-              <Modal
-                className="modal-dialog-centered"
-                isOpen={isOpenForm}
-                toggle={() => {
-                  setIsOpenForm(false);
-                }}
-              >
-                {loading2 ? (
-                  <Loading />
-                ) : (
-                  <>
-                    <div className="modal-header" style={{ display: "block" }}>
-                      <h4
-                        className="modal-title"
-                        style={{ fontWeight: "700" }}
-                        id="modal-title-default"
-                      >
-                        {t("booking.self")}
-                      </h4>
-                      <p style={{ marginBottom: "0" }}>
-                        {t("homestay.slug.depositMess")}
-                      </p>
-                    </div>
-                    <div className="modal-body">
-                      <Row>
-                        <Col md="12">
-                          <FormGroup>
-                            <p
-                              className={`input-label ${
-                                validateErr.email ? (ani ? "err1" : "err2") : ""
-                              }`}
-                            >
-                              Email
-                            </p>
-                            <Input
-                              type="text"
-                              onChange={(e) => (form.email = e.target.value)}
-                            />
-                          </FormGroup>
-                        </Col>
-                        <Col md="6">
-                          <FormGroup>
-                            <p
-                              className={`input-label ${
-                                validateErr.phone ? (ani ? "err1" : "err2") : ""
-                              }`}
-                            >
-                              {t("phone")}
-                            </p>
-                            <Input
-                              type="number"
-                              onChange={(e) => (form.phone = e.target.value)}
-                            />
-                          </FormGroup>
-                        </Col>
-                        <Col md="6">
-                          <FormGroup>
-                            <p
-                              className={`input-label ${
-                                validateErr.people
-                                  ? ani
-                                    ? "err1"
-                                    : "err2"
-                                  : ""
-                              }`}
-                            >
-                              {t("slot")}
-                            </p>
-                            <Input
-                              type="number"
-                              onChange={(e) => (form.people = e.target.value)}
-                            />
-                          </FormGroup>
-                        </Col>
-                        <Col md="6">
-                          <FormGroup>
-                            <p
-                              className={`input-label ${
-                                validateErr.checkin
-                                  ? ani
-                                    ? "err1"
-                                    : "err2"
-                                  : ""
-                              }`}
-                            >
-                              {t("checkin")}
-                            </p>
-                            <InputGroup className="input-group-alternative">
-                              <InputGroupAddon addonType="prepend">
-                                <InputGroupText>
-                                  <i className="ni ni-calendar-grid-58" />
-                                </InputGroupText>
-                              </InputGroupAddon>
-                              <ReactDatetime
-                                onChange={(e) => {
-                                  form.checkin = formatDate(e._d);
-                                  fetchDiscount();
-                                }}
-                                inputProps={{
-                                  placeholder: "mm/dd/yyyy",
-                                }}
-                                timeFormat={false}
-                              />
-                            </InputGroup>
-                          </FormGroup>
-                        </Col>
-                        <Col md="6">
-                          <FormGroup>
-                            <p
-                              className={`input-label ${
-                                validateErr.checkout
-                                  ? ani
-                                    ? "err1"
-                                    : "err2"
-                                  : ""
-                              }`}
-                            >
-                              {t("checkout")}
-                            </p>
-                            <InputGroup className="input-group-alternative">
-                              <InputGroupAddon addonType="prepend">
-                                <InputGroupText>
-                                  <i className="ni ni-calendar-grid-58" />
-                                </InputGroupText>
-                              </InputGroupAddon>
-                              <ReactDatetime
-                                onChange={(e) => {
-                                  form.checkout = formatDate(e._d);
-                                  fetchDiscount();
-                                }}
-                                inputProps={{
-                                  placeholder: "mm/dd/yyyy",
-                                }}
-                                timeFormat={false}
-                              />
-                            </InputGroup>
-                          </FormGroup>
-                        </Col>
-                        <Col md="12">
-                          <FormGroup>
-                            <p className={`input-label`}>
-                              {t("homestay.slug.note")}
-                            </p>
-                            <Input
-                              type="textarea"
-                              onChange={(e) => (form.note = e.target.value)}
-                            />
-                          </FormGroup>
-                        </Col>
-                        <Col md="12">
-                          <FormGroup
-                            style={{ marginBottom: 0, position: "relative" }}
-                          >
-                            <p className={`input-label`}>
-                              {t("discount.self")}
-                            </p>
-                            <Input
-                              className="discount-select"
-                              type="text"
-                              value={discount._id || ""}
-                              onChange={() => {}}
-                            ></Input>
-                            <Input
-                              type="select"
-                              value={{}}
-                              onChange={(e) =>
-                                caculate(discounts[e.target.selectedIndex - 1])
-                              }
-                              style={{ opacity: 0 }}
-                            >
-                              <option
-                                style={{ display: "none" }}
-                                value={{}}
-                              ></option>
-                              {discounts.map((discount, index) => (
-                                <option key={index} value={discount}>
-                                  {discount._id}
-                                </option>
-                              ))}
-                            </Input>
-                            {discount._id && (
-                              <div
-                                className="discount-select-clear"
-                                onClick={() => caculate({})}
-                              >
-                                <i
-                                  className="fa fa-times"
-                                  aria-hidden="true"
-                                ></i>
-                              </div>
-                            )}
-                          </FormGroup>
-                        </Col>
-                        {
-                          <Col md="12">
-                            <p style={{ marginBottom: 0, marginTop: "8px" }}>
-                              {t("money")}: {homestay.price}
-                            </p>
-                          </Col>
-                        }
-                        {
-                          <Col md="12">
-                            <p style={{ marginBottom: 0 }}>
-                              {t("homestay.slug.deposit")}: {info.deposit}
-                            </p>
-                          </Col>
-                        }
-                        {
-                          <Col md="12">
-                            <p style={{ marginBottom: 0 }}>
-                              {t("homestay.slug.discount")}:{" "}
-                              {info.discountMoney}
-                            </p>
-                          </Col>
-                        }
-                        {
-                          <Col md="12">
-                            <h4 style={{ marginBottom: 0 }}>
-                              {t("total")}: {info.money}
-                            </h4>
-                          </Col>
-                        }
-                      </Row>
-                    </div>
-                    <div className="modal-footer">
-                      <Button
-                        color="link"
-                        data-dismiss="modal"
-                        type="button"
-                        onClick={() => {
-                          setIsOpenForm(false);
-                          setValidateErr({});
-                          setForm({ ...defaultForm });
-                        }}
-                      >
-                        {t("cancel")}
-                      </Button>
-                      <Button
-                        color="primary"
-                        type="button"
-                        className="ml-auto"
-                        onClick={bookHomestay}
-                      >
-                        {t("ok")}
-                      </Button>
-                    </div>
-                  </>
-                )}
-              </Modal>
-            </div>
-          )}
+              </>
+            )}
+          </Modal>
         </div>
-      </div>
-      <Map coor={mapCoor} onChange={setMapCoor} defaultCoor={defaultCoor} />
-    </Card>
+      )}
+    </>
   );
 };
 export default DetailHomestay;

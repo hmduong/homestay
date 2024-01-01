@@ -39,8 +39,8 @@ const HomestayCard = ({ homestay, onClick, newBooking }) => {
           />
         )}
       </Slide>
-      <div className="card-detail">
-        <div className="card-price">${homestay.price}</div>
+      <div className="card-overlay">
+        <div className="card-price">{homestay.price}$</div>
         <div className="card-rate">
           {new Array(5).fill(0).map((q, key) => (
             <i
@@ -52,6 +52,8 @@ const HomestayCard = ({ homestay, onClick, newBooking }) => {
             ></i>
           ))}
         </div>
+      </div>
+      <div className="card-detail">
         <h2
           style={{
             width: "fit-content",

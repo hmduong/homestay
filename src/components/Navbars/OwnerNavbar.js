@@ -88,10 +88,10 @@ const OwnerNavbar = ({ refe }) => {
                         onExited={onExited}
                     >
                         <Nav className="align-items-lg-center ml-lg-auto" navbar>
-                            <NavItem className="d-none d-lg-block ml-lg-4 mr-4">
+                            <NavItem className="d-none d-lg-block mr-4">
                                 <img onClick={changeLanguage} width={40} src={enLang ? "https://flagicons.lipis.dev/flags/4x3/gb.svg" : "https://flagicons.lipis.dev/flags/4x3/vn.svg"} alt="" />
                             </NavItem>
-                            <NavItem className="d-none d-lg-block ml-lg-4 mr-9">
+                            <NavItem className="d-none d-lg-block">
                                 <Dropdown isOpen={dropdownOpen}
                                     toggle={toggle}
                                     direction={"down"}
@@ -99,7 +99,7 @@ const OwnerNavbar = ({ refe }) => {
                                     <DropdownToggle className="dropdown-btn">
                                         <Avatar name={cookies.name} />
                                     </DropdownToggle>
-                                    <DropdownMenu className="mt-5">
+                                    <DropdownMenu className="mt-5 ddmenu">
                                         <DropdownItem onClick={toUserPage}>{t('aboutYou')}</DropdownItem>
                                         <DropdownItem onClick={() => { setIsOpenModal(true); }}>{t('logout.title')}</DropdownItem>
                                     </DropdownMenu>
