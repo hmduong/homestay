@@ -162,36 +162,48 @@ const BookingListCard = ({ booking, triggerRerender }) => {
             onMouseLeave={() => setHover(false)}
             onMouseOver={() => setHover(true)}
         >
-            <div className="booking-info">
-                <div className="sub-info">
-                    <div style={{ paddingLeft: "8px" }}>
-                        <h5>Tenant: {booking.user.name}</h5>
-                        <h5>{t('checkin')}: {format(new Date(booking.checkin), "dd/MM/yyyy")}</h5>
-                        <h5>
-                            {t('checkout')}: {format(new Date(booking.checkout), "dd/MM/yyyy")}
-                        </h5>
-                        <h5>Phone: {booking.phone}</h5>
-                        <h5>Money: {booking.money}</h5>
-                        <h5>Deposited: {booking.deposit}</h5>
+            <div className="booking-list-info">
+                <div className="bli-show">
+                    <div style={{ width: '15%' }}>
+                        <h6>Visitor</h6>
+                        <p>{booking.user.name}</p>
+                    </div>
+                    <div style={{ width: '25%' }}>
+                        <h6>{t('time')}</h6>
+                        <p>{format(new Date(booking.checkin), "dd/MM/yyyy")} - {format(new Date(booking.checkout), "dd/MM/yyyy")}</p>
+                    </div>
+                    <div style={{ width: '15%' }}>
+                        <h6>Money</h6>
+                        <p>{booking.money}</p>
+                    </div>
+                    <div style={{ width: '15%' }}>
+                        <h6>Deposited</h6>
+                        <p>{booking.deposit}</p>
+                    </div>
+                    <div style={{ width: '15%' }}>
+                        <h6>Phone</h6>
+                        <p>{booking.phone}</p>
+                    </div>
+                    <div style={{ width: '15%' }}>
+                        <h6>Status</h6>
+                        <p className={`booking-list-status ${booking.status}`}>
+                            {booking.status}
+                        </p>
                     </div>
                 </div>
-                <h5 className={`booking-status list ${booking.status}`}>
-                    {booking.status}
-                </h5>
             </div>
-            <div className={`booking-actions${hover ? " listactive" : ""}`}>
+            <i className="fa toggle-actions fa-angle-double-left " aria-hidden="true"></i>
+            <div className={`booking-list-actions${hover ? " listactive" : ""}`}>
                 {booking.status === "requested" &&
                     (
                         <>
                             <Button
-                                style={{ marginRight: 0, marginBottom: "8px" }}
                                 color="success"
                                 onClick={() => updateBooking('accepted')}
                             >
                                 {t('accept')}
                             </Button>
                             <Button
-                                style={{ marginRight: 0 }}
                                 color="warning"
                                 onClick={() => updateBooking("declined")}
                             >
@@ -202,7 +214,6 @@ const BookingListCard = ({ booking, triggerRerender }) => {
                 {booking.status === "accepted" && (
                     <>
                         <Button
-                            style={{ marginRight: 0, marginBottom: "8px" }}
                             color="danger"
                             onClick={() => updateBooking("expired")}
                         >
@@ -213,7 +224,6 @@ const BookingListCard = ({ booking, triggerRerender }) => {
                 {booking.status === "deposited" && (
                     <>
                         <Button
-                            style={{ marginRight: 0, marginBottom: "8px" }}
                             color="success"
                             onClick={() => setIsOpenDeposit(true)}
                         >
@@ -224,11 +234,10 @@ const BookingListCard = ({ booking, triggerRerender }) => {
                             isOpen={isOpenDeposit}
                             toggle={() => setIsOpenDeposit(false)}
                         >
-
                             {loadingModal ? <Loading /> : <Row>
                                 <Col md={12} className="m-2 mt-3">
                                     <h5>
-                                        {t('deposit')}
+                                        {t('depositMoney')}
                                     </h5>
                                 </Col>
                                 <Col md="12" className='m-2'>
@@ -245,21 +254,18 @@ const BookingListCard = ({ booking, triggerRerender }) => {
                 {booking.status === "confirmed" && (
                     <>
                         <Button
-                            style={{ marginRight: 0, marginBottom: "8px" }}
                             color="success"
                             onClick={() => updateBooking("stayed")}
                         >
-                           {t('stay')}
+                            {t('stay')}
                         </Button>
-                        {/* <Button
-                            style={{ marginRight: 0, marginBottom: "8px" }}
+                        <Button
                             color="default"
                             onClick={() => setIsOpenService(true)}
                         >
-                            Services
-                        </Button> */}
+                            {t('services')}
+                        </Button>
                         <Button
-                            style={{ marginRight: 0 }}
                             color="danger"
                             onClick={() => updateBooking("expired")}
                         >
@@ -268,13 +274,14 @@ const BookingListCard = ({ booking, triggerRerender }) => {
                     </>
                 )}
                 {booking.status === "stayed" && (
-                    <Button
-                        style={{ marginRight: 0 }}
-                        color="default"
-                        onClick={() => setIsOpenService(true)}
-                    >
-                        {t('services')}
-                    </Button>
+                    <>
+                        <Button
+                            color="default"
+                            onClick={() => setIsOpenService(true)}
+                        >
+                            {t('services')}
+                        </Button>
+                    </>
                 )}
                 <Modal
                     className="modal-dialog-centered"

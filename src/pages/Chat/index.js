@@ -18,7 +18,6 @@ const Chat = () => {
     "currentuser",
     "name"
   ]);
-  const [currUserName, setCurrUserName] = useState(cookies.name)
   const [chats, setChats] = useState([]);
   const [opposit, setOpposit] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -28,11 +27,6 @@ const Chat = () => {
       const response = await yourChats();
       if (response?.data?.chats) {
         setChats(response.data.chats);
-        if (response.data.chats[0].users[0].username === cookies.name) {
-          setCurrUserName(response.data.chats[0].users[0].name)
-        } else {
-          setCurrUserName(response.data.chats[0].users[1].name)
-        }
       } else {
         dispatch(
           actions.createAlert({
@@ -48,7 +42,7 @@ const Chat = () => {
 
   return (cookies.currentuser ?
     <div className="chat-page">
-      <ChatNavbar currUserName={currUserName} />
+      <ChatNavbar />
       {loading ? <Loading /> : <div className="chat-content">
         <ChartSidebar setOpposit={setOpposit} chats={chats} />
         {opposit && <ChatSlug opposit={opposit} />}

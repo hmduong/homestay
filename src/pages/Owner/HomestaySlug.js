@@ -7,7 +7,8 @@ import {
     FormGroup,
     Modal,
     Row,
-    Input
+    Input,
+    UncontrolledTooltip
 } from "reactstrap";
 import { getHomestay } from "services/homestayManagementService";
 import Statistics from "pages/Owner/Statistics";
@@ -21,6 +22,8 @@ import { useTranslation } from "react-i18next";
 import HomestayForm from "components/HomestayForm";
 import validator from "utils/validator";
 import { createService } from "services/serviceManagement";
+import HomestayCard from "components/HomestayCard";
+import { getSuggest } from "services/homestayManagementService";
 
 const HomestaySlug = () => {
     const { t, i18n } = useTranslation();
@@ -29,13 +32,16 @@ const HomestaySlug = () => {
     const navigate = useNavigate();
 
     const [rerender, triggerRerender] = useState(false);
-    const [data, setData] = useState({});
-    const [loading, setLoading] = useState(true);
+    const [thisHomestay, setThisHomestay] = useState(null);
+    const [owner, setOwner] = useState(null);
+    const [loading, setLoading] = useState(false);
     const [IsOpenDelete, setIsOpenDelete] = useState(false);
     const [showEdit, setShowEdit] = useState(false);
     const [isOpenService, setIsOpenService] = useState(false);
     const [validateErrService, setValidateErrService] = useState({});
     const [ani, toggleAni] = useState(false);
+    const [loadingSuggest, setLoadingSuggest] = useState(false);
+    const [suggestList, setSuggestList] = useState(null)
     const [formService, setFormService] = useState({
         name: null,
         description: null,
@@ -79,8 +85,13 @@ const HomestaySlug = () => {
         const fetchData = async () => {
             setLoading(true);
             const data = await getHomestay(id);
-            setData(data.data);
+            setThisHomestay(data.data.homestay);
+            setOwner(data.data.owner);
             setLoading(false);
+            setLoadingSuggest(true);
+            const data2 = await getSuggest(id, 3);
+            setSuggestList(data2.data.homestays)
+            setLoadingSuggest(false)
         };
         fetchData();
     }, [rerender]);
@@ -88,7 +99,7 @@ const HomestaySlug = () => {
         <Loading />
     ) : (
         <>
-            {data.homestay && <Container>
+            {thisHomestay && <Container>
                 <div style={{ display: "flex", justifyContent: cookies.role === "homestay owner" ? "space-between" : 'center' }}>
                     <h2
                         className="homestay-slug-header"
@@ -96,22 +107,36 @@ const HomestaySlug = () => {
                             color: cookies.role === "homestay owner" ? '' : '#FFF'
                         }}
                     >
-                        {data.homestay && data.homestay.name}
+                        {thisHomestay && thisHomestay.name}
                     </h2>
                     {cookies.role === "homestay owner" && <div className="homestay-slug-actions">
-                        <Button onClick={() => setShowEdit(true)} color="primary">
+                        <Button id="hs-edit" onClick={() => setShowEdit(true)} color="primary">
                             <i style={{ fontSize: 20 }} className="fa fa-pencil" aria-hidden="true"></i>
                         </Button>
+                        <UncontrolledTooltip
+                            delay={0}
+                            placement="bottom"
+                            target="hs-edit"
+                        >
+                            {t('homestay.slug.edit')}
+                        </UncontrolledTooltip>
                         {showEdit && (
                             <HomestayForm
                                 turnOff={() => setShowEdit(false)}
                                 triggerRerender={triggerRerender}
-                                editPayload={data.homestay}
+                                editPayload={thisHomestay}
                             />
                         )}
-                        <Button color="success" onClick={() => setIsOpenService(true)}>
+                        <Button id="hs-service" color="success" onClick={() => setIsOpenService(true)}>
                             <i style={{ fontSize: 20 }} className="fa fa-puzzle-piece" aria-hidden="true"></i>
                         </Button>
+                        <UncontrolledTooltip
+                            delay={0}
+                            placement="bottom"
+                            target="hs-service"
+                        >
+                            {t('homestay.slug.createService')}
+                        </UncontrolledTooltip>
                         <Modal
                             className="modal-dialog-centered"
                             isOpen={isOpenService}
@@ -214,9 +239,16 @@ const HomestaySlug = () => {
                                 </Button>
                             </div>
                         </Modal>
-                        <Button color="danger" onClick={openDeleteModal}>
+                        <Button id="hs-delete" color="danger" onClick={openDeleteModal}>
                             <i style={{ fontSize: 20 }} className="fa fa-trash" aria-hidden="true"></i>
                         </Button>
+                        <UncontrolledTooltip
+                            delay={0}
+                            placement="bottom"
+                            target="hs-delete"
+                        >
+                            {t('homestay.slug.delete.header')}
+                        </UncontrolledTooltip>
                         <Modal
                             className="modal-dialog-centered"
                             isOpen={IsOpenDelete}
@@ -238,7 +270,7 @@ const HomestaySlug = () => {
                             </div>
                             <div className="modal-body">
                                 <p>
-                                    {t('homestay.slug.delete.body')} {data.homestay && data.homestay.name} ?
+                                    {t('homestay.slug.delete.body')} {thisHomestay && thisHomestay.name} ?
                                 </p>
                             </div>
                             <div className="modal-footer">
@@ -257,15 +289,26 @@ const HomestaySlug = () => {
                         </Modal>
                     </div>}
                 </div>
-                <DetailHomestay homestay={data.homestay} owner={data.owner} triggerRerender={() => triggerRerender(!rerender)} />
+                <DetailHomestay homestay={thisHomestay} owner={owner} triggerRerender={() => triggerRerender(!rerender)} />
             </Container>}
-            {cookies.role === "homestay owner" && (
+            {cookies.role === "homestay owner" ?
                 <>
-                    {data.homestay && <BookingList homestay={data.homestay} />}
+                    {thisHomestay && <BookingList homestay={thisHomestay} />}
                     <Statistics />
                 </>
-            )}
-            {data.homestay && <Review homestay={data.homestay} />}
+                : <Container>
+                    <h2 className="mt-6">{t('homestay.suggest')}</h2>
+                    {loadingSuggest ? <Loading /> : <Row className="mt-4">
+                        {suggestList && (
+                            suggestList.map((homestay, index) => (
+                                <Col key={index} className="mb-4" md="4">
+                                    <HomestayCard homestay={homestay} />
+                                </Col>
+                            ))
+                        )}
+                    </Row>}
+                </Container>}
+            {thisHomestay && <Review homestay={thisHomestay} />}
         </>
     );
 };

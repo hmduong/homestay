@@ -28,7 +28,7 @@ function MainNavbar() {
     const [enLang, setEnLang] = useState(languageStore == 'vi' ? false : true ?? true);
     const [isOpenModal, setIsOpenModal] = useState(false);
     const changeLanguage = () => {
-        setEnLang(!enLang); 
+        setEnLang(!enLang);
         localStorage.setItem('language', JSON.stringify(enLang ? 'vi' : 'en'))
         i18n.changeLanguage(enLang ? 'vi' : 'en');
     }
@@ -170,7 +170,7 @@ function MainNavbar() {
                                                 direction={"down"}
                                                 className="avatar-droprown">
                                                 <DropdownToggle className="dropdown-btn">
-                                                    <Avatar name={cookies.name} />
+                                                    <Avatar namee={cookies.name} />
                                                 </DropdownToggle>
                                                 <DropdownMenu className="mt-5">
                                                     <DropdownItem onClick={toUserPage}>{t('aboutYou')}</DropdownItem>

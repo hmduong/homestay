@@ -9,7 +9,7 @@ import {
   Col,
   UncontrolledTooltip,
 } from "reactstrap";
-import { withTranslation  } from "react-i18next";
+import { withTranslation } from "react-i18next";
 class SimpleFooter extends React.Component {
   render() {
     const { t } = this.props;
@@ -98,42 +98,6 @@ class SimpleFooter extends React.Component {
                   </a>
                   .
                 </div>
-              </Col>
-              <Col md="6">
-                <Nav className=" nav-footer justify-content-end">
-                  <NavItem>
-                    <NavLink
-                      href="https://www.creative-tim.com?ref=adsr-footer"
-                      target="_blank"
-                    >
-                      Tran Khanh Le
-                    </NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink
-                      href="https://www.creative-tim.com/presentation?ref=adsr-footer"
-                      target="_blank"
-                    >
-                      {t('footer.aboutUs')}
-                    </NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink
-                      href="http://blog.creative-tim.com?ref=adsr-footer"
-                      target="_blank"
-                    >
-                      Blog
-                    </NavLink>
-                  </NavItem>
-                  <NavItem>
-                    <NavLink
-                      href="https://github.com/creativetimofficial/argon-design-system-react/blob/master/LICENSE.md"
-                      target="_blank"
-                    >
-                      {t('footer.mitLicense')}
-                    </NavLink>
-                  </NavItem>
-                </Nav>
               </Col>
             </Row>
           </Container>

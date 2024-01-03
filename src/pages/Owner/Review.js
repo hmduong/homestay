@@ -23,12 +23,12 @@ function Review({ homestay }) {
 
     return (
         <>
-            <Container style={{ minHeight: '300px', marginTop: 24 }}>
+            <Container style={{ marginTop: 24 }}>
                 {loading ? <Loading /> :
                     <>
                         <h2>{t('homestay.reviews')}</h2>
                         <Row>
-                            {reviews?.map(review => <ReviewCard key={review._id} review={review} />)}
+                            {reviews.length ? reviews.map(review => <ReviewCard key={review._id} review={review} />) : <div className="review-nodata">{t('homestay.reviewNodata')}</div>}
                         </Row>
                     </>}
             </Container>

@@ -27,6 +27,11 @@ export async function getListHomestay(userid) {
   return getAsyncWithToken(url);
 }
 
+export async function getSuggest(id, limit) {
+  const url = process.env.REACT_APP_API_URL + `/homestays/similar?id=${id}&limit=${limit}`;
+  return getAsyncWithToken(url);
+}
+
 export async function getHomestay(id) {
   const url = process.env.REACT_APP_API_URL + `/homestays/${id}`;
   return getAsync(url);

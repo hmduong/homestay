@@ -134,7 +134,7 @@ const BookingCard = ({ indexkey, booking, triggerRerender }) => {
                 <div className='booking-info' onClick={() => setIsExpand(!isExpand)}>
                     <div className='bi-info biname'>
                         <h6>{t('name')}</h6>
-                        <h5>{booking.homestay.name}</h5>
+                        <h5 onClick={check}>{booking.homestay.name}</h5>
                     </div>
                     <div className='bi-info bitime'>
                         <h6>{t('time')}</h6>
@@ -159,27 +159,21 @@ const BookingCard = ({ indexkey, booking, triggerRerender }) => {
                             <h6>{t('address')}:</h6> <p>{booking.homestay.address}</p>
                         </div>
                     </div>
-                    <div style={{ width: '45%' }}>
+                    <div style={{ width: '30%' }}>
                         <div className='bi-expand bipeople'>
                             <h6>{t('people')}:</h6> <p>{booking.people}</p>
                         </div>
                         <div className='bi-expand bideposit'>
-                            <h6>{t('deposit')}:</h6> <p>{booking.deposit} VNĐ</p>
+                            <h6>{t('depositMoney')}:</h6> <p>{booking.deposit} VNĐ</p>
                         </div>
                     </div>
-                    <div className='biexpand-btns' style={{ width: '20%' }}>
+                    <div className='biexpand-btns' style={{ width: '35%' }}>
                         {
                             booking.status === 'stayed' &&
                             <>
                                 <Button className='checkhomestay' id='reviewBtn' onClick={() => setIsOpenReview(true)} color='default'>
-                                    <i className="fa fa-star-o" aria-hidden="true"></i>
-                                </Button>
-                                <UncontrolledTooltip
-                                    placement="bottom"
-                                    target="reviewBtn"
-                                >
                                     {t('homestay.reviews')}
-                                </UncontrolledTooltip>
+                                </Button>
                                 <Modal
                                     className="modal-dialog-centered"
                                     isOpen={isOpenReview}
@@ -212,14 +206,8 @@ const BookingCard = ({ indexkey, booking, triggerRerender }) => {
                         }
                         {booking.status === 'accepted' && <>
                             <Button className='checkhomestay' id='depositBtn' onClick={() => setIsOpenDeposit(true)} color='warning'>
-                                <i className="fa fa-usd" aria-hidden="true"></i>
-                            </Button>
-                            <UncontrolledTooltip
-                                placement="bottom"
-                                target="depositBtn"
-                            >
                                 {t('deposit')}
-                            </UncontrolledTooltip>
+                            </Button>
                             <Modal
                                 className="modal-dialog-centered"
                                 isOpen={isOpenDeposit}
@@ -229,7 +217,7 @@ const BookingCard = ({ indexkey, booking, triggerRerender }) => {
                                 {loading ? <Loading /> : <Row>
                                     <Col md={12} className="m-2 mt-3">
                                         <h4>
-                                            {t('deposit')}
+                                            {t('depositMoney')}
                                         </h4>
                                     </Col>
                                     <Col md={12}>
@@ -255,15 +243,6 @@ const BookingCard = ({ indexkey, booking, triggerRerender }) => {
                             </Modal>
                         </>
                         }
-                        <Button className='checkhomestay' id='checkBtn' onClick={check} color='primary'>
-                            <i className="fa fa-home" aria-hidden="true"></i>
-                        </Button>
-                        <UncontrolledTooltip
-                            placement="bottom"
-                            target="checkBtn"
-                        >
-                            Check homestay
-                        </UncontrolledTooltip>
                     </div>
                 </div>}
             </Card>

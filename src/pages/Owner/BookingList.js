@@ -10,7 +10,7 @@ import { useTranslation } from "react-i18next";
 function BookingList({ homestay }) {
     const dispatch = useDispatch();
     const { t } = useTranslation();
-    
+
     const [bookings, setBookings] = useState([]);
     const [name, setName] = useState('');
     const [date, setDate] = useState('');
@@ -67,30 +67,8 @@ function BookingList({ homestay }) {
     }
 
     return (
-        <><Container style={{ minHeight: '300px', marginTop: 24 }}>
+        <Container style={{ marginTop: 24 }}>
             <h2>{t('homestay.bookings.title')}</h2>
-            <Row className="mb-3">
-                <Col md='6'>
-                    <p className="mb-0">{t('userName')}</p>
-                    <Input
-                        className="input-text"
-                        placeholder="Aa"
-                        type="text"
-                    />
-                </Col>
-                <Col md='6'>
-                    <p className="mb-0">{t('time')}</p>
-                    <Input
-                        className="input-text"
-                        placeholder="Aa"
-                        type="select"
-                    >
-                        <option>{t('homestay.bookings.all')}</option>
-                        <option>{t('homestay.bookings.thisWeek')}</option>
-                        <option>{t('homestay.bookings.thisMonth')}</option>
-                    </Input>
-                </Col>
-            </Row>
             <Nav tabs>
                 {tabs.map((tab, key) =>
                     <NavItem key={key}>
@@ -112,10 +90,10 @@ function BookingList({ homestay }) {
                             <Card className="booking-container shadow">
                                 {bookings && bookings.length > 0 ?
                                     <Row>
-                                        {bookings && bookings.map((booking, index) => <Col md='6' key={index}><BookingListCard booking={booking} triggerRerender={() => triggerRerender(!rerender)} /></Col>
+                                        {bookings && bookings.map((booking, index) => <Col md='12' key={index}><BookingListCard booking={booking} triggerRerender={() => triggerRerender(!rerender)} /></Col>
                                         )}
                                     </Row>
-                                    : <div>{t('noData')}</div>
+                                    : <div className="nodata">{t('noData')}</div>
                                 }
                             </Card>
                         </TabPane>
@@ -123,7 +101,6 @@ function BookingList({ homestay }) {
                 </TabContent>
             }
         </Container>
-        </>
     );
 }
 

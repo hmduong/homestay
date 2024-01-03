@@ -313,7 +313,7 @@ const DetailHomestay = ({ homestay, owner, triggerRerender }) => {
               </div>
             </div>}
             <div className="homestay-info-hide" onClick={toggleInfo}>
-              <i className={`fa fa-window-${isShowInfo ? 'maximize' : 'minimize'}`} aria-hidden="true"></i>
+              <i className={`fa fa${isShowInfo ? '-angle-double-down' : '-angle-double-up'}`} aria-hidden="true"></i>
             </div>
           </div>
         </div>

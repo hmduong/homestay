@@ -37,6 +37,7 @@ export default {
         services: 'Services',
         confirmSure: 'Bạn có chắc chắn không?',
         addService: 'Add service',
+        depositMoney: 'Deposit money',
         deposit: 'Deposit',
         deposited: 'deposited',
         checkDeposit: 'Check deposit',
@@ -92,7 +93,9 @@ export default {
                 depositMess: 'You need deposit 80% of total money',
                 note: 'Note',
             },
+            suggest: 'Related',
             reviews: 'Reviews',
+            reviewNodata: 'No reviews yet.',
             sendReview: 'Send review',
             comment: 'Comment',
             checkHomestay: 'Check Homestay',
@@ -168,7 +171,8 @@ export default {
         chat: {
             owner: 'Homestay owner',
             visitor: 'Visitor',
-            leave: 'Leave chat'
+            leave: 'Leave chat',
+            nochat: 'You have no message.'
         },
         alert: {
             updated: 'Updated booking!',

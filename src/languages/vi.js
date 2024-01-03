@@ -37,7 +37,8 @@ export default {
         services: 'Dịch vụ',
         confirmSure: 'Bạn có chắc chắn không?',
         addService: 'Thêm dịch vụ',
-        deposit: 'Tiền cọc',
+        depositMoney: 'Tiền cọc',
+        deposit: 'Đặt cọc',
         deposited: 'Đã cọc tiền',
         checkDeposit: 'Kiểm tra tiền cọc',
         requested: 'Đã yêu cầu',
@@ -92,7 +93,9 @@ export default {
                 depositMess: 'Bạn cần đặt cọc 80% tổng số tiền',
                 note: 'Ghi chú',
             },
+            suggest: 'Gợi ý',
             reviews: 'Đánh giá',
+            reviewNodata: 'Chưa có đánh giá nào.',
             comment: 'Bình luận',
             sendReview: 'Gửi đánh giá',
             checkHomestay: 'Kiểm tra Homestay',
@@ -168,7 +171,8 @@ export default {
         chat: {
             owner: 'Chủ homestay',
             visitor: 'Khách',
-            leave: 'Rời chat'
+            leave: 'Rời chat',
+            nochat: 'Bạn không có tin nhắn.'
         },
         alert: {
             updated: 'Đã cập nhật đơn đặt!',

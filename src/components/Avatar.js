@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { Button, UncontrolledTooltip } from "reactstrap"
 
-const Avatar = ({ name, onclick }) => {
+const Avatar = ({ namee, onclick }) => {
     const [hover, setHover] = useState(false)
     return (
         <>
@@ -14,7 +14,7 @@ const Avatar = ({ name, onclick }) => {
                 onMouseOver={() => setHover(true)}
             >
                 <span className="nav-link-inner--text">
-                    {name.toUpperCase()[0]}
+                    {namee.toUpperCase()[0]}
                 </span>
             </Button>
             {hover && <UncontrolledTooltip
@@ -22,7 +22,7 @@ const Avatar = ({ name, onclick }) => {
                 placement="bottom"
                 target="avatar-btn"
             >
-                {name}
+                {namee}
             </UncontrolledTooltip>}
         </>
     )

@@ -16,7 +16,7 @@ function ReviewCard({ review }) {
 
     return (
         <Col md='12' className="review-card" style={{ marginBottom: 16 }}>
-            <Avatar name={review.user.name} />
+            <Avatar namee={review.user.name} />
             <Card className="review-info shadow" onClick={detail}>
                 <div className="review-comment">
                     <h5>{review.user.name}</h5>

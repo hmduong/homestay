@@ -97,7 +97,7 @@ const OwnerNavbar = ({ refe }) => {
                                     direction={"down"}
                                     className="avatar-droprown">
                                     <DropdownToggle className="dropdown-btn">
-                                        <Avatar name={cookies.name} />
+                                        <Avatar namee={cookies.name} />
                                     </DropdownToggle>
                                     <DropdownMenu className="mt-5 ddmenu">
                                         <DropdownItem onClick={toUserPage}>{t('aboutYou')}</DropdownItem>
