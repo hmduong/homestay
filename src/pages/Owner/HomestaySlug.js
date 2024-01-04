@@ -48,6 +48,13 @@ const HomestaySlug = () => {
         price: null,
         homestay: id,
     });
+    const detail = (id) => {
+        const url =
+            cookies.role === "homestay owner"
+                ? `/owner/homestay/${id}`
+                : `/homestay/${id}`;
+        window.open(url, '_blank')
+    };
 
     const openDeleteModal = () => {
         setIsOpenDelete(true)
@@ -86,6 +93,7 @@ const HomestaySlug = () => {
             setLoading(true);
             const data = await getHomestay(id);
             setThisHomestay(data.data.homestay);
+            document.title = data.data.homestay.name;
             setOwner(data.data.owner);
             setLoading(false);
             setLoadingSuggest(true);
@@ -94,6 +102,9 @@ const HomestaySlug = () => {
             setLoadingSuggest(false)
         };
         fetchData();
+        return () => {
+            document.title = 'Home 4 stay'
+        }
     }, [rerender]);
     return loading ? (
         <Loading />
@@ -302,7 +313,7 @@ const HomestaySlug = () => {
                         {suggestList && (
                             suggestList.map((homestay, index) => (
                                 <Col key={index} className="mb-4" md="4">
-                                    <HomestayCard homestay={homestay} />
+                                    <HomestayCard detail={detail} homestay={homestay} />
                                 </Col>
                             ))
                         )}

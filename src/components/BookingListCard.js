@@ -193,7 +193,7 @@ const BookingListCard = ({ booking, triggerRerender }) => {
                 </div>
             </div>
             <i className="fa toggle-actions fa-angle-double-left " aria-hidden="true"></i>
-            <div className={`booking-list-actions${hover ? " listactive" : ""}`}>
+            <div className={`booking-list-actions${hover ? " active" : ""}`}>
                 {booking.status === "requested" &&
                     (
                         <>
@@ -275,6 +275,12 @@ const BookingListCard = ({ booking, triggerRerender }) => {
                 )}
                 {booking.status === "stayed" && (
                     <>
+                        <Button
+                            color="success"
+                            onClick={() => updateBooking("checkout")}
+                        >
+                            {t('stay')}
+                        </Button>
                         <Button
                             color="default"
                             onClick={() => setIsOpenService(true)}

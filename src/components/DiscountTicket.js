@@ -46,16 +46,17 @@ const DiscountTicket = ({ discount, onClick }) => {
                 onMouseLeave={() => setHover(false)}
                 onMouseOver={() => setHover(true)}>
                 <div className="ticket-detail">
+                    <h4>{dHomestay.map((homestayName, key) => <span key={key}>{homestayName}, </span>)}</h4>
                     <h2 style={{ width: 'fit-content', cursor: 'pointer', fontWeight: 'bolder' }}>{discount.name}</h2>
                     <div>{t('start')}: {format(new Date(discount.checkin), "dd/MM/yyyy")}</div>
                     <div>{t('end')}: {format(new Date(discount.checkout), "dd/MM/yyyy")}</div>
                     <div>{t('quantity')}: {discount.quantity}</div>
                     <div>{t('used')}: {discount.used}</div>
-                    <div>Homestays: {dHomestay.map((homestayName, key) => <span key={key}>{homestayName}, </span>)}</div>
                     <h6 className={`discount-active ${discount.active && !hide ? 'active' : 'inactive'}`}>{discount.active ? t('active') : t('deactivated')}</h6>
                 </div>
                 <div className="ticket-percent">
                     <h1>{discount.percentage}%</h1>
+                    <div className="tp-percent" style={{ height: `${discount.percentage}%` }}></div>
                 </div>
                 {discount.active && !hide && <div className={`deactive-btn${hover ? ' active' : ''}`}><Button color="primary" onClick={() => deactivate(discount._id)}>{t('deactive')}</Button></div>}
             </Card>) :

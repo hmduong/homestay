@@ -36,6 +36,14 @@ const Main = () => {
     const prices = [1000000, 2000000, 3000000, 4000000, 5000000]
     const { t, i18n } = useTranslation();
 
+    const detail = (id) => {
+        const url =
+            cookies.role === "homestay owner"
+                ? `/owner/homestay/${id}`
+                : `/homestay/${id}`;
+        window.open(url, '_blank')
+    };
+
     const priceChange = (newPrice) => {
         if (newPrice) setPrice(prices[newPrice - 1]);
         else setPrice("")
@@ -220,7 +228,7 @@ const Main = () => {
                     {homestays && (
                         homestays.map((homestay, index) => (
                             <Col key={index} className="mb-4" md="4">
-                                <HomestayCard homestay={homestay} />
+                                <HomestayCard detail={detail} homestay={homestay} />
                             </Col>
                         ))
                     )}
@@ -235,7 +243,7 @@ const Main = () => {
                     <Row className="mt-4">
                         {topHomestays && topHomestays.map((homestay, index) => (
                             <Col key={index} className="mb-4" md="4">
-                                <HomestayCard homestay={homestay} />
+                                <HomestayCard detail={detail} homestay={homestay} />
                             </Col>
                         ))}
                     </Row>}

@@ -1,24 +1,14 @@
 import { Card, CardImg, UncontrolledTooltip } from "reactstrap";
 import { Slide } from "react-slideshow-image";
-import { useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
 import { useTranslation } from "react-i18next";
-const HomestayCard = ({ homestay, onClick, newBooking }) => {
+import { useEffect } from "react";
+const HomestayCard = ({ homestay, adding, detail, newBooking }) => {
   const { t, i18n } = useTranslation();
-  const [cookies, setCookie, removeCookie] = useCookies(["role"]);
-  const navigate = useNavigate();
   const imgLink = (id, idx = 0) =>
     `http://localhost:3333/homestays/${id}/images?index=${idx}`;
-  const detail = () => {
-    const url =
-      cookies.role === "homestay owner"
-        ? `/owner/homestay/${homestay._id}`
-        : `/homestay/${homestay._id}`;
-    navigate(url);
-  };
   return homestay ? (
     <Card
-      onClick={detail}
+      onClick={detail ? () => detail(homestay._id) : () => { }}
       className="homestay-card slide-container card-lift--hover shadow border-0"
     >
       <Slide>
@@ -90,7 +80,7 @@ const HomestayCard = ({ homestay, onClick, newBooking }) => {
         Create new homestay
       </UncontrolledTooltip>
       <Card
-        onClick={onClick}
+        onClick={adding}
         id="add-homestay"
         className="homestay-card add-homestay slide-container card-lift--hover shadow border-0"
       >

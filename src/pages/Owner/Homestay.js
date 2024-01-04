@@ -19,6 +19,14 @@ const Homestay = () => {
     const [loading, setLoading] = useState(false);
     const dispatch = useDispatch();
 
+    const detail = (id) => {
+        const url =
+            cookies.role === "homestay owner"
+                ? `/owner/homestay/${id}`
+                : `/homestay/${id}`;
+        window.open(url, '_blank')
+    };
+
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true)
@@ -59,6 +67,7 @@ const Homestay = () => {
                     homestays.map((homestay, index) => (
                         <Col key={index} className="mb-4" md="3">
                             <HomestayCard
+                                detail={detail}
                                 newBooking={checkNew(homestay._id)}
                                 homestay={homestay}
                             />
@@ -68,7 +77,7 @@ const Homestay = () => {
                     <></>
                 )}
                 <Col className="mb-4" md="3">
-                    <HomestayCard onClick={() => setShow(true)} />
+                    <HomestayCard adding={() => setShow(true)} />
                     {show && <HomestayForm turnOff={() => setShow(false)} triggerRerender={() => triggerRerender(!rerender)} />}
                 </Col>
             </Row>}

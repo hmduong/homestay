@@ -1,6 +1,5 @@
 import { format } from 'date-fns';
 import { useState } from 'react';
-import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
 import { Input, Button, Card, Col, FormGroup, Modal, Row, UncontrolledTooltip } from 'reactstrap'
 import { review } from 'services/review';
@@ -18,21 +17,14 @@ const BookingCard = ({ indexkey, booking, triggerRerender }) => {
     const form = {
         comment: null
     }
-    const [hover, setHover] = useState(false)
     const [rate, setRate] = useState(5)
     const [isOpenReview, setIsOpenReview] = useState(false)
     const [isOpenDeposit, setIsOpenDeposit] = useState(false)
-    const [reviewed, setReviewed] = useState(false)
     const [validateErr, setValidateErr] = useState({})
     const [isExpand, setIsExpand] = useState(false)
     const [ani, toggleAni] = useState(false)
     const [loading, setLoading] = useState(false);
     const [bill, setBill] = useState(null);
-    const imgLink = (id, idx = 0) => `http://localhost:3333/homestays/${id}/images?index=${idx}`;
-
-    const [cookies, setCookie, removeCookie] = useCookies([
-        "role",
-    ]);
     const navigate = useNavigate()
     const check = () => {
         navigate(`/homestay/${booking.homestay._id}`)
@@ -55,7 +47,6 @@ const BookingCard = ({ indexkey, booking, triggerRerender }) => {
                         type: "success"
                     })
                 );
-                setReviewed(true)
             } else {
                 dispatch(
                     actions.createAlert({
@@ -128,9 +119,7 @@ const BookingCard = ({ indexkey, booking, triggerRerender }) => {
 
     return (
         <>
-            <Card key={indexkey} className="booking-card shadow"
-                onMouseLeave={() => setHover(false)}
-                onMouseOver={() => setHover(true)}>
+            <Card key={indexkey} className="booking-card shadow">
                 <div className='booking-info' onClick={() => setIsExpand(!isExpand)}>
                     <div className='bi-info biname'>
                         <h6>{t('name')}</h6>
@@ -169,7 +158,7 @@ const BookingCard = ({ indexkey, booking, triggerRerender }) => {
                     </div>
                     <div className='biexpand-btns' style={{ width: '35%' }}>
                         {
-                            booking.status === 'stayed' &&
+                            booking.status === 'checkout' &&
                             <>
                                 <Button className='checkhomestay' id='reviewBtn' onClick={() => setIsOpenReview(true)} color='default'>
                                     {t('homestay.reviews')}

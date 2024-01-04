@@ -222,6 +222,7 @@
     }
 
     .ticket-percent {
+        position: relative;
         height: 100%;
         width: 50%;
         display: flex;
@@ -233,6 +234,15 @@
         & h1 {
             font-size: 50px;
             font-weight: 700;
+        }
+
+        .tp-percent {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            left: 0;
+            z-index: 0;
+            background-color: #5e72e4;
         }
     }
 
@@ -874,14 +884,20 @@
 .booking-card {
     position: relative;
     display: flex;
-    padding: 8px;
-    margin-bottom: 8px;
+    padding: 16px 8px 8px;
     border: 0;
+    margin-bottom: 8px;
     overflow: hidden;
 
     &.list {
         padding: 0;
-        border-bottom: 1px solid #ddd;
+        margin-bottom: 0;
+        border-top: 1px solid #ddd;
+        transition: background .3s;
+
+        &:hover {
+            background: #00000025;
+        }
 
         .toggle-actions {
             position: absolute;
@@ -1108,7 +1124,8 @@
     border-top: 1px solid #ccc;
     padding-top: 4px;
     display: flex;
-    margin-right: 60px;
+    padding-right: 60px;
+    background: #00000011;
 
     h6,
     p {
@@ -1138,17 +1155,13 @@
     position: absolute;
     height: 70%;
     top: 8px;
-    right: 0;
+    right: -4px;
     transform: translateX(100%);
     transition: transform 0.3s;
     display: flex;
     justify-content: center;
 
     &.active {
-        // transform: translateX(-156px);
-    }
-
-    &.listactive {
         transform: translateX(-8px);
     }
 }
