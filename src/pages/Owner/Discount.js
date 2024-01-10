@@ -53,6 +53,14 @@ const Discount = () => {
         const err = validator(form, { empty: (v) => !v ? 'wut???' : null }, {})
         if (!err) {
             form.homestays = homestaysApply.map(homestay => homestay._id)
+            if (form.homestays.length === 0) {
+                dispatch(
+                    actions.createAlert({
+                        message: 'Please dont let homestays empty',
+                        type: "warning"
+                    })
+                );
+            }
             setLoading2(true)
             const res = await createDiscount(form);
             if (res.status < 299) {
@@ -120,7 +128,7 @@ const Discount = () => {
                     {loading2 ? <Loading /> : <>
                         <div className="modal-header">
                             <h6 className="modal-title" id="modal-title-default">
-                            {t('discount.createNew')}
+                                {t('discount.createNew')}
                             </h6>
                             <button
                                 aria-label="Close"
@@ -134,18 +142,6 @@ const Discount = () => {
                         </div>
                         <div className="modal-body">
                             <Row>
-                                <Col md="6">
-                                    <FormGroup>
-                                        <p className={`input-label ${validateErr.quantity ? (ani ? 'err1' : 'err2') : ''}`}>{t('quantity')}: </p>
-                                        <Input type="number" onChange={e => form.quantity = e.target.value} />
-                                    </FormGroup>
-                                </Col>
-                                <Col md="6">
-                                    <FormGroup>
-                                        <p className={`input-label ${validateErr.percentage ? (ani ? 'err1' : 'err2') : ''}`}>{t('percentage')}: </p>
-                                        <Input type="number" onChange={e => form.percentage = e.target.value} />
-                                    </FormGroup>
-                                </Col>
                                 <Col md="12">
                                     <FormGroup style={{ marginBottom: '16px', position: 'relative' }}>
                                         <p className={`input-label`}>Homestays: </p>
@@ -167,6 +163,18 @@ const Discount = () => {
                                                 </option>)}
                                             </Input>
                                         </div>
+                                    </FormGroup>
+                                </Col>
+                                <Col md="6">
+                                    <FormGroup>
+                                        <p className={`input-label ${validateErr.quantity ? (ani ? 'err1' : 'err2') : ''}`}>{t('quantity')}: </p>
+                                        <Input type="number" onChange={e => form.quantity = e.target.value} />
+                                    </FormGroup>
+                                </Col>
+                                <Col md="6">
+                                    <FormGroup>
+                                        <p className={`input-label ${validateErr.percentage ? (ani ? 'err1' : 'err2') : ''}`}>{t('percentage')}: </p>
+                                        <Input type="number" onChange={e => form.percentage = e.target.value} />
                                     </FormGroup>
                                 </Col>
                                 <Col md="6">

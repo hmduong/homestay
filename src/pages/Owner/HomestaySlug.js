@@ -304,8 +304,10 @@ const HomestaySlug = () => {
             </Container>}
             {cookies.role === "homestay owner" ?
                 <>
-                    {thisHomestay && <BookingList homestay={thisHomestay} />}
-                    <Statistics />
+                    {thisHomestay && <>
+                        <BookingList homestay={thisHomestay} />
+                        <Statistics homestayId={thisHomestay._id} />
+                    </>}
                 </>
                 : <Container>
                     <h2 className="mt-6">{t('homestay.suggest')}</h2>

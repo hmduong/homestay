@@ -12,7 +12,6 @@ import { Bar, Pie } from "react-chartjs-2";
 import { useEffect, useState } from "react";
 import { getStatisticsByHomestay } from "services/statistics";
 import { Link } from "react-router-dom";
-import { useCookies } from "react-cookie";
 import Loading from "components/Loading";
 import { useDispatch } from "react-redux";
 import { actions } from "store/AlertSlice";
@@ -40,7 +39,7 @@ export const optionsPie = {
 
 
 
-const Statistics = () => {
+const Statistics = ({ homestayId }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
@@ -58,7 +57,7 @@ const Statistics = () => {
     t('statistic.month.nov'),
     t('statistic.month.dec'),
   ];
-  
+
   const dataPie = {
     labels,
     datasets: [
@@ -97,12 +96,12 @@ const Statistics = () => {
       },
     ],
   };
-  
+
   const dataQuarter = {
     labels: [
-      t('statistic.quater') + " 1", 
+      t('statistic.quater') + " 1",
       t('statistic.quater') + " 2",
-      t('statistic.quater') + " 3", 
+      t('statistic.quater') + " 3",
       t('statistic.quater') + " 4"
     ],
     datasets: [
@@ -115,9 +114,9 @@ const Statistics = () => {
   };
   const dataQuarterPie = {
     labels: [
-      t('statistic.quater') + " 1", 
+      t('statistic.quater') + " 1",
       t('statistic.quater') + " 2",
-      t('statistic.quater') + " 3", 
+      t('statistic.quater') + " 3",
       t('statistic.quater') + " 4"
     ],
     datasets: [
@@ -163,14 +162,10 @@ const Statistics = () => {
   const [loading, setLoading] = useState(false);
   const [total, setTotal] = useState(0);
 
-  const [cookies, setCookie, removeCookie] = useCookies([
-    "userid",
-  ]);
-
   useEffect(() => {
     setLoading(true);
     async function getData() {
-      let query = process.env.REACT_APP_API_URL + "/statistics/" + cookies.userid;
+      let query = process.env.REACT_APP_API_URL + "/statistics/" + homestayId;
       if (year) {
         query = query + "?year=" + year;
       }
@@ -194,9 +189,9 @@ const Statistics = () => {
         });
         setQuarterList({
           labels: [
-            t('statistic.quater') + " 1", 
+            t('statistic.quater') + " 1",
             t('statistic.quater') + " 2",
-            t('statistic.quater') + " 3", 
+            t('statistic.quater') + " 3",
             t('statistic.quater') + " 4"
           ],
           datasets: [
@@ -246,11 +241,11 @@ const Statistics = () => {
         </Link>
         <div
           className="row"
-          style={{ marginLeft: "38%", marginTop: "15px", marginBottom: "15px" }}
+          style={{ justifyContent: 'center' }}
         >
           <select
             name="year"
-            style={{ width: "20%", padding: "5px" }}
+            style={{ width: "30%", padding: "5px", margin: "5px" }}
             onChange={(e) => setYear(e.target.value)}
             value={year}
           >
@@ -261,7 +256,7 @@ const Statistics = () => {
           </select>
           <select
             name="type"
-            style={{ width: "20%", padding: "5px" }}
+            style={{ width: "30%", padding: "5px", margin: "5px" }}
             onChange={(e) => setType(e.target.value)}
             value={type}
           >
@@ -280,7 +275,7 @@ const Statistics = () => {
               </div>
             </div>
             <p className="text-center" style={{ margin: "15px" }}>
-            {t('statistic.monthlyStatistics')}
+              {t('statistic.monthlyStatistics')}
             </p>
             <div className="row" style={{ marginTop: "30px" }}>
               <div className="col-md-8">
@@ -291,7 +286,7 @@ const Statistics = () => {
               </div>
             </div>
             <p className="text-center" style={{ margin: "15px" }}>
-            {t('statistic.quarterlyStatistics')}
+              {t('statistic.quarterlyStatistics')}
             </p>
           </div>
         )}

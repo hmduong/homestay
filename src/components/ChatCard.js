@@ -22,7 +22,7 @@ const ChatCard = ({ chat, active, onclick }) => {
                 <div className="chat-last-content">
                     <div className="chat-last-mess">
                         {chat.lastMessage.from === cookies.name ? "Me: " : ""}
-                        {chat.lastMessage.message}
+                        <div className="chat-last-mess-content">{chat.lastMessage.message}</div>
                     </div>
                     <div className="chat-time">
                         {format(new Date(chat.updatedAt), "dd/MM/yyyy")}

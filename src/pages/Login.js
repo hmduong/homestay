@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { login } from "services/authService";
 import { useCookies } from "react-cookie";
 import {
   Button,
   Card,
-  CardHeader,
   CardBody,
   FormGroup,
   Form,
@@ -27,20 +26,12 @@ const Login = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch();
   const { t } = useTranslation();
-
   const [loading, setLoading] = useState(false);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   useEffect(() => {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
-    const enterlogin = (e) => {
-      if (e.key === 'Enter') {
-        handleLogin()
-      }
-    }
-    document.addEventListener('keypress', enterlogin)
-    return () => {
-      document.removeEventListener('keypress', enterlogin)
-    }
   }, []);
   const [cookies, setCookie, removeCookie] = useCookies([
     "currentuser",
@@ -49,15 +40,10 @@ const Login = () => {
     "name"
   ]);
 
-  const loginForm = {
-    username: "",
-    password: ""
-  }
-
   const handleLogin = async () => {
-    let tmp = `{ "username": "${loginForm.username}", "password": "${loginForm.password}" }`;
+    let tmp = `{ "username": "${username}", "password": "${password}" }`;
     let params = JSON.parse(tmp);
-    if (loginForm.username && loginForm.password && !cookies.currentuser) {
+    if (username && password && !cookies.currentuser) {
       setLoading(true)
       const response = await login(params);
       if (response?.token) {
@@ -103,7 +89,7 @@ const Login = () => {
                                 <i className="ni ni-single-02" />
                               </InputGroupText>
                             </InputGroupAddon>
-                            <Input placeholder={t('authAction.userName')} type="text" onChange={(e) => loginForm.username = e.target.value} />
+                            <Input value={username} placeholder={t('authAction.userName')} type="text" onChange={(e) => setUsername(e.target.value)} />
                           </InputGroup>
                         </FormGroup>
                         <FormGroup>
@@ -117,7 +103,8 @@ const Login = () => {
                               placeholder={t('authAction.password')}
                               type="password"
                               autoComplete="off"
-                              onChange={(e) => loginForm.password = e.target.value}
+                              onChange={(e) => setPassword(e.target.value)}
+                              value={password}
                             />
                           </InputGroup>
                         </FormGroup>
