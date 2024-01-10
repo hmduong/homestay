@@ -35,6 +35,35 @@ const Main = () => {
     const dispatch = useDispatch();
     const prices = [1000000, 2000000, 3000000, 4000000, 5000000]
     const { t, i18n } = useTranslation();
+    const dateOnChange = async (date, isCheckin) => {
+        if (date) {
+            if (isCheckin) {
+                if (checkout && date > checkout) {
+                    setCheckin(checkout)
+                    dispatch(
+                        actions.createAlert({
+                            message: 'Invalid checkin!',
+                            type: "error",
+                        })
+                    );
+                } else {
+                    setCheckin(date)
+                }
+            } else {
+                if (checkin && date < checkin) {
+                    setCheckout(checkin)
+                    dispatch(
+                        actions.createAlert({
+                            message: 'Invalid checkout!',
+                            type: "error",
+                        })
+                    );
+                } else {
+                    setCheckout(date)
+                }
+            }
+        }
+    }
 
     const detail = (id) => {
         const url =
@@ -195,7 +224,8 @@ const Main = () => {
                                     </InputGroupText>
                                 </InputGroupAddon>
                                 <ReactDatetime
-                                    onChange={(e) => setCheckin(formatDate(e._d))}
+                                    value={checkin}
+                                    onChange={(e) => dateOnChange(formatDate(e._d), true)}
                                     inputProps={{
                                         placeholder: "mm/dd/yyyy",
                                     }}
@@ -214,7 +244,8 @@ const Main = () => {
                                     </InputGroupText>
                                 </InputGroupAddon>
                                 <ReactDatetime
-                                    onChange={(e) => setCheckout(formatDate(e._d))}
+                                    value={checkout}
+                                    onChange={(e) => dateOnChange(formatDate(e._d), false)}
                                     inputProps={{
                                         placeholder: "mm/dd/yyyy",
                                     }}

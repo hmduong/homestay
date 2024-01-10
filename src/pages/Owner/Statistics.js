@@ -143,7 +143,7 @@ const Statistics = ({ homestayId }) => {
 
 
 
-  const [year, setYear] = useState("2023");
+  const [year, setYear] = useState(new Date().getFullYear());
   const [type, setType] = useState("Money");
   const [homestay, setHomeStay] = useState(null);
   const [list, setList] = useState({
@@ -230,6 +230,15 @@ const Statistics = ({ homestayId }) => {
     getData();
   }, [year, type]);
 
+  const years = (() => {
+    var ys = []
+    var thisYear = new Date().getFullYear()
+    for (let i = thisYear - 3; i <= thisYear; i++) {
+      ys.push(i)
+    }
+    return ys
+  })()
+
   return (
     <>
       <div className="container" style={{ marginTop: 24 }}>
@@ -249,10 +258,9 @@ const Statistics = ({ homestayId }) => {
             onChange={(e) => setYear(e.target.value)}
             value={year}
           >
-            <option value="2020">{t('year')} 2020</option>
-            <option value="2021">{t('year')} 2021</option>
-            <option value="2022">{t('year')} 2022</option>
-            <option value="2023">{t('year')} 2023</option>
+            {
+              years.map((y, idx) => <option key={idx} value={y}>{t('year')} {y}</option>)
+            }
           </select>
           <select
             name="type"

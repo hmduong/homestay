@@ -103,7 +103,7 @@ const HomestaySlug = () => {
         };
         fetchData();
         return () => {
-            document.title = 'Home 4 stay'
+            document.title = 'PearLite Homestay'
         }
     }, [rerender]);
     return loading ? (

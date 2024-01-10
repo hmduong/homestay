@@ -16,15 +16,15 @@ const HomestayForm = ({ turnOff, triggerRerender, editPayload }) => {
     const { t, i18n } = useTranslation();
     const dispatch = useDispatch();
     const defaultForm = {
-        name: "",
-        address: "",
-        city: defaultGeo.geoList[0],
-        price: 0,
-        people: 0,
-        description: "",
-        pool: false,
-        longitude: defaultGeo.geoMap.get("Ha Noi")[0],
-        latitude: defaultGeo.geoMap.get("Ha Noi")[1],
+        name: editPayload ? editPayload.name : "",
+        address: editPayload ? editPayload.address : "",
+        city: editPayload ? editPayload.city : defaultGeo.geoList[0],
+        price: editPayload ? editPayload.price : 0,
+        people: editPayload ? editPayload.people : 0,
+        description: editPayload ? editPayload.description : "",
+        pool: editPayload ? editPayload.pool : false,
+        longitude: editPayload ? editPayload.longitude : defaultGeo.geoMap.get("Ha Noi")[0],
+        latitude: editPayload ? editPayload.latitude : defaultGeo.geoMap.get("Ha Noi")[1],
     };
     const [loading, setLoading] = useState(false);
     const [files, setFiles] = useState(null);

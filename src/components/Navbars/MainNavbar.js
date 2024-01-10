@@ -97,7 +97,7 @@ function MainNavbar() {
         const sideBarSlider = document.querySelector(".sidebar-slider");
         sideBarSlider?.classList.toggle("display_block_mobile");
         e.currentTarget?.classList.toggle("close");
-      };
+    };
 
     return (
         <>
@@ -109,139 +109,139 @@ function MainNavbar() {
                 >
                     <Container>
                         <div className=" flex-row">
-                        {cookies.role && <div
-                            onClick={handleOpenSidebar}
-                            className="navbar-toggler navbar-menu-slider"
-                            id="navbar_global"
+                            {cookies.role && <div
+                                onClick={handleOpenSidebar}
+                                className="navbar-toggler navbar-menu-slider"
+                                id="navbar_global"
                             >
-                            <span className="" />
-                        </div>}
+                                <span className="" />
+                            </div>}
                             <NavbarBrand className="mr-lg-5 brand" to="/" tag={Link}>
-                                <img alt="..." src={require("assets/img/brand/logo.png")} />
-                            </NavbarBrand>  
+                                <img height={50} alt="..." src={require("assets/img/brand/logo.png")} />
+                            </NavbarBrand>
                         </div>
-                        
+
                         {/* <button className="navbar-toggler" id="navbar_global">
                             <span className="navbar-toggler-icon" />
                         </button> */}
-                          {cookies.role && <>
-                                <Nav className="navbar-nav-hover align-items-lg-center display_none_mobile" navbar>
-                                    <UncontrolledDropdown nav>
-                                        <DropdownToggle nav onClick={() => navigate('/')}>
-                                            {currentPage() === 'homestay' ? <div className="active-bg"></div> : <></>}
-                                            <i className="ni ni-ui-04 d-lg-none mr-1" />
-                                            <span className="nav-link-inner--text">Homestay</span>
-                                        </DropdownToggle>
-                                    </UncontrolledDropdown>
-                                </Nav>
-                                <Nav className="navbar-nav-hover align-items-lg-center display_none_mobile" navbar>
-                                    <UncontrolledDropdown nav>
-                                        <DropdownToggle nav onClick={() => navigate('/visitor')}>
-                                            {currentPage() === 'booking' ? <div className="active-bg"></div> : <></>}
-                                            <i className="ni ni-ui-04 d-lg-none mr-1" />
-                                            <span className="nav-link-inner--text">{t('booking.self')}</span>
-                                        </DropdownToggle>
-                                    </UncontrolledDropdown>
-                                </Nav>
-                                <Nav className="navbar-nav-hover align-items-lg-center display_none_mobile" navbar>
-                                    <UncontrolledDropdown nav>
-                                        <DropdownToggle nav onClick={() => navigate('/chat')}>
-                                            <i className="ni ni-ui-04 d-lg-none mr-1" />
-                                            <span className="nav-link-inner--text">{t('sideBar.chat')} <i className="fa fa-external-link" aria-hidden="true"></i></span>
-                                        </DropdownToggle>
-                                    </UncontrolledDropdown>
-                                </Nav>
-                            </>}
-                            <Nav className="align-items-lg-center ml-lg-auto flex-row flex-jus-end-mobile flex-1-mobile" navbar>
-                                {cookies.role === 'visitor' &&
-                                    <>
-                                        <NavItem onClick={openNotification} className="notification-nav">
-                                            <Dropdown isOpen={isOpenNotification} toggle={() => setIsOpenNotification(!isOpenNotification)} direction="down">
-                                                <DropdownToggle style={{ background: 'none', border: 'none', marginRight: 0 }}>
-                                                    <i className="fa fa-bell notification-bell" aria-hidden="true"></i>
-                                                    {isNewNoti && <i className="fa fa-circle notification-dot" aria-hidden="true"></i>}
-                                                </DropdownToggle>
-                                                <DropdownMenu container="body" className="notification-menu">
-                                                    {notifications && notifications.map(notification => <DropdownItem className={`notification-item${notification.seen ? '' : 'new'}`} key={notification._id} onClick={() => navigate('/visitor/booking')}>
-                                                        <h5>{format(new Date(notification.updatedAt), "dd/MM/yyyy")}</h5>
-                                                        <p className="notification-message">{notification.message}</p>
-                                                    </DropdownItem>)}
-                                                </DropdownMenu>
-                                            </Dropdown>
-                                        </NavItem>
-                                    </>
-                                }
-                                <NavItem className=" d-lg-block ml-lg-4 mg-right-1-mobile">
-                                    <img onClick={changeLanguage} width={30} src={enLang ? "https://flagicons.lipis.dev/flags/4x3/gb.svg" : "https://flagicons.lipis.dev/flags/4x3/vn.svg"} alt="" />
-                                </NavItem>
-                                <NavItem className=" d-lg-block ml-lg-4 mg-right-0-mobile">
-                                    {cookies.name ? (
-                                        <>
-                                            <Dropdown isOpen={dropdownOpen}
-                                                toggle={toggle}
-                                                direction={"down"}
-                                                className="avatar-droprown">
-                                                <DropdownToggle className="dropdown-btn">
-                                                    <Avatar namee={cookies.name} />
-                                                </DropdownToggle>
-                                                <DropdownMenu className="mt-5 ddmenu-responsive left-130-mobile">
-                                                    <DropdownItem onClick={toUserPage}>{t('aboutYou')}</DropdownItem>
-                                                    <DropdownItem onClick={() => { setIsOpenModal(true); }}>{t('logout.title')}</DropdownItem>
-                                                </DropdownMenu>
-                                            </Dropdown>
-                                            <Modal
-                                                className="modal-dialog-centered"
-                                                isOpen={isOpenModal}
-                                                toggle={() => setIsOpenModal(false)}
-                                            >
-                                                <div className="modal-header">
-                                                    <h6 className="modal-title" id="modal-title-default">
-                                                        {t('logout.title')}
-                                                    </h6>
-                                                    <button
-                                                        aria-label="Close"
-                                                        className="close"
-                                                        data-dismiss="modal"
-                                                        type="button"
-                                                        onClick={() => setIsOpenModal(false)}
-                                                    >
-                                                        <span>×</span>
-                                                    </button>
-                                                </div>
-                                                <div className="modal-body">
-                                                    <p>
-                                                        {t('logout.content')}
-                                                    </p>
-                                                </div>
-                                                <div className="modal-footer">
-                                                    <Button
-                                                        color="link"
-                                                        data-dismiss="modal"
-                                                        type="button"
-                                                        onClick={() => setIsOpenModal(false)}
-                                                    >
-                                                        {t('cancel')}
-                                                    </Button>
-                                                    <Button color="primary" type="button" className="ml-auto" onClick={logout}>
-                                                        {t('ok')}
-                                                    </Button>
-                                                </div>
-                                            </Modal>
-                                        </>
-                                    ) : (
-                                        <Button
-                                            className="btn-neutral btn-icon"
-                                            color="default"
-                                            href="/login"
-                                        >
-                                            <span className="nav-link-inner--text mr-2">{t('signIn')}</span>
-                                            <span className="btn-inner--icon">
-                                                <i className="fa fa-sign-in ml-1" />
-                                            </span>
-                                        </Button>
-                                    )}
-                                </NavItem>
+                        {cookies.role && <>
+                            <Nav className="navbar-nav-hover align-items-lg-center display_none_mobile" navbar>
+                                <UncontrolledDropdown nav>
+                                    <DropdownToggle nav onClick={() => navigate('/')}>
+                                        {currentPage() === 'homestay' ? <div className="active-bg"></div> : <></>}
+                                        <i className="ni ni-ui-04 d-lg-none mr-1" />
+                                        <span className="nav-link-inner--text">Homestay</span>
+                                    </DropdownToggle>
+                                </UncontrolledDropdown>
                             </Nav>
+                            <Nav className="navbar-nav-hover align-items-lg-center display_none_mobile" navbar>
+                                <UncontrolledDropdown nav>
+                                    <DropdownToggle nav onClick={() => navigate('/visitor')}>
+                                        {currentPage() === 'booking' ? <div className="active-bg"></div> : <></>}
+                                        <i className="ni ni-ui-04 d-lg-none mr-1" />
+                                        <span className="nav-link-inner--text">{t('booking.self')}</span>
+                                    </DropdownToggle>
+                                </UncontrolledDropdown>
+                            </Nav>
+                            <Nav className="navbar-nav-hover align-items-lg-center display_none_mobile" navbar>
+                                <UncontrolledDropdown nav>
+                                    <DropdownToggle nav onClick={() => navigate('/chat')}>
+                                        <i className="ni ni-ui-04 d-lg-none mr-1" />
+                                        <span className="nav-link-inner--text">{t('sideBar.chat')} <i className="fa fa-external-link" aria-hidden="true"></i></span>
+                                    </DropdownToggle>
+                                </UncontrolledDropdown>
+                            </Nav>
+                        </>}
+                        <Nav className="align-items-lg-center ml-lg-auto flex-row flex-jus-end-mobile flex-1-mobile" navbar>
+                            {cookies.role === 'visitor' &&
+                                <>
+                                    <NavItem onClick={openNotification} className="notification-nav">
+                                        <Dropdown isOpen={isOpenNotification} toggle={() => setIsOpenNotification(!isOpenNotification)} direction="down">
+                                            <DropdownToggle style={{ background: 'none', border: 'none', marginRight: 0 }}>
+                                                <i className="fa fa-bell notification-bell" aria-hidden="true"></i>
+                                                {isNewNoti && <i className="fa fa-circle notification-dot" aria-hidden="true"></i>}
+                                            </DropdownToggle>
+                                            <DropdownMenu container="body" className="notification-menu">
+                                                {notifications && notifications.map(notification => <DropdownItem className={`notification-item${notification.seen ? '' : 'new'}`} key={notification._id} onClick={() => navigate('/visitor/booking')}>
+                                                    <h5>{format(new Date(notification.updatedAt), "dd/MM/yyyy")}</h5>
+                                                    <p className="notification-message">{notification.message}</p>
+                                                </DropdownItem>)}
+                                            </DropdownMenu>
+                                        </Dropdown>
+                                    </NavItem>
+                                </>
+                            }
+                            <NavItem className=" d-lg-block ml-lg-4 mg-right-1-mobile">
+                                <img onClick={changeLanguage} width={30} src={enLang ? "https://flagicons.lipis.dev/flags/4x3/gb.svg" : "https://flagicons.lipis.dev/flags/4x3/vn.svg"} alt="" />
+                            </NavItem>
+                            <NavItem className=" d-lg-block ml-lg-4 mg-right-0-mobile">
+                                {cookies.name ? (
+                                    <>
+                                        <Dropdown isOpen={dropdownOpen}
+                                            toggle={toggle}
+                                            direction={"down"}
+                                            className="avatar-droprown">
+                                            <DropdownToggle className="dropdown-btn">
+                                                <Avatar namee={cookies.name} />
+                                            </DropdownToggle>
+                                            <DropdownMenu className="mt-5 ddmenu-responsive left-130-mobile">
+                                                <DropdownItem onClick={toUserPage}>{t('aboutYou')}</DropdownItem>
+                                                <DropdownItem onClick={() => { setIsOpenModal(true); }}>{t('logout.title')}</DropdownItem>
+                                            </DropdownMenu>
+                                        </Dropdown>
+                                        <Modal
+                                            className="modal-dialog-centered"
+                                            isOpen={isOpenModal}
+                                            toggle={() => setIsOpenModal(false)}
+                                        >
+                                            <div className="modal-header">
+                                                <h6 className="modal-title" id="modal-title-default">
+                                                    {t('logout.title')}
+                                                </h6>
+                                                <button
+                                                    aria-label="Close"
+                                                    className="close"
+                                                    data-dismiss="modal"
+                                                    type="button"
+                                                    onClick={() => setIsOpenModal(false)}
+                                                >
+                                                    <span>×</span>
+                                                </button>
+                                            </div>
+                                            <div className="modal-body">
+                                                <p>
+                                                    {t('logout.content')}
+                                                </p>
+                                            </div>
+                                            <div className="modal-footer">
+                                                <Button
+                                                    color="link"
+                                                    data-dismiss="modal"
+                                                    type="button"
+                                                    onClick={() => setIsOpenModal(false)}
+                                                >
+                                                    {t('cancel')}
+                                                </Button>
+                                                <Button color="primary" type="button" className="ml-auto" onClick={logout}>
+                                                    {t('ok')}
+                                                </Button>
+                                            </div>
+                                        </Modal>
+                                    </>
+                                ) : (
+                                    <Button
+                                        className="btn-neutral btn-icon"
+                                        color="default"
+                                        href="/login"
+                                    >
+                                        <span className="nav-link-inner--text mr-2">{t('signIn')}</span>
+                                        <span className="btn-inner--icon">
+                                            <i className="fa fa-sign-in ml-1" />
+                                        </span>
+                                    </Button>
+                                )}
+                            </NavItem>
+                        </Nav>
                         {/* <UncontrolledCollapse
                             toggler="#navbar_global"
                             navbar
