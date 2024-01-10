@@ -37,6 +37,8 @@ const DetailHomestay = ({ homestay, owner, triggerRerender }) => {
   const [isOpenForm, setIsOpenForm] = useState(false);
   const [discounts, setDiscounts] = useState([]);
   const [discount, setDiscount] = useState({});
+  const [checkin, setCheckin] = useState(null);
+  const [checkout, setCheckout] = useState();
   const navigate = useNavigate();
   const [message, setMessage] = useState("");
   const [loading2, setLoading2] = useState(false);
@@ -98,29 +100,60 @@ const DetailHomestay = ({ homestay, owner, triggerRerender }) => {
     if (discount._id) {
       if (form.checkin && form.checkout) {
         let diff = Math.round((form.checkout - form.checkin) / 86400000);
-        if (diff) {
-          let dc = Math.round((homestay.price / 100) * discount.percentage);
-          setInfo({
-            discountMoney: dc * diff,
-            money: (homestay.price - dc) * diff,
-            deposit: (homestay.price - dc) * 0.8 * diff,
-          });
-        }
+        let dc = Math.round((homestay.price / 100) * discount.percentage);
+        setInfo({
+          discountMoney: dc * diff,
+          money: (homestay.price - dc) * diff,
+          deposit: (homestay.price - dc) * 0.8 * diff,
+        });
       }
     } else {
       if (form.checkin && form.checkout) {
         let diff = Math.round((form.checkout - form.checkin) / 86400000);
-        if (diff) {
-          setInfo({
-            discountMoney: 0,
-            money: homestay.price * diff,
-            deposit: homestay.price * 0.8 * diff,
-          });
-        }
+        setInfo({
+          discountMoney: 0,
+          money: homestay.price * diff,
+          deposit: homestay.price * 0.8 * diff,
+        });
       }
     }
   };
-  const fetchDiscount = async () => {
+  const fetchDiscount = async (date, isCheckin) => {
+    if (date) {
+      if (isCheckin) {
+        if (form.checkout && formatDate(date) > form.checkout) {
+          setCheckin(form.checkout)
+          form.checkin = form.checkout
+          caculate({});
+          dispatch(
+            actions.createAlert({
+              message: 'Invalid checkin!',
+              type: "error",
+            })
+          );
+          return
+        } else {
+          form.checkin = formatDate(date)
+          setCheckin(formatDate(date))
+        }
+      } else {
+        if (form.checkin && formatDate(date) < form.checkin) {
+          setCheckout(form.checkin)
+          form.checkout = form.checkin
+          caculate({});
+          dispatch(
+            actions.createAlert({
+              message: 'Invalid checkout!',
+              type: "error",
+            })
+          );
+          return
+        } else {
+          form.checkout = formatDate(date)
+          setCheckout(formatDate(date))
+        }
+      }
+    }
     setDiscount({});
     caculate({});
     const res = await getDiscountsByHomestay(id, {
@@ -133,6 +166,7 @@ const DetailHomestay = ({ homestay, owner, triggerRerender }) => {
       console.log(res.data.discounts);
       setDiscounts(res.data.discounts || []);
     }
+
   };
   const bookHomestay = async () => {
     const payload = {
@@ -449,10 +483,8 @@ const DetailHomestay = ({ homestay, owner, triggerRerender }) => {
                             </InputGroupText>
                           </InputGroupAddon>
                           <ReactDatetime
-                            onChange={(e) => {
-                              form.checkin = formatDate(e._d);
-                              fetchDiscount();
-                            }}
+                            value={checkin}
+                            onChange={(e) => fetchDiscount(e._d, true)}
                             inputProps={{
                               placeholder: "mm/dd/yyyy",
                             }}
@@ -480,10 +512,8 @@ const DetailHomestay = ({ homestay, owner, triggerRerender }) => {
                             </InputGroupText>
                           </InputGroupAddon>
                           <ReactDatetime
-                            onChange={(e) => {
-                              form.checkout = formatDate(e._d);
-                              fetchDiscount();
-                            }}
+                            onChange={(e) => fetchDiscount(e._d, false)}
+                            value={checkout}
                             inputProps={{
                               placeholder: "mm/dd/yyyy",
                             }}

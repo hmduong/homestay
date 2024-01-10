@@ -309,6 +309,8 @@
 }
 
 .homestays-picker {
+    border: 1px solid #ddd;
+    border-radius: 4px;
     display: flex;
     position: relative;
 
@@ -326,7 +328,7 @@
 
     .picker-btn {
         position: absolute;
-        width: 50px;
+        width: 70px;
         height: 100%;
         top: 0;
         right: 0;
@@ -538,7 +540,7 @@
 }
 
 .chat-look {
-    flex: 1;
+    width: calc(100% - 50px);
     height: 100%;
     padding: 10px 0;
 
@@ -549,14 +551,27 @@
 }
 
 .chat-last-content {
+    width: 100%;
     display: flex;
     justify-content: space-between;
 
     .chat-time {
+        width: 85px;
         margin-right: 16px;
         font-size: 13px;
         display: flex;
         align-items: flex-end;
+    }
+
+    .chat-last-mess {
+        width: calc(100% - 85px);
+    }
+
+    .chat-last-mess-content {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
     }
 }
 
