@@ -1,0 +1,32 @@
+$screen_tablet: 62rem;
+$screen_mobile: 48em;
+
+@mixin screen_pc {
+  @media screen and (min-width: 64em) {
+    @content;
+  }
+}
+
+@mixin screen_smaller_pc {
+    @media screen and (max-width: $screen_tablet) {
+        @content;
+      }
+}
+
+@mixin screen_xl {
+  @media screen and (min-width: 62.01em) and (max-width: 75em) {
+    @content;
+  }
+}
+@mixin screen_tablet {
+  @media screen and (min-width: 48.01em) and (max-width: $screen_tablet) {
+    @content;
+  }
+}
+
+
+@mixin screen_mobile {
+  @media screen and (max-width: $screen_mobile) {
+    @content;
+  }
+}

@@ -110,7 +110,7 @@ const HomestaySlug = () => {
         <Loading />
     ) : (
         <>
-            {thisHomestay && <Container>
+            {thisHomestay && <Container className="pd-0-mobile">
                 <div style={{ display: "flex", justifyContent: cookies.role === "homestay owner" ? "space-between" : 'center' }}>
                     <h2
                         className="homestay-slug-header"
@@ -309,7 +309,7 @@ const HomestaySlug = () => {
                         <Statistics homestayId={thisHomestay._id} />
                     </>}
                 </>
-                : <Container>
+                : <Container className="pd-0-mobile">
                     <h2 className="mt-6">{t('homestay.suggest')}</h2>
                     {loadingSuggest ? <Loading /> : <Row className="mt-4">
                         {suggestList && (

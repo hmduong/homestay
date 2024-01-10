@@ -1,3 +1,7 @@
+
+@import '/src/styles/mixin.scss';
+$screen_tablet: 62rem;
+
 .homestay-card {
     height: 500px;
 }
@@ -42,11 +46,27 @@
 .content {
     width: calc(100% - 300px);
     padding: 16px;
+    flex: 1;
+}
+
+.content_responsive {
+    width: clamp(calc(100% - 100px), 10vw, calc(100% - 300px));
+
+    @include screen_mobile {
+        width: 92%;
+        padding: 0;
+        // margin: 0;
+    }
 }
 
 .sidebar-slider {
     width: 0;
     transition: width 0.3s;
+
+    @include screen_smaller_pc {
+        display: none;
+    }
+
 }
 
 .add-homestay {
@@ -65,20 +85,21 @@
     }
 }
 
-@media (min-width: 992px) {
+// @media (min-width: $screen_tablet) {
 
     .drawer .sidebar-main {
         transform: translateX(0);
     }
 
     .sidebar-slider.drawer {
-        width: 300px;
+        width: clamp(13.75rem, 20vw, 18.75rem);
         height: 300px;
     }
 
     .sidebar-main {
         position: fixed;
-        width: 300px;
+        // width: 300px;
+        width: clamp(13.75rem, 20vw, 18.75rem);
         height: 100vh;
         left: 0;
         z-index: 100;
@@ -111,4 +132,14 @@
         background: #ffffff67;
         color: inherit;
     }
+// }
+
+@media (max-width: $screen_tablet) {
+.sidebar-slider{
+        position: absolute;
+        // width: 300px;
+        left: 0;
+        transition: all 0.3s ease-in-out;
+    }
+
 }
