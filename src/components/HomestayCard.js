@@ -77,7 +77,7 @@ const HomestayCard = ({ homestay, adding, detail, newBooking }) => {
   ) : (
     <>
       <UncontrolledTooltip delay={0} placement="bottom" target="add-homestay">
-        Create new homestay
+      {t('homestay.slug.create')}
       </UncontrolledTooltip>
       <Card
         onClick={adding}

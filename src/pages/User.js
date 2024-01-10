@@ -182,13 +182,13 @@ const User = () => {
                             {userInfo.name.toUpperCase()[0]}
                         </span>
                     </div>
-                    <div className="the-split"></div>
-                    <div className="user-text">
+                    <div className="the-split the-split-mobile"></div>
+                    <div className="user-text user-text-mobile">
                         <div className="user-info-header"><h3>{t('authAction.userInfo')}</h3> {enableEdit ? <Button color="success" onClick={editUser}>{t('authAction.save')}</Button> : <Button color="primary" onClick={() => setEnableEdit(true)}>{t('authAction.edit')}</Button>}</div>
-                        <div className="user-info-input"><span>{t('authAction.name')}:</span><Input disabled={!enableEdit} value={name} onChange={e => setName(e.target.value)} defaultValue={userInfo.name} /></div>
-                        <div className="user-info-input"><span>{t('authAction.userName')}:</span><Input disabled={!enableEdit} value={username} onChange={e => setUsername(e.target.value)} defaultValue={userInfo.username} /></div>
-                        <div className="user-info-input"><span>Email:</span><Input disabled={!enableEdit} value={email} onChange={e => setEmail(e.target.value)} defaultValue={userInfo.email} /></div>
-                        <div className="user-info-input"><span>{t('authAction.phone')}:</span><Input disabled={!enableEdit} value={phone} onChange={e => setPhone(e.target.value)} defaultValue={userInfo.phone} /></div>
+                        <div className="user-info-input"><span>{t('authAction.name')}:</span><Input disabled={!enableEdit} value={name}  onChange={e => setName(e.target.value)} defaultValue={userInfo.name} title={userInfo.name} /></div>
+                        <div className="user-info-input"><span>{t('authAction.userName')}:</span><Input disabled={!enableEdit} value={username} onChange={e => setUsername(e.target.value)} defaultValue={userInfo.username} title={userInfo.username} /></div>
+                        <div className="user-info-input"><span>Email:</span><Input disabled={!enableEdit} value={email} onChange={e => setEmail(e.target.value)} defaultValue={userInfo.email}  title={userInfo.email} /></div>
+                        <div className="user-info-input"><span>{t('authAction.phone')}:</span><Input disabled={!enableEdit} value={phone} onChange={e => setPhone(e.target.value)} defaultValue={userInfo.phone}  title={userInfo.phone} /></div>
                         <div className="user-info-input">
                             <span>{t('authAction.password')}:</span>
                             <Button className="ml-n3" color="dangerr" onClick={() => setIsOpenModal(true)}>{t('authAction.changePassword')}</Button>

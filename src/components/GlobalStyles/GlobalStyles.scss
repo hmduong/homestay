@@ -1,0 +1,49 @@
+:root {
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-center-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-jus-between {
+  display: flex;
+  justify-content: space-between;
+}
+
+.flex-align-center {
+  display: flex;
+  align-items: center;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+
+.avatar-droprown .left-130-mobile {
+  left: -130px !important;
+
+  &::before {
+    left: 135px !important;
+  }
+}
+
+.display_none {
+  display: none;
+}
