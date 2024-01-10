@@ -85,7 +85,7 @@ const Main = () => {
 
     const topHandler = async () => {
         setLoadingSearch(true)
-        const response = await getTop({ limit: 3 });
+        const response = await getTop({ limit: 6 });
         if (response.data.homestays) {
             setTopHomestays(response.data.homestays);
         }
