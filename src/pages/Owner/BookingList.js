@@ -59,7 +59,7 @@ function BookingList({ homestay }) {
         await getData(t)
     }
     useEffect(() => {
-        getData();
+        getData(tabIndex);
     }, [rerender]);
 
     const capitalizeFirstLetter = (string) => {

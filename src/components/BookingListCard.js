@@ -13,6 +13,7 @@ import Loading from "./Loading";
 import { useTranslation } from "react-i18next";
 
 const BookingListCard = ({ booking, triggerRerender }) => {
+    const envApi = process.env.REACT_APP_API_URL
     const dispatch = useDispatch();
     const { t } = useTranslation();
     useEffect(() => {
@@ -78,6 +79,7 @@ const BookingListCard = ({ booking, triggerRerender }) => {
             stayed: t('homestay.messageAlert.stayed'),
             declined: t('homestay.messageAlert.declined'),
             expired: t('homestay.messageAlert.expired'),
+            checkout: t('homestay.messageAlert.checkout'),
         }
         setIsOpenModal(true);
         setActionsEdit({
@@ -241,7 +243,7 @@ const BookingListCard = ({ booking, triggerRerender }) => {
                                     </h5>
                                 </Col>
                                 <Col md="12" className='m-2'>
-                                    <img width={400} height={400} src={`http://localhost:3333/bookings/${booking._id}/bill`} alt="" />
+                                    <img width={400} height={400} src={`${envApi}/bookings/${booking._id}/bill`} alt="" />
                                 </Col>
                                 <Col md="12" className='booking-submit'>
                                     <Button color='primary' onClick={() => updateBooking("confirmed")}>{t('confirm')}</Button>
@@ -260,12 +262,6 @@ const BookingListCard = ({ booking, triggerRerender }) => {
                             {t('stay')}
                         </Button>
                         <Button
-                            color="default"
-                            onClick={() => setIsOpenService(true)}
-                        >
-                            {t('services')}
-                        </Button>
-                        <Button
                             color="danger"
                             onClick={() => updateBooking("expired")}
                         >
@@ -279,7 +275,7 @@ const BookingListCard = ({ booking, triggerRerender }) => {
                             color="success"
                             onClick={() => updateBooking("checkout")}
                         >
-                            {t('stay')}
+                            {t('checkout')}
                         </Button>
                         <Button
                             color="default"

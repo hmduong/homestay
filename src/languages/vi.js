@@ -112,6 +112,7 @@ export default {
                 stayed: "Ở nhé?",
                 declined: "Xóa nhé?",
                 expired: "Xác nhận hết hạn?",
+                checkout: "Xác nhận trả phòng?",
             },
             map: 'Bản đồ',
             showMap: 'Hiển thị bản đồ',

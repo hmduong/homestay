@@ -37,6 +37,20 @@ export const optionsPie = {
   },
 };
 
+const options = {
+  scales: {
+    y: {
+      beginAtZero: true,
+      ticks: {
+        min: 50,
+        callback: function (value) {
+          return value.toFixed(0);
+        },
+      },
+    },
+  },
+};
+
 
 
 const Statistics = ({ homestayId }) => {
@@ -276,7 +290,7 @@ const Statistics = ({ homestayId }) => {
           <div>
             <div className="row" style={{ marginTop: "30px" }}>
               <div className="col-md-8">
-                <Bar data={list} />
+                <Bar data={list} options={options} />
               </div>
               <div className="col-md-4">
                 <Pie options={optionsPie} data={listPie} />
@@ -287,7 +301,7 @@ const Statistics = ({ homestayId }) => {
             </p>
             <div className="row" style={{ marginTop: "30px" }}>
               <div className="col-md-8">
-                <Bar data={quarterList} />
+                <Bar data={quarterList} options={options} />
               </div>
               <div className="col-md-4">
                 <Pie options={optionsPie} data={quarterListPie} />

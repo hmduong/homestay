@@ -55,8 +55,9 @@ const DetailHomestay = ({ homestay, owner, triggerRerender }) => {
     lat: defaultGeo.geoMap.get("Ha Noi")[1],
     zoom: [13],
   });
+  const envApi = process.env.REACT_APP_API_URL
   const imgLink = (id, idx = 0) =>
-    `http://localhost:3333/homestays/${id}/images?index=${idx}`;
+    `${envApi}/homestays/${id}/images?index=${idx}`;
 
   const defaultCoor = {
     lng: defaultGeo.geoMap.get("Ha Noi")[0],

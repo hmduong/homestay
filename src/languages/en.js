@@ -112,6 +112,7 @@ export default {
                 stayed: "Stay here?",
                 declined: "Delete?",
                 expired: "Confirm expired?",
+                checkout: "Confirm checkout?",
             },
             map: 'Map',
             showMap: 'Show map',

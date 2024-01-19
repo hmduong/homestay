@@ -5,7 +5,7 @@ import { useEffect } from "react";
 const HomestayCard = ({ homestay, adding, detail, newBooking }) => {
   const { t, i18n } = useTranslation();
   const imgLink = (id, idx = 0) =>
-    `http://localhost:3333/homestays/${id}/images?index=${idx}`;
+    `${process.env.REACT_APP_API_URL}/homestays/${id}/images?index=${idx}`;
   return homestay ? (
     <Card
       onClick={detail ? () => detail(homestay._id) : () => { }}
@@ -77,7 +77,7 @@ const HomestayCard = ({ homestay, adding, detail, newBooking }) => {
   ) : (
     <>
       <UncontrolledTooltip delay={0} placement="bottom" target="add-homestay">
-      {t('homestay.slug.create')}
+        {t('homestay.slug.create')}
       </UncontrolledTooltip>
       <Card
         onClick={adding}
