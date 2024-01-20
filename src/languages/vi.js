@@ -1,5 +1,6 @@
 export default {
     translation: {
+        submit: 'Ghi nhận',
         yes: 'Có',
         no: 'Không',
         cancel: 'Hủy',
@@ -140,6 +141,7 @@ export default {
             starGithub: 'Đánh dấu sao trên Github',
         },
         authAction: {
+            updateqr: 'Cập nhật QR',
             signIn: 'Đăng nhập',
             userName: 'Tên tài khoản',
             password: 'Mật khẩu',
@@ -157,7 +159,7 @@ export default {
             checkQR: 'Kiểm tra QR',
             edit: 'Chỉnh sửa',
             submit: 'Ghi nhận',
-            yourQR: 'Your QR',
+            yourQR: 'QR của bạn',
             activeAccount: 'Kích hoạt tài khoản',
             active: 'Kích hoạt',
             recentPassword: 'Mật khẩu cũ',

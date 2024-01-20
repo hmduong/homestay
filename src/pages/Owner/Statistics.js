@@ -37,20 +37,6 @@ export const optionsPie = {
   },
 };
 
-const options = {
-  scales: {
-    y: {
-      beginAtZero: true,
-      ticks: {
-        min: 50,
-        callback: function (value) {
-          return value.toFixed(0);
-        },
-      },
-    },
-  },
-};
-
 
 
 const Statistics = ({ homestayId }) => {
@@ -155,10 +141,9 @@ const Statistics = ({ homestayId }) => {
   };
 
 
-
-
   const [year, setYear] = useState(new Date().getFullYear());
   const [type, setType] = useState("Money");
+  const [step, setStep] = useState(200000);
   const [homestay, setHomeStay] = useState(null);
   const [list, setList] = useState({
     labels,
@@ -244,6 +229,25 @@ const Statistics = ({ homestayId }) => {
     getData();
   }, [year, type]);
 
+  const changeType = (type) => {
+    setType(type)
+    setStep(type === 'Money' ? 200000 : 1)
+  }
+
+
+
+  const options = {
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: {
+          stepSize: step,
+          precision: 0
+        },
+      },
+    },
+  };
+
   const years = (() => {
     var ys = []
     var thisYear = new Date().getFullYear()
@@ -279,7 +283,7 @@ const Statistics = ({ homestayId }) => {
           <select
             name="type"
             style={{ width: "30%", padding: "5px", margin: "5px" }}
-            onChange={(e) => setType(e.target.value)}
+            onChange={(e) => changeType(e.target.value)}
             value={type}
           >
             <option value="Money">{t('money')}</option>

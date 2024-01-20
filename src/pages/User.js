@@ -27,6 +27,8 @@ const User = () => {
     const [userInfo, setUserInfo] = useState(null);
     const [isOpenActive, setIsOpenActive] = useState(false)
     const [bankqr, setBankqr] = useState(null);
+    const [isOpenUpdate, setIsOpenUpdate] = useState(false)
+    const [bankqrupdate, setBankqrupdate] = useState(null);
     const [rerender, triggerRerender] = useState(false);
     const [enableEdit, setEnableEdit] = useState(false);
 
@@ -42,12 +44,38 @@ const User = () => {
     const [username, setUsername] = useState("");
     const [phone, setPhone] = useState("");
     const [email, setEmail] = useState();
+    const uploadBankqrupdate = async () => {
+        const err = validator({ bankqrupdate: bankqrupdate }, { empty: (v) => !v ? 'wut???' : null }, {})
+        if (!err) {
+            setLoading(true)
+            const res = await saveBankqr(bankqrupdate);
+            if (res.data._id) {
+                dispatch(
+                    actions.createAlert({
+                        message: t('alert.activeSuccessful'),
+                        type: "success"
+                    })
+                );
+                setIsOpenQr(false)
+                setIsOpenUpdate(false)
+                triggerRerender()
+            } else {
+                dispatch(
+                    actions.createAlert({
+                        message: t('alert.error'),
+                        type: "error"
+                    })
+                );
+            }
+            setLoading(false)
+        }
+    }
     const uploadBankqr = async () => {
         const err = validator({ bankqr: bankqr }, { empty: (v) => !v ? 'wut???' : null }, {})
         if (!err) {
             setLoading(true)
-            const res = await saveBankqr();
-            if (res._id) {
+            const res = await saveBankqr(bankqr);
+            if (res.data._id) {
                 setIsOpenActive(false)
                 dispatch(
                     actions.createAlert({
@@ -99,7 +127,7 @@ const User = () => {
         setEnableEdit(false)
         setLoading(false)
     }
-    const saveBankqr = async () => {
+    const saveBankqr = async (bankqr) => {
         const formData = new FormData();
         formData.append("bankqr", bankqr);
         const url = process.env.REACT_APP_API_URL + "/users/" + userInfo._id + "/banking";
@@ -185,10 +213,10 @@ const User = () => {
                     <div className="the-split the-split-mobile"></div>
                     <div className="user-text user-text-mobile">
                         <div className="user-info-header"><h3>{t('authAction.userInfo')}</h3> {enableEdit ? <Button color="success" onClick={editUser}>{t('authAction.save')}</Button> : <Button color="primary" onClick={() => setEnableEdit(true)}>{t('authAction.edit')}</Button>}</div>
-                        <div className="user-info-input"><span>{t('authAction.name')}:</span><Input disabled={!enableEdit} value={name}  onChange={e => setName(e.target.value)} defaultValue={userInfo.name} title={userInfo.name} /></div>
+                        <div className="user-info-input"><span>{t('authAction.name')}:</span><Input disabled={!enableEdit} value={name} onChange={e => setName(e.target.value)} defaultValue={userInfo.name} title={userInfo.name} /></div>
                         <div className="user-info-input"><span>{t('authAction.userName')}:</span><Input disabled={!enableEdit} value={username} onChange={e => setUsername(e.target.value)} defaultValue={userInfo.username} title={userInfo.username} /></div>
-                        <div className="user-info-input"><span>Email:</span><Input disabled={!enableEdit} value={email} onChange={e => setEmail(e.target.value)} defaultValue={userInfo.email}  title={userInfo.email} /></div>
-                        <div className="user-info-input"><span>{t('authAction.phone')}:</span><Input disabled={!enableEdit} value={phone} onChange={e => setPhone(e.target.value)} defaultValue={userInfo.phone}  title={userInfo.phone} /></div>
+                        <div className="user-info-input"><span>Email:</span><Input disabled={!enableEdit} value={email} onChange={e => setEmail(e.target.value)} defaultValue={userInfo.email} title={userInfo.email} /></div>
+                        <div className="user-info-input"><span>{t('authAction.phone')}:</span><Input disabled={!enableEdit} value={phone} onChange={e => setPhone(e.target.value)} defaultValue={userInfo.phone} title={userInfo.phone} /></div>
                         <div className="user-info-input">
                             <span>{t('authAction.password')}:</span>
                             <Button className="ml-n3" color="dangerr" onClick={() => setIsOpenModal(true)}>{t('authAction.changePassword')}</Button>
@@ -262,11 +290,42 @@ const User = () => {
                                             <Col md="12" className='m-2'>
                                                 <img width={400} height={400} src={process.env.REACT_APP_API_URL + "/users/" + userInfo._id + "/banking"} alt="" />
                                             </Col>
+                                            <Col md="12" className='booking-submit'>
+                                                <Button color='primary' onClick={() => setIsOpenUpdate(true)}>{t('update')}</Button>
+                                            </Col>
+                                        </Row>}
+                                    </Modal>
+                                    <Modal
+                                        className="modal-dialog-centered"
+                                        isOpen={isOpenUpdate}
+                                        toggle={() => setIsOpenUpdate(false)}
+                                    >
+
+                                        {loading ? <Loading /> : <Row>
+                                            <Col md={12} className="m-2 mt-3">
+                                                <h5>
+                                                    {t('authAction.updateqr')}
+                                                </h5>
+                                            </Col>
+                                            <Col md="12" className='m-2'>
+                                                <FormGroup>
+                                                    <Input
+                                                        type="file"
+                                                        accept=".jpg,.png"
+                                                        multiple
+                                                        onChange={(e) => setBankqrupdate(e.target.files[0])}
+                                                    />
+                                                </FormGroup>
+                                            </Col>
+                                            <Col md="12" className='booking-submit'>
+                                                <Button color='primary' onClick={uploadBankqrupdate}>{t('submit')}</Button>
+                                                <Button color='default' onClick={() => setIsOpenUpdate(false)}>{t('cancel')}</Button>
+                                            </Col>
                                         </Row>}
                                     </Modal>
                                 </> :
                                 <>
-                                    <Button color="primaryy" className="mt-5 btn" onClick={() => setIsOpenActive(true)}>{t('authAction.active')}</Button>
+                                    <Button color="primaryy" className="btn" onClick={() => setIsOpenActive(true)}>{t('authAction.active')}</Button>
                                     <Modal
                                         className="modal-dialog-centered"
                                         isOpen={isOpenActive}

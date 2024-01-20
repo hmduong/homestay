@@ -1,5 +1,6 @@
 export default {
     translation: {
+        submit: 'Submit',
         yes: 'Yes',
         no: 'No',
         cancel: 'Cancel',
@@ -140,6 +141,7 @@ export default {
             starGithub: 'Star on Github',
         },
         authAction: {
+            updateqr: 'Update QR',
             signIn: 'Sign in',
             userName: 'User Name',
             password: 'Password',
