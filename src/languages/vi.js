@@ -108,10 +108,10 @@ export default {
                 thisMonth: 'Tháng này',
             },
             messageAlert: {
-                accepted: "Ok nhé?",
+                accepted: "Xác nhận cho thuê?",
                 confirmed: "Xác nhận đặt cọc?",
-                stayed: "Ở nhé?",
-                declined: "Xóa nhé?",
+                stayed: "Xác nhận đã ở?",
+                declined: "Xác nhận từ chối?",
                 expired: "Xác nhận hết hạn?",
                 checkout: "Xác nhận trả phòng?",
             },

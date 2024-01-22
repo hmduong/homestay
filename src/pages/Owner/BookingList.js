@@ -6,18 +6,18 @@ import { useDispatch } from "react-redux";
 import { actions } from "store/AlertSlice"
 import Loading from "components/Loading";
 import { useTranslation } from "react-i18next";
+import Paginatior from "components/Paginatior";
 
 function BookingList({ homestay }) {
     const dispatch = useDispatch();
     const { t } = useTranslation();
 
     const [bookings, setBookings] = useState([]);
-    const [name, setName] = useState('');
-    const [date, setDate] = useState('');
     const [tabIndex, setTab] = useState(0);
     const [rerender, triggerRerender] = useState(false);
     const [loading, setLoading] = useState(false);
-    // const tabs = ['requested', 'accepted', 'stayed', 'declined'];
+    const [pagiTotal, setPagiTotal] = useState(0)
+    const [page, setPage] = useState(1)
     const tabs = [
         {
             title: t('requested'),
@@ -36,13 +36,15 @@ function BookingList({ homestay }) {
             value: 'declined',
         },
     ];
-    const getData = async (tab = 0) => {
+    const getData = async (limit, page) => {
         setLoading(true)
         let query =
-            `${process.env.REACT_APP_API_URL}/bookings/homestay/${homestay._id}?tab=${tabs[tab]?.value}&&username=${name}&&time=${date}`;
+            `${process.env.REACT_APP_API_URL}/bookings/homestay/${homestay._id}?tab=${tabs[tabIndex]?.value}&limit=${limit}&page=${page}`;
         const response = await getBookingListByHomestay(query);
         if (response.status === 200) {
             setBookings(response.data.bookingList);
+            setPagiTotal(response.data.totalCount || 0)
+            setPage(page)
         } else {
             dispatch(
                 actions.createAlert({
@@ -53,14 +55,16 @@ function BookingList({ homestay }) {
         }
         setLoading(false)
     }
-    const switchTab = async (t) => {
-        console.log(t)
+
+    const pagiCallback = async (idx) => {
+        await getData(10, idx)
+    }
+    const switchTab = (t) => {
         setTab(t)
-        await getData(t)
     }
     useEffect(() => {
-        getData(tabIndex);
-    }, [rerender]);
+        getData(10, 1);
+    }, [rerender, tabIndex]);
 
     const capitalizeFirstLetter = (string) => {
         return string.charAt(0).toUpperCase() + string.slice(1);
@@ -88,10 +92,11 @@ function BookingList({ homestay }) {
                     {tabs.map((tab, key) =>
                         <TabPane tabId={key} key={key}>
                             <Card className="booking-container shadow">
-                                {bookings && bookings.length > 0 ?
+                                {key === tabIndex && bookings && bookings.length > 0 ?
                                     <Row>
-                                        {bookings && bookings.map((booking, index) => <Col md='12' key={index}><BookingListCard booking={booking} triggerRerender={() => triggerRerender(!rerender)} /></Col>
+                                        {bookings.map((booking, index) => <Col md='12' key={index}><BookingListCard booking={booking} triggerRerender={() => triggerRerender(!rerender)} /></Col>
                                         )}
+                                        {bookings.length > 0 && <Paginatior refe="#searchResponse" numOfPage={pagiTotal} pagiCallback={pagiCallback} page={page} />}
                                     </Row>
                                     : <div className="nodata">{t('noData')}</div>
                                 }

@@ -20,7 +20,7 @@
 
 .homestay-card .each-slide {
     width: 100%;
-    height: 300px;
+    height: 250px;
 }
 
 // detail-homestay
@@ -28,7 +28,7 @@
 .detail-homestay {
     position: relative;
     display: flex;
-    height: 600px;
+    height: 500px;
     font-size: 18px;
     padding: 8px;
 
@@ -68,10 +68,11 @@
     width: 100%;
 
     &.homestay-info {
+        width: calc(100% - 16px);
         position: absolute;
-        bottom: 16px;
+        bottom: 24px;
         padding: 4px;
-        background: #ffffffaa;
+        background: #858585aa;
 
         .hi-first {
             display: flex;
@@ -378,7 +379,7 @@
 
 .card-overlay {
     position: absolute;
-    top: 270px;
+    top: 220px;
     left: 0;
     width: 100%;
     height: 30px;

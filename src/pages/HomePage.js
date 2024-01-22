@@ -21,6 +21,7 @@ import { actions } from "store/AlertSlice"
 import Loading from "components/Loading";
 import { getTop } from "services/homestayManagementService";
 import { useTranslation } from 'react-i18next';
+import Paginatior from "components/Paginatior";
 
 const Main = () => {
     const [cookies, setCookie, removeCookie] = useCookies(["role"]);
@@ -31,9 +32,10 @@ const Main = () => {
     const [homestays, setHomestays] = useState([]);
     const [topHomestays, setTopHomestays] = useState([]);
     const [loadingSearch, setLoadingSearch] = useState(false);
+    const [pagiTotal, setPagiTotal] = useState(0)
+    const [page, setPage] = useState(0)
     const [loadingTop, setLoadingTop] = useState(false);
     const dispatch = useDispatch();
-    const prices = [1000000, 2000000, 3000000, 4000000, 5000000]
     const { t, i18n } = useTranslation();
     const dateOnChange = async (date, isCheckin) => {
         if (date) {
@@ -73,18 +75,13 @@ const Main = () => {
         window.open(url, '_blank')
     };
 
-    const priceChange = (newPrice) => {
-        if (newPrice) setPrice(prices[newPrice - 1]);
-        else setPrice("")
-    }
-
     const cityChange = (newCity) => {
         if (newCity) setCity(defaultGeo.geoList[newCity - 1]);
         else setCity("")
     }
 
     const topHandler = async () => {
-        setLoadingSearch(true)
+        setLoadingTop(true)
         const response = await getTop({ limit: 6 });
         if (response.data.homestays) {
             setTopHomestays(response.data.homestays);
@@ -97,20 +94,22 @@ const Main = () => {
                 })
             );
         }
-        setLoadingSearch(false)
+        setLoadingTop(false)
     };
 
-    const searchHandler = async () => {
+    const searchHandler = async (pagi) => {
         const data = {
             city,
             checkin,
             checkout,
             price: price || 0
         };
-        setLoadingTop(true)
-        const response = await search(data);
+        setLoadingSearch(true)
+        const response = await search(data, pagi);
         if (response.status < 299) {
             setHomestays(response.data.homestays);
+            setPagiTotal(response.data.totalCount || 0)
+            setPage(pagi.page)
         } else {
             dispatch(
                 actions.createAlert({
@@ -119,23 +118,27 @@ const Main = () => {
                 })
             );
         }
-        setLoadingTop(false)
+        setLoadingSearch(false)
     };
+
+    const pagiCallback = async (idx) => {
+        await searchHandler({ limit: 3, page: idx })
+    }
 
     useEffect(() => {
         topHandler()
     }, [])
 
     useEffect(() => {
-        if (checkin || checkout || city || price) searchHandler(); else setHomestays([])
-    }, [checkin, checkout, city, price]);
+        if ((checkin && checkout) || city || (price === 0 || price > 199999)) searchHandler({ limit: 3, page: 1 }); else setHomestays([])
+    }, [(checkin && checkout), city, price]);
 
     if (cookies.role === "homestay owner") {
         return <Navigate to="/owner" />;
     } else {
         return (
             <div className="main-page">
-                <Row className="main-filter">
+                <Row className="main-filter" id="searchResponse">
                     <Col md={12} className="main-page-header">
                         <i className="fa fa-home" aria-hidden="true"></i>
                         <h2>{t('search.title')}</h2>
@@ -182,36 +185,11 @@ const Main = () => {
                             <p className="input-label">{t('price')}</p>
                             <Input
                                 placeholder={t('search.priceHolder')}
-                                className="main-filter-select"
-                                type="text"
+                                type="number"
                                 value={price}
-                            ></Input>
-                            <Input
-                                className="main-filter-select-dropdown"
-                                type="select"
-                                onChange={(e) => priceChange(e.target.selectedIndex)}
+                                onChange={(e) => setPrice(e.target.value)}
                             >
-                                <option
-                                    style={{ display: "none" }}
-                                    value={null}
-                                ></option>
-                                {prices.map((price, index) => (
-                                    <option key={index} value={price}>
-                                        {price}
-                                    </option>
-                                ))}
                             </Input>
-                            {price != 0 && price != null && (
-                                <div
-                                    className="main-select-clear"
-                                    onClick={() => priceChange(null)}
-                                >
-                                    <i
-                                        className="fa fa-times"
-                                        aria-hidden="true"
-                                    ></i>
-                                </div>
-                            )}
                         </FormGroup>
                     </Col>
                     <Col md="3">
@@ -257,11 +235,14 @@ const Main = () => {
                 </Row>
                 {loadingSearch ? <Loading /> : <Row>
                     {homestays && (
-                        homestays.map((homestay, index) => (
-                            <Col key={index} className="mb-4" md="4">
-                                <HomestayCard detail={detail} homestay={homestay} />
-                            </Col>
-                        ))
+                        <>
+                            {homestays.map((homestay, index) => (
+                                <Col key={index} className="mb-4" md="4">
+                                    <HomestayCard detail={detail} homestay={homestay} />
+                                </Col>
+                            ))}
+                            {homestays.length > 0 && <Paginatior refe="#searchResponse" numOfPage={pagiTotal} pagiCallback={pagiCallback} page={page} />}
+                        </>
                     )}
                 </Row>}
                 <Row>

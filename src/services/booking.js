@@ -5,8 +5,8 @@ import {
   postAsyncWithToken,
   putAsyncWithToken,
 } from "utils/request";
-export async function search(data) {
-  const url = process.env.REACT_APP_API_URL + "/search";
+export async function search(data, pagi = {}) {
+  const url = `${process.env.REACT_APP_API_URL}/search?limit=${pagi.limit || 9}&page=${pagi.page || 1}`;
   return postAsync(url, data);
 }
 
@@ -21,6 +21,7 @@ export async function editBook(id, data) {
 }
 
 export async function getBookingListByHomestay(url) {
+  console.log("hehe", url);
   return getAsyncWithToken(url);
 }
 
@@ -29,8 +30,8 @@ export async function getBooking(id) {
   return getAsyncWithToken(url);
 }
 
-export async function getYourBooking(id) {
-  const url = process.env.REACT_APP_API_URL + "/bookings/your-booking";
+export async function getYourBooking(limit, page) {
+  const url = process.env.REACT_APP_API_URL + `/bookings/your-booking?limit=${limit}&page=${page}`;
   return getAsyncWithToken(url);
 }
 

@@ -10,6 +10,7 @@ import Loading from "components/Loading";
 import { editBook } from 'services/booking';
 import { multipleFilesUpload } from "utils/request";
 import { useTranslation } from 'react-i18next';
+import { getReviewById } from 'services/review';
 
 const BookingCard = ({ indexkey, booking, triggerRerender }) => {
     const dispatch = useDispatch();
@@ -19,12 +20,15 @@ const BookingCard = ({ indexkey, booking, triggerRerender }) => {
     }
     const [rate, setRate] = useState(5)
     const [isOpenReview, setIsOpenReview] = useState(false)
+    const [isOpenCheckReview, setIsOpenCheckReview] = useState(false)
     const [isOpenDeposit, setIsOpenDeposit] = useState(false)
     const [validateErr, setValidateErr] = useState({})
     const [isExpand, setIsExpand] = useState(false)
     const [ani, toggleAni] = useState(false)
     const [loading, setLoading] = useState(false);
     const [bill, setBill] = useState(null);
+    const [checkLoading, setCheckLoading] = useState(false);
+    const [reviewed, setReviewed] = useState({});
     const navigate = useNavigate()
     const check = () => {
         navigate(`/homestay/${booking.homestay._id}`)
@@ -55,6 +59,7 @@ const BookingCard = ({ indexkey, booking, triggerRerender }) => {
                     })
                 );
             }
+            triggerRerender()
             setLoading(false)
             setIsOpenReview(false)
             setValidateErr({})
@@ -63,8 +68,19 @@ const BookingCard = ({ indexkey, booking, triggerRerender }) => {
             toggleAni(!ani)
         }
     }
+    const openCheckReview = async () => {
+        setIsOpenCheckReview(true)
+        setCheckLoading(true)
+        const res = await getReviewById(booking._id);
+        if (res.data.review) {
+            setReviewed(res.data.review)
+        } else {
+            setReviewed({})
+        }
+        setCheckLoading(false)
+    }
     const sendDeposit = async () => {
-        const err = validator({ bill: bill }, { empty: (v) => !v ? 'wut???' : null }, {})
+        const err = validator({ bill: bill }, { empty: (v) => !v ? 'wut???' : null, image: (v) => v > 1024 * 1024 ? "sdad" : null }, {})
         if (!err) {
             setLoading(true)
             let data = {
@@ -216,7 +232,7 @@ const BookingCard = ({ indexkey, booking, triggerRerender }) => {
                                     </Col>
                                     <Col md="12" className='m-2'>
                                         <FormGroup>
-                                            <p className={`mb-0 input-label ${validateErr.bill ? (ani ? 'err1' : 'err2') : ''}`} >{t('uploadBillImage')}</p>
+                                            <p className={`mb-0 input-label ${validateErr.bill ? (ani ? 'err1' : 'err2') : ''}`} >{t('uploadBillImage')} (1MB)</p>
                                             <Input
                                                 type="file"
                                                 accept=".jpg,.png"
@@ -229,6 +245,53 @@ const BookingCard = ({ indexkey, booking, triggerRerender }) => {
                                         <Button color='primary' onClick={sendDeposit}>{t('authAction.submit')}</Button>
                                     </Col>
                                 </Row>}
+                            </Modal>
+                        </>
+                        }
+                        {booking.status === 'reviewed' && <>
+                            <Button className='checkhomestay' id='reviewedBtn' onClick={openCheckReview} color='warning'>
+                                {t('checkReview')}
+                            </Button>
+                            <Modal
+                                className="modal-dialog-centered"
+                                isOpen={isOpenCheckReview}
+                                toggle={() => setIsOpenCheckReview(false)}
+                            >
+
+                                {checkLoading ? <Loading /> : <>
+                                    <div className="modal-header">
+                                        <h4
+                                            className="modal-title"
+                                            style={{ fontWeight: "700" }}
+                                            id="modal-title-default"
+                                        >
+                                            {booking.homestay.name}
+                                        </h4>
+                                        <button
+                                            aria-label="Close"
+                                            className="close"
+                                            data-dismiss="modal"
+                                            type="button"
+                                            onClick={() => setIsOpenCheckReview(false)}
+                                        >
+                                            <span>×</span>
+                                        </button>
+                                    </div>
+                                    <div className="modal-body">
+                                        <Row>
+                                            <Col md="12" className='booking-rate'>
+                                                <i style={{ color: 'yellow', marginRight: '8px', fontSize: '36px' }} className={`fa fa-star`} aria-hidden="true"></i>
+                                                <i style={{ color: 'yellow', marginRight: '8px', fontSize: '36px' }} className={`fa fa-star${reviewed.rate > 1 ? '' : '-o'}`} aria-hidden="true"></i>
+                                                <i style={{ color: 'yellow', marginRight: '8px', fontSize: '36px' }} className={`fa fa-star${reviewed.rate > 2 ? '' : '-o'}`} aria-hidden="true"></i>
+                                                <i style={{ color: 'yellow', marginRight: '8px', fontSize: '36px' }} className={`fa fa-star${reviewed.rate > 3 ? '' : '-o'}`} aria-hidden="true"></i>
+                                                <i style={{ color: 'yellow', marginRight: '8px', fontSize: '36px' }} className={`fa fa-star${reviewed.rate > 4 ? '' : '-o'}`} aria-hidden="true"></i>
+                                            </Col>
+                                            <Col md="12" className='booking-rate'>
+                                                <h6 className='mr-1'>Comment: </h6> <p>{reviewed.comment}</p>
+                                            </Col>
+                                        </Row>
+                                    </div>
+                                </>}
                             </Modal>
                         </>
                         }

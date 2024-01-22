@@ -22,8 +22,8 @@ export async function editHomestay(id, data) {
   return putAsyncWithToken(url, data);
 }
 
-export async function getListHomestay(userid) {
-  const url = process.env.REACT_APP_API_URL + `/homestays?userid=${userid}`;
+export async function getListHomestay(userid, limit, page) {
+  const url = process.env.REACT_APP_API_URL + `/homestays?userid=${userid}&limit=${limit}&page=${page}`;
   return getAsyncWithToken(url);
 }
 

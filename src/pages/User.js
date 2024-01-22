@@ -45,7 +45,7 @@ const User = () => {
     const [phone, setPhone] = useState("");
     const [email, setEmail] = useState();
     const uploadBankqrupdate = async () => {
-        const err = validator({ bankqrupdate: bankqrupdate }, { empty: (v) => !v ? 'wut???' : null }, {})
+        const err = validator({ bankqrupdate: bankqrupdate }, { empty: (v) => !v ? 'wut???' : null, image: (v) => v.size > 1024 * 1024 ? "sdad" : null }, {})
         if (!err) {
             setLoading(true)
             const res = await saveBankqr(bankqrupdate);
@@ -71,7 +71,7 @@ const User = () => {
         }
     }
     const uploadBankqr = async () => {
-        const err = validator({ bankqr: bankqr }, { empty: (v) => !v ? 'wut???' : null }, {})
+        const err = validator({ bankqr: bankqr }, { empty: (v) => !v ? 'wut???' : null, image: (v) => v.size > 1024 * 1024 ? "sdad" : null }, {})
         if (!err) {
             setLoading(true)
             const res = await saveBankqr(bankqr);

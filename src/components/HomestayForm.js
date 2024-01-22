@@ -40,9 +40,33 @@ const HomestayForm = ({ turnOff, triggerRerender, editPayload }) => {
         form.longitude = mapCoor.lng;
         form.latitude = mapCoor.lat;
         const err = validator(
-            form,
-            { empty: (v) => (!v ? "wut???" : null) },
-            { pool: ["empty"] }
+            { ...form, files: files },
+            {
+                empty: (v) => (!v ? "wut???" : null),
+                image: (v) => {
+                    if (!Array.from(v).every(el => el.size < (1024 * 1024))) {
+                        dispatch(
+                            actions.createAlert({
+                                message: "Invalid image! Too big.",
+                                type: "error"
+                            })
+                        );
+                    };
+                    return Array.from(v).every(el => el.size < (1024 * 1024)) ? null : "bro"
+                }
+            },
+            {
+                pool: ["empty", "image"],
+                name: ["image"],
+                address: ["image"],
+                city: ["image"],
+                price: ["image"],
+                people: ["image"],
+                description: ["image"],
+                pool: ["image"],
+                longitude: ["image"],
+                latitude: ["image"],
+            }
         );
         if (!err) {
             setLoading(true)
@@ -193,7 +217,7 @@ const HomestayForm = ({ turnOff, triggerRerender, editPayload }) => {
                         </Col>
                         <Col md="6">
                             <FormGroup style={{ position: 'relative' }}>
-                                <p className={`input-label`}>{t('images')}</p>
+                                <p className={`input-label ${validateErr.files ? (ani ? "err1" : "err2") : ""}`}>{t('images')} (1MB)</p>
                                 <Input
                                     className="img-input form-control"
                                     type="file"
@@ -206,10 +230,7 @@ const HomestayForm = ({ turnOff, triggerRerender, editPayload }) => {
                         </Col>
                         <Col md="6">
                             <FormGroup>
-                                <p
-                                    className={`input-label ${validateErr.address ? (ani ? "err1" : "err2") : ""
-                                        }`}
-                                >
+                                <p className={`input-label ${validateErr.address ? (ani ? "err1" : "err2") : ""}`}>
                                     {t('address')}
                                 </p>
                                 <Input

@@ -307,6 +307,7 @@ const HomestaySlug = () => {
                     {thisHomestay && <>
                         <BookingList homestay={thisHomestay} />
                         <Statistics homestayId={thisHomestay._id} />
+                        <Review homestay={thisHomestay} />
                     </>}
                 </>
                 : <Container className="pd-0-mobile">
@@ -320,8 +321,9 @@ const HomestaySlug = () => {
                             ))
                         )}
                     </Row>}
+                    {thisHomestay && <Review homestay={thisHomestay} />}
                 </Container>}
-            {thisHomestay && <Review homestay={thisHomestay} />}
+
         </>
     );
 };

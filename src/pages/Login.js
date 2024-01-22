@@ -51,10 +51,11 @@ const Login = () => {
         setCookie("userid", response?.user._id, { path: '/' });
         setCookie("role", response.user.role, { path: '/' });
         setCookie("name", response.user.name, { path: '/' });
-        let owner = '/'
+        let owner = sessionStorage.getItem('pearRedirect')
         if (response.user.role === 'homestay owner')
           owner = '/owner';
         navigate(owner)
+        sessionStorage.removeItem('pearRedirect')
       } else {
         dispatch(
           actions.createAlert({

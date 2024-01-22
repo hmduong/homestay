@@ -12,6 +12,7 @@ import { useDispatch } from "react-redux";
 import { actions } from "store/AlertSlice"
 import Loading from "components/Loading";
 import { useTranslation } from "react-i18next";
+import Paginatior from "components/Paginatior";
 
 const Discount = () => {
     const { t, i18n } = useTranslation();
@@ -34,25 +35,33 @@ const Discount = () => {
     const [ani, toggleAni] = useState(false)
     const [validateErr, setValidateErr] = useState({})
     const [rerender, triggerRerender] = useState(false)
+    const [pagiTotal, setPagiTotal] = useState(0)
+    const [page, setPage] = useState(1)
+    const fetchData = async (limit, page) => {
+        setLoading(true)
+        const { data } = await getListDiscount(cookies.userid);
+        let discounts = []
+        if (data.activeDiscounts && data.inactiveDiscounts) {
+            discounts = data.activeDiscounts.concat(data.inactiveDiscounts)
+        }
+        setData(discounts);
+        setPagiTotal(data.totalCount || 0)
+        setPage(page)
+        setLoading(false)
+    };
+
+    const pagiCallback = async (idx) => {
+        await fetchData(12, idx)
+    }
 
     useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true)
-            const { data } = await getListDiscount(cookies.userid);
-            let discounts = []
-            if (data.activeDiscounts && data.inactiveDiscounts) {
-                discounts = data.activeDiscounts.concat(data.inactiveDiscounts)
-            }
-            setData(discounts);
-            setLoading(false)
-        };
-        fetchData();
-    }, []);
+        fetchData(12, 1);
+    }, [rerender]);
 
     const addDiscount = async () => {
-        const err = validator(form, { empty: (v) => !v ? 'wut???' : null }, {})
+        form.homestays = homestaysApply.map(homestay => homestay._id)
+        const err = validator(form, { zero: (v) => v.length > 0 ? null : 'wow', empty: (v) => !v ? 'wut???' : null, date: (v) => form.checkin > form.checkout }, { percentage: 'date,zero', quantity: 'date,zero', homestays: 'date', checkin: 'zero', checkout: 'zero' })
         if (!err) {
-            form.homestays = homestaysApply.map(homestay => homestay._id)
             if (form.homestays.length === 0) {
                 dispatch(
                     actions.createAlert({
@@ -94,6 +103,16 @@ const Discount = () => {
             toggleAni(!ani)
         }
     }
+    const turnOffModal = () => {
+        setShow(false)
+        setForm({
+            percentage: null,
+            quantity: null,
+            checkin: null,
+            checkout: null,
+        })
+        setValidateErr({});
+    }
     const openModal = async () => {
         setShow(true)
         const response = await getListHomestay(cookies.userid);
@@ -113,17 +132,15 @@ const Discount = () => {
                 <Row>
                     {
                         data ? data.map((discount, index) => <Col key={index} className="mb-5" md="4">
-                            <DiscountTicket discount={discount} />
+                            <DiscountTicket discount={discount} triggerRerender={() => triggerRerender(!rerender)} />
                         </Col>) : <></>
                     }
-                    <Col className="mb-5" md="4">
-                        <DiscountTicket onClick={openModal} />
-                    </Col>
+                    {data && data.length > 0 && <Paginatior refe="#searchResponse" numOfPage={pagiTotal} pagiCallback={pagiCallback} page={page} />}
                 </Row>
                 <Modal
                     className="modal-dialog-centered"
                     isOpen={show}
-                    toggle={() => setShow(false)}
+                    toggle={turnOffModal}
                 >
                     {loading2 ? <Loading /> : <>
                         <div className="modal-header">
@@ -135,7 +152,7 @@ const Discount = () => {
                                 className="close"
                                 data-dismiss="modal"
                                 type="button"
-                                onClick={() => setShow(false)}
+                                onClick={turnOffModal}
                             >
                                 <span>×</span>
                             </button>
@@ -144,7 +161,7 @@ const Discount = () => {
                             <Row>
                                 <Col md="12">
                                     <FormGroup style={{ marginBottom: '16px', position: 'relative' }}>
-                                        <p className={`input-label`}>Homestays: </p>
+                                        <p className={`input-label ${validateErr.homestays ? (ani ? 'err1' : 'err2') : ''}`}>Homestays: </p>
                                         <div className="homestays-picker">
                                             <div className="homestays-apply">
                                                 {homestaysApply.map((homestay, key) => <span key={key}>{homestay.name}, </span>)}
@@ -222,7 +239,7 @@ const Discount = () => {
                                 color="link"
                                 data-dismiss="modal"
                                 type="button"
-                                onClick={() => setShow(false)}
+                                onClick={turnOffModal}
                             >
                                 {t('cancel')}
                             </Button>

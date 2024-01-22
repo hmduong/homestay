@@ -1,9 +1,8 @@
-
 @import '/src/styles/mixin.scss';
 $screen_tablet: 62rem;
 
 .homestay-card {
-    height: 500px;
+    height: 430px;
 }
 
 .homestay-card .react-slideshow-container .nav {
@@ -71,7 +70,7 @@ $screen_tablet: 62rem;
 
 .add-homestay {
     width: 100%;
-    height: 500px;
+    height: 430px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -87,55 +86,56 @@ $screen_tablet: 62rem;
 
 // @media (min-width: $screen_tablet) {
 
-    .drawer .sidebar-main {
-        transform: translateX(0);
+.drawer .sidebar-main {
+    transform: translateX(0);
+}
+
+.sidebar-slider.drawer {
+    width: clamp(13.75rem, 20vw, 18.75rem);
+    height: 300px;
+}
+
+.sidebar-main {
+    position: fixed;
+    // width: 300px;
+    width: clamp(13.75rem, 20vw, 18.75rem);
+    height: 100vh;
+    left: 0;
+    z-index: 100;
+    background: #5e72e4;
+    transform: translateX(-100%);
+    transition: transform 0.3s;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-row {
+    cursor: pointer;
+    width: 100%;
+    height: 80px;
+    transition: background 0.3s;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 16px;
+    font-size: 20px;
+
+    i {
+        margin-right: 8px;
     }
 
-    .sidebar-slider.drawer {
-        width: clamp(13.75rem, 20vw, 18.75rem);
-        height: 300px;
-    }
+    color: #fff;
+}
 
-    .sidebar-main {
-        position: fixed;
-        // width: 300px;
-        width: clamp(13.75rem, 20vw, 18.75rem);
-        height: 100vh;
-        left: 0;
-        z-index: 100;
-        background: #5e72e4;
-        transform: translateX(-100%);
-        transition: transform 0.3s;
-        display: flex;
-        flex-direction: column;
-    }
+.sidebar-row:hover {
+    background: #ffffff67;
+    color: inherit;
+}
 
-    .sidebar-row {
-        cursor: pointer;
-        width: 100%;
-        height: 80px;
-        transition: background 0.3s;
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
-        padding: 16px;
-        font-size: 20px;
-
-        i {
-            margin-right: 8px;
-        }
-
-        color: #fff;
-    }
-
-    .sidebar-row:hover {
-        background: #ffffff67;
-        color: inherit;
-    }
 // }
 
 @media (max-width: $screen_tablet) {
-.sidebar-slider{
+    .sidebar-slider {
         position: absolute;
         // width: 300px;
         left: 0;

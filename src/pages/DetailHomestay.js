@@ -86,6 +86,7 @@ const DetailHomestay = ({ homestay, owner, triggerRerender }) => {
       await fetchDiscount();
       setIsOpenForm(true);
     } else {
+      sessionStorage.setItem('pearRedirect', `/homestay/${id}`)
       navigate("/login");
     }
   };
@@ -93,6 +94,7 @@ const DetailHomestay = ({ homestay, owner, triggerRerender }) => {
     if (cookies.userid) {
       setIsOpenChat(true);
     } else {
+      sessionStorage.setItem('pearRedirect', `/homestay/${id}`)
       navigate("/login");
     }
   };
@@ -271,7 +273,7 @@ const DetailHomestay = ({ homestay, owner, triggerRerender }) => {
           </Slide>
           <div className="homestay-info">
             <div className="hi-first">
-              <h2 className="detail-price">{homestay.price}$</h2>
+              <h2 className="detail-price">{(homestay.price).toLocaleString('en-US')}$</h2>
               <div className="detail-rate">
                 {new Array(Math.round(5)).fill().map((q, key) => (
                   <i
@@ -581,7 +583,7 @@ const DetailHomestay = ({ homestay, owner, triggerRerender }) => {
                     {
                       <Col md="12">
                         <p style={{ marginBottom: 0, marginTop: "8px" }}>
-                          {t("money")}: {homestay.price}
+                          {t("money")}: {(homestay.price).toLocaleString('en-US')}
                         </p>
                       </Col>
                     }

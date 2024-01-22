@@ -30,7 +30,7 @@ const HomestayCard = ({ homestay, adding, detail, newBooking }) => {
         )}
       </Slide>
       <div className="card-overlay">
-        <div className="card-price">{homestay.price}$</div>
+        <div className="card-price">{(homestay.price).toLocaleString('en-US')}$</div>
         <div className="card-rate">
           {new Array(5).fill(0).map((q, key) => (
             <i

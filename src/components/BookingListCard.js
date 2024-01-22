@@ -61,7 +61,7 @@ const BookingListCard = ({ booking, triggerRerender }) => {
             deposit: booking.deposit,
             email: booking.email,
             homestay: booking.homestay,
-            money: booking.money,
+            money: payload.services ? (booking.deposit * 10 / 8) + payload.services.reduce((accumulator, element) => accumulator + element.money, 0) : booking.money,
             people: booking.people,
             phone: booking.phone,
             status: payload.status || booking.status,
@@ -141,6 +141,7 @@ const BookingListCard = ({ booking, triggerRerender }) => {
                     type: "success"
                 })
             );
+            triggerRerender()
             setIsOpenService(false);
         } else {
             dispatch(

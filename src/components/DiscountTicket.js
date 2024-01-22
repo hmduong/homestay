@@ -7,7 +7,7 @@ import { actions } from "store/AlertSlice"
 import Loading from "components/Loading";
 import { useTranslation } from "react-i18next";
 
-const DiscountTicket = ({ discount, onClick }) => {
+const DiscountTicket = ({ discount, onClick, triggerRerender }) => {
     const dispatch = useDispatch();
     const { t } = useTranslation();
 
@@ -29,6 +29,7 @@ const DiscountTicket = ({ discount, onClick }) => {
                 })
             );
             setHide(true)
+            triggerRerender()
         } else {
             dispatch(
                 actions.createAlert({

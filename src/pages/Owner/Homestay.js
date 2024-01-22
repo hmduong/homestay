@@ -8,6 +8,7 @@ import { actions } from "store/AlertSlice"
 import Loading from "components/Loading";
 import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
+import Paginatior from "components/Paginatior";
 
 const Homestay = () => {
     const { t, i18n } = useTranslation();
@@ -17,6 +18,8 @@ const Homestay = () => {
     const [cookies, setCookie, removeCookie] = useCookies(["userid"]);
     const [show, setShow] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [pagiTotal, setPagiTotal] = useState(0)
+    const [page, setPage] = useState(1)
     const dispatch = useDispatch();
 
     const detail = (id) => {
@@ -27,24 +30,30 @@ const Homestay = () => {
         window.open(url, '_blank')
     };
 
+    const fetchData = async (limit, page) => {
+        setLoading(true)
+        const data = await getListHomestay(cookies.userid, limit, page);
+        if (data.data) {
+            setHomestays(data.data.homestays);
+            setNews(data.data.bookings);
+            setPagiTotal(data.data.totalCount || 0)
+            setPage(page)
+        } else {
+            dispatch(
+                actions.createAlert({
+                    message: t('alert.error'),
+                    type: "error"
+                })
+            );
+        }
+        setLoading(false)
+    };
+
+    const pagiCallback = async (idx) => {
+        await fetchData(12, idx)
+    }
     useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true)
-            const data = await getListHomestay(cookies.userid);
-            if (data.data) {
-                setHomestays(data.data.homestays);
-                setNews(data.data.bookings);
-            } else {
-                dispatch(
-                    actions.createAlert({
-                        message: t('alert.error'),
-                        type: "error"
-                    })
-                );
-            }
-            setLoading(false)
-        };
-        fetchData();
+        fetchData(12, 1);
     }, [rerender]);
     const checkNew = (id) => {
         const found = news.find((newId) => newId === id);
@@ -64,22 +73,24 @@ const Homestay = () => {
             </div>
             {loading ? <Loading /> : <Row>
                 {homestays ? (
-                    homestays.map((homestay, index) => (
-                        <Col key={index} className="mb-4" md="3">
-                            <HomestayCard
-                                detail={detail}
-                                newBooking={checkNew(homestay._id)}
-                                homestay={homestay}
-                            />
-                        </Col>
-                    ))
-                ) : (
-                    <></>
-                )}
-                <Col className="mb-4" md="3">
-                    <HomestayCard adding={() => setShow(true)} />
-                    {show && <HomestayForm turnOff={() => setShow(false)} triggerRerender={() => triggerRerender(!rerender)} />}
-                </Col>
+                    <>
+                        <>
+                            {homestays.map((homestay, index) => (
+                                <Col key={index} className="mb-4" md="3">
+                                    <HomestayCard
+                                        detail={detail}
+                                        newBooking={checkNew(homestay._id)}
+                                        homestay={homestay}
+                                    />
+                                </Col>))}
+                        </>
+                        <>{homestays.length > 0 && <Paginatior refe="#searchResponse" numOfPage={pagiTotal} pagiCallback={pagiCallback} page={page} />}</>
+                    </>
+                )
+                    : (
+                        <></>
+                    )}
+                {show && <HomestayForm turnOff={() => setShow(false)} triggerRerender={() => triggerRerender(!rerender)} />}
             </Row>}
         </>
     );
