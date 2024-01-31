@@ -13,6 +13,7 @@ import Loading from "./Loading";
 import { useTranslation } from "react-i18next";
 
 const BookingListCard = ({ booking, triggerRerender }) => {
+    const [detailBooking, setDetailBooking] = useState(null)
     const envApi = process.env.REACT_APP_API_URL
     const dispatch = useDispatch();
     const { t } = useTranslation();
@@ -20,6 +21,7 @@ const BookingListCard = ({ booking, triggerRerender }) => {
         const fetch = async () => {
             const response = await getBooking(booking._id);
             if (response.data) {
+                setDetailBooking(response.data.booking)
                 setServiceList(response.data.services);
                 setServicesUsed(response.data.servicesBooking);
                 setServices(response.data.servicesBooking);
@@ -169,7 +171,7 @@ const BookingListCard = ({ booking, triggerRerender }) => {
                 <div className="bli-show">
                     <div style={{ width: '15%' }}>
                         <h6>Visitor</h6>
-                        <p>{booking.user.name}</p>
+                        {detailBooking && <p>{detailBooking.user.name}</p>}
                     </div>
                     <div style={{ width: '25%' }}>
                         <h6>{t('time')}</h6>
@@ -278,12 +280,12 @@ const BookingListCard = ({ booking, triggerRerender }) => {
                         >
                             {t('checkout')}
                         </Button>
-                        <Button
+                        {/* <Button
                             color="default"
                             onClick={() => setIsOpenService(true)}
                         >
                             {t('services')}
-                        </Button>
+                        </Button> */}
                     </>
                 )}
                 <Modal
@@ -329,7 +331,7 @@ const BookingListCard = ({ booking, triggerRerender }) => {
                         </div>
                     </>}
                 </Modal>
-                <Modal
+                {/* <Modal
                     className="modal-dialog-centered"
                     isOpen={isOpenService}
                     toggle={() => setIsOpenService(false)}
@@ -406,7 +408,7 @@ const BookingListCard = ({ booking, triggerRerender }) => {
                             </Button>
                         </div>
                     </>}
-                </Modal>
+                </Modal> */}
             </div>
         </div>
     );

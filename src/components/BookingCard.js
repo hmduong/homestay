@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Input, Button, Card, Col, FormGroup, Modal, Row, UncontrolledTooltip } from 'reactstrap'
 import { review } from 'services/review';
@@ -11,6 +11,7 @@ import { editBook } from 'services/booking';
 import { multipleFilesUpload } from "utils/request";
 import { useTranslation } from 'react-i18next';
 import { getReviewById } from 'services/review';
+import { getBooking } from 'services/booking';
 
 const BookingCard = ({ indexkey, booking, triggerRerender }) => {
     const dispatch = useDispatch();
@@ -30,6 +31,23 @@ const BookingCard = ({ indexkey, booking, triggerRerender }) => {
     const [checkLoading, setCheckLoading] = useState(false);
     const [reviewed, setReviewed] = useState({});
     const navigate = useNavigate()
+    const [detailBooking, setDetailBooking] = useState(null)
+    useEffect(() => {
+        const fetch = async () => {
+            const response = await getBooking(booking._id);
+            if (response.data) {
+                setDetailBooking(response.data.booking)
+            } else {
+                dispatch(
+                    actions.createAlert({
+                        message: "Can't load booking's services",
+                        type: "error"
+                    })
+                );
+            }
+        };
+        fetch();
+    }, []);
     const check = () => {
         navigate(`/homestay/${booking.homestay._id}`)
     }
@@ -139,7 +157,7 @@ const BookingCard = ({ indexkey, booking, triggerRerender }) => {
                 <div className='booking-info' onClick={() => setIsExpand(!isExpand)}>
                     <div className='bi-info biname'>
                         <h6>{t('name')}</h6>
-                        <h5 onClick={check}>{booking.homestay.name}</h5>
+                        {detailBooking &&<h5 onClick={check}>{detailBooking.homestay.name}</h5>}
                     </div>
                     <div className='bi-info bitime'>
                         <h6>{t('time')}</h6>
@@ -158,7 +176,7 @@ const BookingCard = ({ indexkey, booking, triggerRerender }) => {
                 {isExpand && <div className='booking-expand'>
                     <div style={{ width: '35%' }}>
                         <div className='bi-expand bicity'>
-                            <h6>{t('city')}:</h6> <p>{booking.homestay.city}</p>
+                        <h6>{t('city')}:</h6> <p>{booking.homestay.city}</p>
                         </div>
                         <div className='bi-expand biaddress'>
                             <h6>{t('address')}:</h6> <p>{booking.homestay.address}</p>

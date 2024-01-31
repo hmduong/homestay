@@ -84,6 +84,9 @@ export default {
                     header: 'Xóa homestay',
                     body: 'Bạn có chắc muốn xóa homestay',
                 },
+                old: 'Ảnh hiện tại',
+                image: 'Sửa ảnh',
+                imageHeader: 'Sửa ảnh',
                 discount: 'Giảm giá',
                 edit: 'Chỉnh sửa homestay',
                 create: 'Tạo mới homestay',
@@ -122,6 +125,7 @@ export default {
             title: 'Tìm kiếm',
             selectCity: 'Chọn thành phố',
             priceHolder: 'Mức giá',
+            people: 'Chỗ',
             address: {
                 hanoi: 'Hà Nội',
                 danang: 'Đà Nẵng',
@@ -186,6 +190,7 @@ export default {
             activeSuccessful: 'Kích hoạt thành công!',
             depositSuccessful: 'Cọc tiền thành công!',
             sentMessage: 'Đã gửi tin nhắn!',
+            editedImage: 'Đã chỉnh sửa ảnh!',
             editedHomestay: 'Đã chỉnh sửa homestay!',
             createdHomestay: 'Đã thêm homestay!',
             updatedService: 'Đã cập nhật dịch vụ!',
@@ -211,6 +216,15 @@ export default {
                 dec: "Tháng 12",
             },
             quater: 'Quý'
-        }
+        },
+        attrs0: 'Bể bơi',
+        attrs1: 'Bữa sáng',
+        attrs2: 'Bãi đỗ xe',
+        attrs3: 'Wifi',
+        attrs4: 'Bếp',
+        attrs5: 'Tủ lạnh',
+        attrs6: 'Điều hòa',
+        attrs7: 'Máy rửa bát',
+        attrs8: 'TV',
     }
 }

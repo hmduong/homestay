@@ -22,19 +22,23 @@ import Loading from "components/Loading";
 import { getTop } from "services/homestayManagementService";
 import { useTranslation } from 'react-i18next';
 import Paginatior from "components/Paginatior";
+import attributes from "utils/attributes";
 
 const Main = () => {
     const [cookies, setCookie, removeCookie] = useCookies(["role"]);
     const [checkin, setCheckin] = useState(null);
     const [checkout, setCheckout] = useState(null);
     const [city, setCity] = useState("");
-    const [price, setPrice] = useState(null);
+    const [people, setPeople] = useState(null);
     const [homestays, setHomestays] = useState([]);
     const [topHomestays, setTopHomestays] = useState([]);
     const [loadingSearch, setLoadingSearch] = useState(false);
     const [pagiTotal, setPagiTotal] = useState(0)
     const [page, setPage] = useState(0)
     const [loadingTop, setLoadingTop] = useState(false);
+    const [rerender, triggerRerender] = useState(false);
+    const [minPrice, setMin] = useState(null);
+    const [maxPrice, setMax] = useState(200000);
     const dispatch = useDispatch();
     const { t, i18n } = useTranslation();
     const dateOnChange = async (date, isCheckin) => {
@@ -66,6 +70,22 @@ const Main = () => {
             }
         }
     }
+    const [searchAttr, setS] = useState([])
+    const checkAttrs = (value, attr) => {
+        if (value) {
+            if (!searchAttr.includes(attr)) searchAttr.push(attr)
+        } else {
+            if (searchAttr.includes(attr)) {
+                let ind = searchAttr.indexOf(attr);
+                if (ind !== -1) {
+                    searchAttr.splice(ind, 1);
+                }
+            }
+        }
+        setS(searchAttr)
+        console.log(searchAttr);
+        triggerRerender(!rerender)
+    }
 
     const detail = (id) => {
         const url =
@@ -73,6 +93,24 @@ const Main = () => {
                 ? `/owner/homestay/${id}`
                 : `/homestay/${id}`;
         window.open(url, '_blank')
+    };
+
+    const setMinPrice = (price) => {
+        if (!maxPrice || maxPrice > price) {
+            setMin(price)
+        }
+    };
+
+    const setMaxPrice = (price) => {
+        if (!minPrice || minPrice < price) {
+            setMax(price)
+        }
+    };
+
+    const changePrice = (priceType) => {
+        const cases = [[null, 200000], [200001, 500000], [500001, 1000000], [1000001, null]]
+        setMin(cases[priceType - 1][0])
+        setMax(cases[priceType - 1][1])
     };
 
     const cityChange = (newCity) => {
@@ -102,8 +140,11 @@ const Main = () => {
             city,
             checkin,
             checkout,
-            price: price || 0
+            people,
         };
+        if (minPrice) data.minPrice = minPrice
+        if (maxPrice) data.maxPrice = maxPrice
+        if (searchAttr.length) data.attributes = searchAttr
         setLoadingSearch(true)
         const response = await search(data, pagi);
         if (response.status < 299) {
@@ -130,8 +171,8 @@ const Main = () => {
     }, [])
 
     useEffect(() => {
-        if ((checkin && checkout) || city || (price === 0 || price > 199999)) searchHandler({ limit: 3, page: 1 }); else setHomestays([])
-    }, [(checkin && checkout), city, price]);
+        if ((checkin && checkout) || city || people) searchHandler({ limit: 3, page: 1 }); else setHomestays([])
+    }, [(checkin && checkout), city, people, rerender, minPrice, maxPrice]);
 
     if (cookies.role === "homestay owner") {
         return <Navigate to="/owner" />;
@@ -182,12 +223,12 @@ const Main = () => {
                     </Col>
                     <Col md="3">
                         <FormGroup style={{ position: 'relative' }}>
-                            <p className="input-label">{t('price')}</p>
+                            <p className="input-label">{t('people')}</p>
                             <Input
-                                placeholder={t('search.priceHolder')}
+                                placeholder={t('search.people')}
                                 type="number"
-                                value={price}
-                                onChange={(e) => setPrice(e.target.value)}
+                                value={people}
+                                onChange={(e) => setPeople(e.target.value)}
                             >
                             </Input>
                         </FormGroup>
@@ -233,18 +274,68 @@ const Main = () => {
                         </FormGroup>
                     </Col>
                 </Row>
-                {loadingSearch ? <Loading /> : <Row>
-                    {homestays && (
-                        <>
-                            {homestays.map((homestay, index) => (
-                                <Col key={index} className="mb-4" md="4">
-                                    <HomestayCard detail={detail} homestay={homestay} />
-                                </Col>
-                            ))}
-                            {homestays.length > 0 && <Paginatior refe="#searchResponse" numOfPage={pagiTotal} pagiCallback={pagiCallback} page={page} />}
-                        </>
-                    )}
-                </Row>}
+                {((checkin && checkout) || city || people) &&
+                    <>
+                        <Row>
+                            <Col md={4}>
+                                <FormGroup>
+                                    <p
+                                        className={`input-label`}
+                                        style={{ color: '#fff' }}
+                                    >
+                                        {t('price')}
+                                    </p>
+                                    <Input
+                                        type="select"
+                                        onChange={(e) => changePrice(e.target.value)}
+                                    >
+                                        <option value="1"> {'< 200k'}</option>
+                                        <option value="2">{'200k - 500k'}</option>
+                                        <option value="3">{'500k - 1m'}</option>
+                                        <option value="4">{'> 1m'}</option>
+                                    </Input>
+                                </FormGroup>
+                            </Col>
+                            <Col md={8}>
+                                <Row>
+                                    {attributes.map((el, key) => <Col md='4' key={key}>
+                                        <div className="custom-control custom-control-alternative custom-checkbox mb-3">
+                                            <input
+                                                className="custom-control-input"
+                                                id={`customCheckLeft${key}`}
+                                                type="checkbox"
+                                                checked={searchAttr.includes(el)}
+                                                onChange={(e) => checkAttrs(e.target.checked, el)}
+                                            />
+                                            <label
+                                                style={{ color: '#fff' }}
+                                                className="custom-control-label"
+                                                htmlFor={`customCheckLeft${key}`}
+                                            >
+                                                <span>{t(`attrs${key}`)}</span>
+                                            </label>
+                                        </div>
+                                    </Col>)}
+                                </Row>
+                            </Col>
+                        </Row>
+                    </>
+                }
+                {loadingSearch ? <Loading /> :
+                    <>
+                        {homestays && (
+                            <>
+                                <Row>{homestays.map((homestay, index) => (
+                                    <Col key={index} className="mb-4" md="4">
+                                        <HomestayCard detail={detail} homestay={homestay} />
+                                    </Col>
+                                ))}
+                                    {homestays.length > 0 && <Paginatior refe="#searchResponse" numOfPage={pagiTotal} pagiCallback={pagiCallback} page={page} />}
+                                </Row>
+                            </>
+                        )}
+                    </>
+                }
                 <Row>
                     <Col md={12} className="main-page-header">
                         <i className="fa fa-home" aria-hidden="true"></i>

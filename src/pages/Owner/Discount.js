@@ -131,7 +131,7 @@ const Discount = () => {
                 </div>
                 <Row>
                     {
-                        data ? data.map((discount, index) => <Col key={index} className="mb-5" md="4">
+                        data ? data.reverse().map((discount, index) => <Col key={index} className="mb-5" md="4">
                             <DiscountTicket discount={discount} triggerRerender={() => triggerRerender(!rerender)} />
                         </Col>) : <></>
                     }

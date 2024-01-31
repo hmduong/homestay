@@ -134,6 +134,28 @@ export const multipleFilesUpload = async (url, data) => {
     };
   }
 };
+export const putMultipleFilesUpload = async (url, data) => {
+  try {
+    const response = await axios.put(url, data, {
+      headers: {
+        Authorization: "Bearer " + getCookie(),
+        Accept: "application/json",
+        "Content-Type": "multipart/form-data",
+        "Cache-Control": "no-cache",
+      },
+    });
+    return response;
+  } catch (ex) {
+    const { status = 400, data = {} } = ex?.response || {};
+    const error = data?.errors || [];
+    return {
+      status,
+      data: {},
+      message: error[0]?.message || "",
+      code: error[0]?.code || 0,
+    };
+  }
+};
 
 export async function deleteAsyncWithToken(url) {
   try {

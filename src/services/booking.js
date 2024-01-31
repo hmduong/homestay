@@ -21,7 +21,6 @@ export async function editBook(id, data) {
 }
 
 export async function getBookingListByHomestay(url) {
-  console.log("hehe", url);
   return getAsyncWithToken(url);
 }
 
@@ -30,8 +29,8 @@ export async function getBooking(id) {
   return getAsyncWithToken(url);
 }
 
-export async function getYourBooking(limit, page) {
-  const url = process.env.REACT_APP_API_URL + `/bookings/your-booking?limit=${limit}&page=${page}`;
+export async function getYourBooking(limit, page, id) {
+  const url = process.env.REACT_APP_API_URL + `/bookings/your-booking/${id}?limit=${limit}&page=${page}`;
   return getAsyncWithToken(url);
 }
 

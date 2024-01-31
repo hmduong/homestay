@@ -166,7 +166,6 @@ const DetailHomestay = ({ homestay, owner, triggerRerender }) => {
       },
     });
     if (res.data) {
-      console.log(res.data.discounts);
       setDiscounts(res.data.discounts || []);
     }
 
@@ -181,8 +180,27 @@ const DetailHomestay = ({ homestay, owner, triggerRerender }) => {
     };
     const err = validator(
       payload,
-      { empty: (v) => (!v ? "wut???" : null) },
-      {}
+      {
+        empty: (v) => (!v ? "wut???" : null), max: (v) => {
+          if (v > homestay.people) {
+            dispatch(
+              actions.createAlert({
+                message: 'Max 20 slot!',
+                type: "error",
+              })
+            );
+            return "fak"
+          } else {
+            return null
+          }
+        }
+      },
+      {
+        email: ["max"],
+        phone: ["max"],
+        checkin: ["max"],
+        checkout: ["max"]
+      }
     );
     if (!err) {
       if (discount) payload.discount = discount._id;
@@ -204,7 +222,6 @@ const DetailHomestay = ({ homestay, owner, triggerRerender }) => {
         );
         setLoading2(false);
       } else {
-        console.log(res);
         dispatch(
           actions.createAlert({
             message: res.data.message,
@@ -459,7 +476,7 @@ const DetailHomestay = ({ homestay, owner, triggerRerender }) => {
                             : ""
                             }`}
                         >
-                          {t("slot")}
+                          {t("slot")}(max: {homestay.people})
                         </p>
                         <Input
                           type="number"
@@ -563,7 +580,7 @@ const DetailHomestay = ({ homestay, owner, triggerRerender }) => {
                           ></option>
                           {discounts.map((discount, index) => (
                             <option key={index} value={discount}>
-                              {discount._id}
+                              {t('discount.self')} {`${discount.percentage}%`}
                             </option>
                           ))}
                         </Input>

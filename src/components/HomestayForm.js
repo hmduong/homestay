@@ -11,6 +11,7 @@ import { useDispatch } from "react-redux";
 import { actions } from "store/AlertSlice"
 import Loading from "components/Loading";
 import { useTranslation } from "react-i18next";
+import attributes from "utils/attributes";
 
 const HomestayForm = ({ turnOff, triggerRerender, editPayload }) => {
     const { t, i18n } = useTranslation();
@@ -22,7 +23,7 @@ const HomestayForm = ({ turnOff, triggerRerender, editPayload }) => {
         price: editPayload ? editPayload.price : 0,
         people: editPayload ? editPayload.people : 0,
         description: editPayload ? editPayload.description : "",
-        pool: editPayload ? editPayload.pool : false,
+        attributes: editPayload ? editPayload.attributes : [],
         longitude: editPayload ? editPayload.longitude : defaultGeo.geoMap.get("Ha Noi")[0],
         latitude: editPayload ? editPayload.latitude : defaultGeo.geoMap.get("Ha Noi")[1],
     };
@@ -36,36 +37,56 @@ const HomestayForm = ({ turnOff, triggerRerender, editPayload }) => {
         lat: editPayload ? editPayload.latitude : defaultGeo.geoMap.get("Ha Noi")[1],
         zoom: [13],
     });
+    const checkAttrs = (value, attr) => {
+        if (value) {
+            if (!form.attributes.includes(attr)) form.attributes.push(attr)
+        } else {
+            if (form.attributes.includes(attr)) {
+                let ind = form.attributes.indexOf(attr);
+                if (ind !== -1) {
+                    form.attributes.splice(ind, 1);
+                }
+            }
+        }
+    }
     const addHomestay = async () => {
         form.longitude = mapCoor.lng;
         form.latitude = mapCoor.lat;
+        const thef = { ...form }
+        if (!editPayload) {
+            thef.files = { ...files }
+        }
         const err = validator(
-            { ...form, files: files },
+            thef,
             {
-                empty: (v) => (!v ? "wut???" : null),
+                empty: (v) => {
+                    return !v ? "wut???" : null
+                },
                 image: (v) => {
                     if (!Array.from(v).every(el => el.size < (1024 * 1024))) {
                         dispatch(
                             actions.createAlert({
-                                message: "Invalid image! Too big.",
+                                message: "Invalid image! file > 1MB.",
                                 type: "error"
                             })
                         );
                     };
                     return Array.from(v).every(el => el.size < (1024 * 1024)) ? null : "bro"
+                },
+                files: (v) => {
+                    return Object.keys(v).length !== 3 ? "whut" : null
                 }
             },
             {
-                pool: ["empty", "image"],
-                name: ["image"],
-                address: ["image"],
-                city: ["image"],
-                price: ["image"],
-                people: ["image"],
-                description: ["image"],
-                pool: ["image"],
-                longitude: ["image"],
-                latitude: ["image"],
+                attributes: ["empty", "image", "files"],
+                name: ["image", "files"],
+                address: ["image", "files"],
+                city: ["image", "files"],
+                price: ["image", "files"],
+                people: ["image", "files"],
+                description: ["image", "files"],
+                longitude: ["image", "files"],
+                latitude: ["image", "files"],
             }
         );
         if (!err) {
@@ -217,8 +238,9 @@ const HomestayForm = ({ turnOff, triggerRerender, editPayload }) => {
                         </Col>
                         <Col md="6">
                             <FormGroup style={{ position: 'relative' }}>
-                                <p className={`input-label ${validateErr.files ? (ani ? "err1" : "err2") : ""}`}>{t('images')} (1MB)</p>
+                                <p className={`input-label ${!editPayload && (validateErr.files ? (ani ? "err1" : "err2") : "")}`}>{t('images')} (3 files)</p>
                                 <Input
+                                    disabled={editPayload ? true : false}
                                     className="img-input form-control"
                                     type="file"
                                     accept=".jpg,.png"
@@ -240,23 +262,23 @@ const HomestayForm = ({ turnOff, triggerRerender, editPayload }) => {
                                 />
                             </FormGroup>
                         </Col>
-                        <Col xs="12">
+                        {attributes.map((el, key) => <Col xs="3" key={key}>
                             <div className="custom-control custom-control-alternative custom-checkbox mb-3">
                                 <input
                                     className="custom-control-input"
-                                    id="customCheckLeft"
+                                    id={`customCheckLeft${key}`}
                                     type="checkbox"
-                                    defaultValue={editPayload ? editPayload.name : false}
-                                    onChange={(e) => (form.pool = e.target.checked)}
+                                    defaultChecked={form.attributes.includes(el)}
+                                    onChange={(e) => checkAttrs(e.target.checked, el)}
                                 />
                                 <label
                                     className="custom-control-label"
-                                    htmlFor="customCheckLeft"
+                                    htmlFor={`customCheckLeft${key}`}
                                 >
-                                    <span>{t('pool')}</span>
+                                    <span>{t(`attrs${key}`)}</span>
                                 </label>
                             </div>
-                        </Col>
+                        </Col>)}
                         <Col md="12">
                             <FormGroup>
                                 <p

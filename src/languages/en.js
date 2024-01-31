@@ -84,6 +84,9 @@ export default {
                     header: 'Delete homestay',
                     body: 'Are you sure you want to delete homestay',
                 },
+                image: 'Edit image',
+                imageHeader: 'Edit images',
+                old: 'Current Images',
                 discount: 'Discount',
                 edit: 'Edit homestay',
                 create: 'Create new homestay',
@@ -122,6 +125,7 @@ export default {
             title: 'Search',
             selectCity: 'Select city',
             priceHolder: 'Price',
+            people: 'Slot',
             address: {
                 hanoi: 'Ha Noi',
                 danang: 'Da Nang',
@@ -187,6 +191,7 @@ export default {
             depositSuccessful: 'Deposit successful!',
             sentMessage: 'Sent message!',
             editedHomestay: 'Edited homestay!',
+            editedImage: 'Edited images!',
             createdHomestay: 'Created homestay!',
             updatedService: 'Updated service!',
             editUserInfo: 'Edit user info successful!',
@@ -211,6 +216,15 @@ export default {
                 dec: "Dec",
             },
             quater: 'Quater'
-        }
+        },
+        attrs0: 'Swimming pool',
+        attrs1: 'Breakfast',
+        attrs2: 'Car parking',
+        attrs3: 'Wifi',
+        attrs4: 'Kitchen',
+        attrs5: 'Fridge',
+        attrs6: 'Air conditioner',
+        attrs7: 'Washing machine',
+        attrs8: 'TV',
     }
 }
