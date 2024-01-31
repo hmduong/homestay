@@ -7,6 +7,7 @@ import { actions } from "store/AlertSlice"
 import Loading from "components/Loading";
 import { useTranslation } from "react-i18next";
 import Paginatior from "components/Paginatior";
+import { useCookies } from "react-cookie";
 
 function Booking() {
     const dispatch = useDispatch();
@@ -16,9 +17,12 @@ function Booking() {
     const [rerender, triggerRerender] = useState(false);
     const [pagiTotal, setPagiTotal] = useState(0)
     const [page, setPage] = useState(1)
+    const [cookies, setCookie, removeCookie] = useCookies([
+        "userid",
+    ]);
     const getData = async (limit, page) => {
         setLoading(true)
-        const response = await getYourBooking(limit, page);
+        const response = await getYourBooking(limit, page, cookies.userid);
         if (response.data) {
             setBookings(response.data.bookings);
             setPagiTotal(response.data.totalCount || 0)

@@ -67,9 +67,6 @@ const HomestayCard = ({ homestay, adding, detail, newBooking }) => {
           {t("slot")}: {homestay.people}
         </div>
         <div>
-          {t("pool")}: {homestay.pool ? "Yes" : "No"}
-        </div>
-        <div>
           {t("homestay.bookings.title")}: {homestay.bookingNumber}
         </div>
       </div>

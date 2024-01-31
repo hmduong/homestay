@@ -289,10 +289,10 @@ const Main = () => {
                                         type="select"
                                         onChange={(e) => changePrice(e.target.value)}
                                     >
-                                        <option value="1"> {'< 200k'}</option>
-                                        <option value="2">{'200k - 500k'}</option>
-                                        <option value="3">{'500k - 1m'}</option>
-                                        <option value="4">{'> 1m'}</option>
+                                        <option value="1"> {'< 200000'}</option>
+                                        <option value="2">{'200000 - 500000'}</option>
+                                        <option value="3">{'500000 - 1000000'}</option>
+                                        <option value="4">{'> 1000000'}</option>
                                     </Input>
                                 </FormGroup>
                             </Col>
